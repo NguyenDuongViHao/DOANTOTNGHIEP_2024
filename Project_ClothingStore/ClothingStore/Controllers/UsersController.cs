@@ -1,7 +1,9 @@
-﻿using ClothingStore.Models;
+﻿using ClothingStore.Data;
+using ClothingStore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -17,14 +19,46 @@ namespace ClothingStore.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public UsersController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        public UsersController(
+            ClothingStoreContext context,
+            UserManager<User> userManager, 
+            RoleManager<IdentityRole> roleManager, 
+            IConfiguration configuration
+            )
         {
+            
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
         }
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<User>>>GetUsers()
+        {
+            var users = await _userManager.Users
+                .Where(u => u.Status)
+                .ToListAsync();
+            List<UserViewModel> list = new List<UserViewModel>();
+            foreach (var user in users)
+            {
+                list.Add(new UserViewModel
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                    FullName = user.FullName,
+                    Address = user.Address,
+                    Email = user.Email,
+                    Status = user.Status,
+                });
+            }
+            return Ok(list);
+        }
+		[HttpGet("{id}")]
+		public async Task<ActionResult<User>> GetUser(string id)
+		{
+			return await _userManager.FindByIdAsync(id);
 
-        [HttpPost]
+		}
+		[HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(string Username, string Password)
         {
@@ -75,7 +109,8 @@ namespace ClothingStore.Controllers
             {
                 Email = Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = Username
+                UserName = Username,
+                Status = true
             };
             var result = await _userManager.CreateAsync(user, Password);
             if (!result.Succeeded)

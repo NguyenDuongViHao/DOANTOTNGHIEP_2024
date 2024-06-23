@@ -4,7 +4,7 @@
 	{
 		public int Id { get; set; }
 
-		public string User_Id { get; set; }
+		public string UserId { get; set; }
 		public User User { get; set; }
 
 		public string FileName { get; set;}
