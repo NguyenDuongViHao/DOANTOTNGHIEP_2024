@@ -25,10 +25,10 @@ const Index = () => {
                                 <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i className="ti-menu ti-close" /></a>
                                 <a className="navbar-brand">
                                     <b className="logo-icon p-l-10">
-                                        <img src="Admin//assets/images/logo-icon.png" alt="homepage" className="light-logo" />
+                                        <img src="../Admin/assets/images/logo-icon.png" alt="homepage" className="light-logo" />
                                     </b>
                                     <span className="logo-text">
-                                        <img src="/Admin/assets/images/logo-text.png" alt="homepage" className="light-logo" />
+                                        <img src="../Admin/assets/images/logo-text.png" alt="homepage" className="light-logo" />
                                     </span>
                                 </a>
                                 <a className="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i className="ti-more" /></a>
@@ -114,7 +114,7 @@ const Index = () => {
                                         </div>
                                     </li> */}
                                     <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="/assets/images/users/1.jpg" alt="user" className="rounded-circle" width={31} /></a>
+                                        <a className="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../Admin/assets/images/users/1.jpg" alt="user" className="rounded-circle" width={31} /></a>
                                         <div className="dropdown-menu dropdown-menu-right user-dd animated">
                                             {/* <a className="dropdown-item" href="javascript:void(0)"><i className="ti-user m-r-5 m-l-5" /> My Profile</a>
                                             <a className="dropdown-item" href="javascript:void(0)"><i className="ti-wallet m-r-5 m-l-5" /> My Balance</a>
