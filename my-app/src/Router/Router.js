@@ -1,5 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Index from "../Admin/Index"
+import Main from "../User/Layout/Main"
+import IndexUser from "../User/Layout/IndexUser"
 
 const Router = () =>{
     return (
@@ -11,6 +13,12 @@ const Router = () =>{
 
                         </Route>
                     </Route>
+                    <Route>
+                    <Route path="/" element={<IndexUser/>}>
+                        <Route path="" element={<Main />}></Route>
+                    </Route>
+                    </Route>
+               
                 </Routes>
             </BrowserRouter>
         </>

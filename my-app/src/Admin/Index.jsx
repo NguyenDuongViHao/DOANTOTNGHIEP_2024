@@ -25,10 +25,10 @@ const Index = () => {
                                 <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i className="ti-menu ti-close" /></a>
                                 <a className="navbar-brand">
                                     <b className="logo-icon p-l-10">
-                                        <img src="/assets/images/logo-icon.png" alt="homepage" className="light-logo" />
+                                        <img src="Admin//assets/images/logo-icon.png" alt="homepage" className="light-logo" />
                                     </b>
                                     <span className="logo-text">
-                                        <img src="/assets/images/logo-text.png" alt="homepage" className="light-logo" />
+                                        <img src="/Admin/assets/images/logo-text.png" alt="homepage" className="light-logo" />
                                     </span>
                                 </a>
                                 <a className="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i className="ti-more" /></a>
