@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Index from "../Admin/Index"
 import Main from "../User/Layout/Main"
 import IndexUser from "../User/Layout/IndexUser"
+import AccountList from "../Admin/Account/AccountList"
 
 const Router = () =>{
     return (
@@ -10,7 +11,7 @@ const Router = () =>{
                 <Routes>
                     <Route>
                         <Route path="admin" element={<Index />} exact>
-
+                            <Route path="accounts" element={<AccountList/>}></Route>
                         </Route>
                     </Route>
                     <Route>
