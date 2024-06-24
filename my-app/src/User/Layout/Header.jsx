@@ -23,11 +23,11 @@ const Header = () => {
     handleSearch(event.target.value);
   };
 
-  // useEffect(() => {
-  //   AxiosClient.get(`/products`).then((res) => {
-  //     setFilteredItems(res.data.products);
-  //   });
-  // }, []);
+  useEffect(() => {
+    AxiosClient.get(`/Products/listProduct`).then((res) => {
+      setFilteredItems(res.data);
+    });
+  }, []);
 
   return (
     <>
@@ -71,7 +71,7 @@ const Header = () => {
                           <button className="LdVUr" style={{ height: "100%" }}>
                             Tìm kiếm
                           </button>
-                          {/* {show && 
+                          {show && 
                             <div className="jlBoKO">
                               <div className="gyELMq">
                                 <a href="" className="item"> 
@@ -80,7 +80,7 @@ const Header = () => {
                                 </a>
                                
                               </div>
-                            </div>} */}
+                            </div>}
                         </div>
                       </div>
                     </div>

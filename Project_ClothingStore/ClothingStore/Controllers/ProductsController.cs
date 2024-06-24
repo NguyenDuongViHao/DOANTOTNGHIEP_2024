@@ -104,5 +104,45 @@ namespace ClothingStore.Controllers
         {
             return _context.Product.Any(e => e.Id == id);
         }
-    }
+
+        [HttpGet]
+        [Route("listProduct")]
+		public async Task<ActionResult<IEnumerable<Product>>> GetListProduct()
+		{
+			var products = await _context.Product.Include(e => e.Category).Where(a=> a.Status).ToListAsync();
+            var rows = new List<ProductViewModel>();
+            foreach (var product in products) {
+				var chuoi = "";
+				var ngay = "";
+				var thang = "";
+				var nam = "";
+				var time = "";
+				ngay = ngay + product.CreateTime.Day;
+				thang = thang + product.CreateTime.Month;
+				nam = nam + product.CreateTime.Year;
+				time = ngay + "/" + thang + "/" + nam;
+				Models.Image image = await _context.Image.FirstOrDefaultAsync(i => i.ProductId == product.Id);
+                rows.Add(new ProductViewModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    CreateTime = time,
+                    CategoryName = product.Category.Name,
+					ImageName = image?.ImageURL,
+					Status = product.Status,
+                });
+            }
+			return Ok(rows);
+		}
+
+        [HttpGet]
+        [Route("productDetail")]
+		public async Task<ActionResult<IEnumerable<Product>>> GetDetailOneProduct()
+		{
+			return Ok();
+		}
+
+	}
 }

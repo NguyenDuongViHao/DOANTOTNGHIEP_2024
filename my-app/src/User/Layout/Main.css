@@ -5,12 +5,13 @@
     }
    
     .dOGdaN {
-        width: 1280px;
-        padding-left: 24px;
-        padding-right: 24px;
+        width: 100%;
+        padding-left: 25px;
+        padding-right: 25px;
         margin-right: auto;
         margin-left: auto;
         background: #efefef;
+        border-radius: unset;
     }
 
 .bsxLcZ {
@@ -21,7 +22,8 @@
 }
 
 .jZosWU {
-    width: 230px;
+    margin: 0 auto;
+    width: 17%;
     max-height: 100vh;
     position: sticky;
     overflow-y: scroll;
@@ -147,6 +149,7 @@ a {
 .product_frame{
     background-color: rgb(255, 255, 255);
     padding: 1rem;  
+    margin-bottom: 1rem;
 }
 
 .product-main{
@@ -236,7 +239,7 @@ div{
     object-fit: contain;
     border-radius: 8px;
     width: 495px !important;
-    height: 165px;
+    height: 250px;
 }
 
 .main-swiper-slide img {

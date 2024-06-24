@@ -24,6 +24,7 @@ const Main = () => {
 
   // danh mục
   const [SelectedCategory, setSelectedCategory] = useState(null);
+  const [CategoryList, setCategoryList] = useState([]);
 
   // pagination
   const indexOfLastProduct = CurentProduct * ProductPerPage;
@@ -46,7 +47,7 @@ const Main = () => {
   };
 
   const handleCatagories = (item) => {
-    const filtered = ProductList.filter((a) => a.category === item);
+    const filtered = ProductList.filter((a) => a.categoryName === item);
     setFilteredProducts(filtered);
     setTheHasBeenFilter(filtered); // đã lọc mặc định
     console.log(filtered);
@@ -72,20 +73,31 @@ const Main = () => {
     setFilteredProducts(sortedIncrease);
   };
 
-  // useEffect(() => {
-  //   AxiosClient.get(`/products`).then((res) => {
-  //     setProduct(res.data.products);....
-  //     setFilteredProducts(res.data.products);
-  //     setProductList(res.data.products);
-  //     setTheHasBeenFilter(res.data.products);
-  //   });
-  // }, []);
+  useEffect(() => {
+    AxiosClient.get(`/Products/listProduct`).then((res) => {
+      setFilteredProducts(res.data);
+      setProductList(res.data);
+      setTheHasBeenFilter(res.data);
+    })
+    .catch((error)=>{
+      console.error("There was an error fetching the products!", error);
+    })
+  }, []);
 
   console.log(ProductList);
 
-  // useEffect(() => {
-  //   AxiosClient.get(`/products`).then((res) => setProductCategory(res.data.products));
-  // }, []);
+  useEffect(() => {
+    AxiosClient.get(`/Categories`)
+    .then((res) => {
+      setCategoryList(res.data)
+    })
+    .catch((error)=>{
+      console.error("There was an error fetching the products!", error);
+    })
+  }, []);
+
+
+  console.log(CategoryList)
 
   return (
     <>
@@ -94,13 +106,16 @@ const Main = () => {
           <div className="jZosWU">
             <div className="cjqkgR">
               <div className="efUuhP">Danh muc</div>
-              <div className="bHIPhv">
+              {CategoryList.map((item)=>{
+                return (
+                  <>
+                  <div className="bHIPhv">
                 <a
                   href="#"
-                  title="Beauty"
+                  title={item.name}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleCatagories("beauty");
+                    handleCatagories(item.name);
                   }}
                 >
                   <div className="iFfPOy">
@@ -109,10 +124,14 @@ const Main = () => {
                       alt="hinhanh"
                     />
                   </div>
-                  <div className="ctcPzh">Beauty</div>
+                  <div className="ctcPzh">{item.name}</div>
                 </a>
               </div>
-              <div className="bHIPhv">
+                  </>
+                )
+              })}
+              
+              {/* <div className="bHIPhv">
                 <a
                   href="#"
                   title="Fragrances"
@@ -129,7 +148,7 @@ const Main = () => {
                   </div>
                   <div className="ctcPzh">Fragrances</div>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
 
@@ -158,7 +177,8 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img src="../Ao Thun Carrot Theme 360GSM.jpg" />
+                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
+ />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -166,7 +186,8 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img src="../Ao Thun Carrot Theme 360GSM.jpg" />
+                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
+ />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -174,7 +195,8 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img src="../Ao Thun Carrot Theme 360GSM.jpg" />
+                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
+ />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -239,7 +261,7 @@ const Main = () => {
                     <Tab.Content>
                       <Tab.Pane eventKey="first">
                         <div className="product-main">
-                          {/* {CurrentProducts.map((item) => {
+                          {CurrentProducts.map((item) => {
                             return (
                               <>
                                 <div className="product-item men">
@@ -248,7 +270,7 @@ const Main = () => {
                                       <div className="product_border">
                                         <div className="product_image">
                                           <img
-                                            src="00005047_83f129bc4f7b4984b80cc70831b5d03e_large.jpg"
+                                            src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
                                         </div>
@@ -258,7 +280,7 @@ const Main = () => {
                                     <div className="product_info">
                                       <h6 className="product_name">
                                         <Link to={`detail/${item.id}`}>
-                                          {item.title}
+                                          {item.name}
                                         </Link>
                                       </h6>
                                       <div className="product_price">
@@ -273,11 +295,11 @@ const Main = () => {
                                 </div>
                               </>
                             );
-                          })} */}
+                          })}
                         </div>
                         <div>
                           <ul className="pagination">
-                            {/* {pageNumber.map((item) => {
+                            {pageNumber.map((item) => {
                               return (
                                 <li className="page-item" key={item}>
                                   <a
@@ -292,13 +314,13 @@ const Main = () => {
                                   </a>
                                 </li>
                               );
-                            })} */}
+                            })}
                           </ul>
                         </div>
                       </Tab.Pane>
                       <Tab.Pane eventKey="second">
                         <div className="product-main">
-                          {/* {CurrentProducts.map((item) => {
+                          {CurrentProducts.map((item) => {
                             return (
                               <>
                                 <div className="product-item men">
@@ -307,7 +329,7 @@ const Main = () => {
                                       <div className="product_border">
                                         <div className="product_image">
                                           <img
-                                            src="00005047_83f129bc4f7b4984b80cc70831b5d03e_large.jpg"
+                                            src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
                                         </div>
@@ -330,11 +352,11 @@ const Main = () => {
                                 </div>
                               </>
                             );
-                          })} */}
+                          })}
                         </div>
                         <div>
                           <ul className="pagination">
-                            {/* {pageNumber.map((item) => {
+                            {pageNumber.map((item) => {
                               return (
                                 <li className="page-item" key={item}>
                                   <a
@@ -349,13 +371,13 @@ const Main = () => {
                                   </a>
                                 </li>
                               );
-                            })} */}
+                            })}
                           </ul>
                         </div>
                       </Tab.Pane>
                       <Tab.Pane eventKey="third">
                         <div className="product-main">
-                          {/* {CurrentProducts.map((item) => {
+                          {CurrentProducts.map((item) => {
                             return (
                               <>
                                 <div className="product-item men">
@@ -364,7 +386,7 @@ const Main = () => {
                                       <div className="product_border">
                                         <div className="product_image">
                                           <img
-                                            src="00005047_83f129bc4f7b4984b80cc70831b5d03e_large.jpg"
+                                            src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
                                         </div>
@@ -387,11 +409,11 @@ const Main = () => {
                                 </div>
                               </>
                             );
-                          })} */}
+                          })}
                         </div>
                         <div>
                           <ul className="pagination">
-                            {/* {pageNumber.map((item) => {
+                            {pageNumber.map((item) => {
                               return (
                                 <li className="page-item" key={item}>
                                   <a
@@ -406,7 +428,7 @@ const Main = () => {
                                   </a>
                                 </li>
                               );
-                            })} */}
+                            })}
                           </ul>
                         </div>
                       </Tab.Pane>
