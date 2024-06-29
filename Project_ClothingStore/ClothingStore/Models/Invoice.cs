@@ -13,6 +13,8 @@
 
 		public string ShippingPhone { get; set;}
 
+		public double Discount { get; set; }
+
 		public double Total { get; set;}
 
 		public string ApproveOrder { get; set; }
