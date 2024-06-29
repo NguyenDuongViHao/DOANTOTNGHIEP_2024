@@ -7,7 +7,7 @@
 		public int InvoiceId { get; set; }
 		public Invoice Invoice { get; set; }
 
-		public int ProductDetailId { get;}
+		public int ProductDetailId { get; set; }
 		public ProductDetail ProductDetail { get; set; }
 		public double Price { get; set; }
 
