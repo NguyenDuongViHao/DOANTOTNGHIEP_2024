@@ -1,242 +1,578 @@
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
-// import 'datatables.net-buttons-bs5';
-// import 'datatables.net-buttons/js/buttons.colVis.mjs';
-// import 'datatables.net-buttons/js/buttons.html5.mjs';
-// import 'datatables.net-buttons/js/buttons.print.mjs';
-// import 'datatables.net-responsive-bs5';
 const Index = () => {
-    const navigate = useNavigate();
-    const logout = async () => {
-        try {
-            localStorage.clear();
-            navigate("/");
-        } catch (error) {
-            console.log("Logout error", error);
-        }
+  const navigate = useNavigate();
+  const logout = async () => {
+    try {
+      localStorage.clear();
+      navigate("/");
+    } catch (error) {
+      console.log("Logout error", error);
     }
-    return (
-        <>
-            <div>
-                <div id="main-wrapper">
-                    <header className="topbar" data-navbarbg="skin5">
-                        <nav className="navbar top-navbar navbar-expand-md navbar-dark">
-                            <div className="navbar-header" data-logobg="skin5">
-                                <a className="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i className="ti-menu ti-close" /></a>
-                                <a className="navbar-brand">
-                                    <b className="logo-icon p-l-10">
-                                        <img src="../Admin/assets/images/logo-icon.png" alt="homepage" className="light-logo" />
-                                    </b>
-                                    <span className="logo-text">
-                                        <img src="../Admin/assets/images/logo-text.png" alt="homepage" className="light-logo" />
-                                    </span>
-                                </a>
-                                <a className="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i className="ti-more" /></a>
-                            </div>
-                            <div className="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
-                                <ul className="navbar-nav float-left mr-auto">
-                                    <li className="nav-item d-none d-md-block"><a className="nav-link sidebartoggler waves-effect waves-light" href="javascript:void(0)" data-sidebartype="mini-sidebar"><i className="mdi mdi-menu font-24" /></a></li>
-                                    <li className="nav-item dropdown">
-                                        {/* <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span className="d-none d-md-block">Create New <i className="fa fa-angle-down" /></span>
-                                            <span className="d-block d-md-none"><i className="fa fa-plus" /></span>
-                                        </a> */}
-                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a className="dropdown-item" href="#">Action</a>
-                                            <a className="dropdown-item" href="#">Another action</a>
-                                            <div className="dropdown-divider" />
-                                            <a className="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item search-box"> <a className="nav-link waves-effect waves-dark" href="javascript:void(0)"><i className="ti-search" /></a>
-                                        <form className="app-search position-absolute">
-                                            <input type="text" className="form-control" placeholder="Search & enter" /> <a className="srh-btn"><i className="ti-close" /></a>
-                                        </form>
-                                    </li>
-                                </ul>
-                                <ul className="navbar-nav float-right">
-                                    {/* <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle waves-effect waves-dark" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i className="mdi mdi-bell font-24" />
-                                        </a>
-                                        <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a className="dropdown-item" href="#">Action</a>
-                                            <a className="dropdown-item" href="#">Another action</a>
-                                            <div className="dropdown-divider" />
-                                            <a className="dropdown-item" href="#">Something else here</a>
-                                        </div>
-                                    </li>
-                                    <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle waves-effect waves-dark" href id={2} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i className="font-24 mdi mdi-comment-processing" />
-                                        </a>
-                                        <div className="dropdown-menu dropdown-menu-right mailbox animated bounceInDown" aria-labelledby={2}>
-                                            <ul className="list-style-none">
-                                                <li>
-                                                    <div className>
-                                                        <a href="javascript:void(0)" className="link border-top">
-                                                            <div className="d-flex no-block align-items-center p-10">
-                                                                <span className="btn btn-success btn-circle"><i className="ti-calendar" /></span>
-                                                                <div className="m-l-10">
-                                                                    <h5 className="m-b-0">Event today</h5>
-                                                                    <span className="mail-desc">Just a reminder that event</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)" className="link border-top">
-                                                            <div className="d-flex no-block align-items-center p-10">
-                                                                <span className="btn btn-info btn-circle"><i className="ti-settings" /></span>
-                                                                <div className="m-l-10">
-                                                                    <h5 className="m-b-0">Settings</h5>
-                                                                    <span className="mail-desc">You can customize this template</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)" className="link border-top">
-                                                            <div className="d-flex no-block align-items-center p-10">
-                                                                <span className="btn btn-primary btn-circle"><i className="ti-user" /></span>
-                                                                <div className="m-l-10">
-                                                                    <h5 className="m-b-0">Pavan kumar</h5>
-                                                                    <span className="mail-desc">Just see the my admin!</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                        <a href="javascript:void(0)" className="link border-top">
-                                                            <div className="d-flex no-block align-items-center p-10">
-                                                                <span className="btn btn-danger btn-circle"><i className="fa fa-link" /></span>
-                                                                <div className="m-l-10">
-                                                                    <h5 className="m-b-0">Luanch Admin</h5>
-                                                                    <span className="mail-desc">Just see the my new admin!</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </li> */}
-                                    <li className="nav-item dropdown">
-                                        <a className="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="../Admin/assets/images/users/1.jpg" alt="user" className="rounded-circle" width={31} /></a>
-                                        <div className="dropdown-menu dropdown-menu-right user-dd animated">
-                                            {/* <a className="dropdown-item" href="javascript:void(0)"><i className="ti-user m-r-5 m-l-5" /> My Profile</a>
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="ti-wallet m-r-5 m-l-5" /> My Balance</a>
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="ti-email m-r-5 m-l-5" /> Inbox</a>
-                                            <div className="dropdown-divider" />
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="ti-settings m-r-5 m-l-5" /> Account Setting</a>
-                                            <div className="dropdown-divider" /> */}
-                                            <a className="dropdown-item" href="javascript:void(0)"><i className="fa fa-power-off m-r-5 m-l-5" onClick={logout}/> Đăng Xuất</a>
-                                            <div className="dropdown-divider" />
-                                            <div className="p-l-30 p-10"><Link href="javascript:void(0)" className="btn btn-sm btn-success btn-rounded" to='/'>Quay về trang chủ</Link></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </nav>
-                    </header>
-                    <aside className="left-sidebar" data-sidebarbg="skin5">
-                        <div className="scroll-sidebar">
-                            <nav className="sidebar-nav">
-                                <ul id="sidebarnav" className="p-t-30">
-                                    {/* <li className="sidebar-item">
-                                        <a className="sidebar-link waves-effect waves-dark sidebar-link" href="/admin" aria-expanded="false">
-                                            <i className="mdi mdi-view-dashboard" />
-                                            <span className="hide-menu">Dashboard</span>
-                                        </a>
-                                    </li> */}
-
-                                    <Link to="" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Dashboard</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-                                    
-                                    <Link to="category" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Loại sản phẩm</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="slideshow" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Slide show</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="accounts" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Loại tài khoản</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="products" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Sản phẩm</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="comments" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Bình luận</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="orders" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Danh sách đơn hàng</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-                                    
-                                    <Link to="statistical" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Thống kê</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-
-                                    <Link to="images" className="nav-link">
-                                        <li className="sidebar-item">
-                                            <a className="sidebar-link waves-effect waves-dark sidebar-link" aria-expanded="false">
-                                                <i className="mdi mdi-library-books"></i>
-                                                <span className="hide-menu">Hình ảnh</span>
-                                            </a>
-                                        </li>
-                                    </Link>
-                                </ul>
-                            </nav>
-                        </div>
-                    </aside>
-                    <div className="page-wrapper" style={{ display: 'flex', flexDirection: 'column', minHeight: '91vh' }}>
-                        <Outlet />
-                        <footer className="footer text-center mb-0" style={{ marginTop: 'auto' }}>
-                            All Rights Reserved by Matrix-admin. Designed and Developed by <a href="https://wrappixel.com">WrapPixel</a>.
-                        </footer>
-                    </div>
-                </div>
-
+  }
+  return (
+    <>
+      <div className="wrapper">
+        {/* Sidebar */}
+        <div className="sidebar" data-background-color="dark">
+          <div className="sidebar-logo">
+            {/* Logo Header */}
+            <div className="logo-header" data-background-color="dark">
+              <a href="index.html" className="logo">
+                <img
+                  src="assets/img/kaiadmin/logo_light.svg"
+                  alt="navbar brand"
+                  className="navbar-brand"
+                  height={20}
+                />
+              </a>
+              <div className="nav-toggle">
+                <button className="btn btn-toggle toggle-sidebar">
+                  <i className="gg-menu-right" />
+                </button>
+                <button className="btn btn-toggle sidenav-toggler">
+                  <i className="gg-menu-left" />
+                </button>
+              </div>
+              <button className="topbar-toggler more">
+                <i className="gg-more-vertical-alt" />
+              </button>
             </div>
-        </>
-    );
+            {/* End Logo Header */}
+          </div>
+          <div className="sidebar-wrapper scrollbar scrollbar-inner">
+            <div className="sidebar-content">
+              <ul className="nav nav-secondary">
+                <li className="nav-item active">
+                  <a
+                    data-bs-toggle="collapse"
+                    href="#dashboard"
+                    className="collapsed"
+                    aria-expanded="false"
+                  >
+                    <i className="fas fa-home" />
+                    <p>Home</p>
+                    <span className="caret" />
+                  </a>
+                  <div className="collapse" id="dashboard">
+                    <ul className="nav nav-collapse">
+                      <li>
+                        <a href="">
+                          <span className="sub-item">Dashboard 1</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li className="nav-item">
+                  <a data-bs-toggle="collapse" href="#base">
+                    <i className="fas fa-edit" />
+                    <p>Quản lý</p>
+                    <span className="caret" />
+                  </a>
+                  <div className="collapse" id="base">
+                    <ul className="nav nav-collapse">
+                      <li>
+                          <Link to="accounts">
+                            <span className="sub-item">Quản lý nhân viên</span>
+                          </Link>
+                        </li>
+                      <li>
+                        <a href="products">
+                          <span className="sub-item">Quản lý sản phẩm</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Quản lý đơn hàng</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Quản lý khách hàng</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Quản lý tồn kho</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Quản lý khuyến mãi</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Quản lý thanh toán</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li className="nav-item">
+                  <a data-bs-toggle="collapse" href="#charts">
+                    <i className="far fa-chart-bar" />
+                    <p>Thống kê</p>
+                    <span className="caret" />
+                  </a>
+                  <div className="collapse" id="charts">
+                    <ul className="nav nav-collapse">
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Thống kê bán hàng</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a href="#">
+                          <span className="sub-item">Thống kê nhân vi</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li className="nav-item">
+                  <a data-bs-toggle="collapse" href="#submenu">
+                    <i className="fas fa-users" />
+                    <p>Tài khoản</p>
+                    <span className="caret" />
+                  </a>
+                  <div className="collapse" id="submenu">
+                    <ul className="nav nav-collapse">
+                      <li>
+                        <a data-bs-toggle="collapse" href="#subnav1">
+                          <span className="sub-item">Thay đổi thông tin</span>
+                        </a>
+                      </li>
+                      <li>
+                        <a data-bs-toggle="collapse" href="#subnav2">
+                          <span className="sub-item">Thoát</span>
+                        </a>
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        {/* End Sidebar */}
+        <div className="main-panel">
+          <div className="main-header">
+            <div className="main-header-logo">
+              {/* Logo Header */}
+              <div className="logo-header" data-background-color="dark">
+                <a href="index.html" className="logo">
+                  <img
+                    src="assets/img/kaiadmin/logo_light.svg"
+                    alt="navbar brand"
+                    className="navbar-brand"
+                    height={20}
+                  />
+                </a>
+                <div className="nav-toggle">
+                  <button className="btn btn-toggle toggle-sidebar">
+                    <i className="gg-menu-right" />
+                  </button>
+                  <button className="btn btn-toggle sidenav-toggler">
+                    <i className="gg-menu-left" />
+                  </button>
+                </div>
+                <button className="topbar-toggler more">
+                  <i className="gg-more-vertical-alt" />
+                </button>
+              </div>
+              {/* End Logo Header */}
+            </div>
+            {/* Navbar Header */}
+            <nav className="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
+              <div className="container-fluid">
+                <nav className="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
+                  <div className="input-group">
+                    <div className="input-group-prepend">
+                      <button type="submit" className="btn btn-search pe-1">
+                        <i className="fa fa-search search-icon" />
+                      </button>
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Search ..."
+                      className="form-control"
+                    />
+                  </div>
+                </nav>
+                <ul className="navbar-nav topbar-nav ms-md-auto align-items-center">
+                  <li className="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      role="button"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                    >
+                      <i className="fa fa-search" />
+                    </a>
+                    <ul className="dropdown-menu dropdown-search animated fadeIn">
+                      <form className="navbar-left navbar-form nav-search">
+                        <div className="input-group">
+                          <input
+                            type="text"
+                            placeholder="Search ..."
+                            className="form-control"
+                          />
+                        </div>
+                      </form>
+                    </ul>
+                  </li>
+                  <li className="nav-item topbar-icon dropdown hidden-caret">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="messageDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i className="fa fa-envelope" />
+                    </a>
+                    <ul
+                      className="dropdown-menu messages-notif-box animated fadeIn"
+                      aria-labelledby="messageDropdown"
+                    >
+                      <li>
+                        <div className="dropdown-title d-flex justify-content-between align-items-center">
+                          Messages
+                          <a href="#" className="small">
+                            Mark all as read
+                          </a>
+                        </div>
+                      </li>
+                      <li>
+                        <div className="message-notif-scroll scrollbar-outer">
+                          <div className="notif-center">
+                            <a href="#">
+                              <div className="notif-img">
+                                <img
+                                  src="assets/img/jm_denis.jpg"
+                                  alt="Img Profile"
+                                />
+                              </div>
+                              <div className="notif-content">
+                                <span className="subject">Jimmy Denis</span>
+                                <span className="block"> How are you ? </span>
+                                <span className="time">5 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-img">
+                                <img
+                                  src="assets/img/chadengle.jpg"
+                                  alt="Img Profile"
+                                />
+                              </div>
+                              <div className="notif-content">
+                                <span className="subject">Chad</span>
+                                <span className="block"> Ok, Thanks ! </span>
+                                <span className="time">12 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-img">
+                                <img src="assets/img/mlane.jpg" alt="Img Profile" />
+                              </div>
+                              <div className="notif-content">
+                                <span className="subject">Jhon Doe</span>
+                                <span className="block">
+                                  Ready for the meeting today...
+                                </span>
+                                <span className="time">12 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-img">
+                                <img src="assets/img/talha.jpg" alt="Img Profile" />
+                              </div>
+                              <div className="notif-content">
+                                <span className="subject">Talha</span>
+                                <span className="block"> Hi, Apa Kabar ? </span>
+                                <span className="time">17 minutes ago</span>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <a className="see-all" href="javascript:void(0);">
+                          See all messages
+                          <i className="fa fa-angle-right" />
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="nav-item topbar-icon dropdown hidden-caret">
+                    <a
+                      className="nav-link dropdown-toggle"
+                      href="#"
+                      id="notifDropdown"
+                      role="button"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                    >
+                      <i className="fa fa-bell" />
+                      <span className="notification">4</span>
+                    </a>
+                    <ul
+                      className="dropdown-menu notif-box animated fadeIn"
+                      aria-labelledby="notifDropdown"
+                    >
+                      <li>
+                        <div className="dropdown-title">
+                          You have 4 new notification
+                        </div>
+                      </li>
+                      <li>
+                        <div className="notif-scroll scrollbar-outer">
+                          <div className="notif-center">
+                            <a href="#">
+                              <div className="notif-icon notif-primary">
+                                <i className="fa fa-user-plus" />
+                              </div>
+                              <div className="notif-content">
+                                <span className="block"> New user registered </span>
+                                <span className="time">5 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-icon notif-success">
+                                <i className="fa fa-comment" />
+                              </div>
+                              <div className="notif-content">
+                                <span className="block">
+                                  Rahmad commented on Admin
+                                </span>
+                                <span className="time">12 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-img">
+                                <img
+                                  src="assets/img/profile2.jpg"
+                                  alt="Img Profile"
+                                />
+                              </div>
+                              <div className="notif-content">
+                                <span className="block">
+                                  Reza send messages to you
+                                </span>
+                                <span className="time">12 minutes ago</span>
+                              </div>
+                            </a>
+                            <a href="#">
+                              <div className="notif-icon notif-danger">
+                                <i className="fa fa-heart" />
+                              </div>
+                              <div className="notif-content">
+                                <span className="block"> Farrah liked Admin </span>
+                                <span className="time">17 minutes ago</span>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </li>
+                      <li>
+                        <a className="see-all" href="javascript:void(0);">
+                          See all notifications
+                          <i className="fa fa-angle-right" />
+                        </a>
+                      </li>
+                    </ul>
+                  </li>
+                  <li className="nav-item topbar-icon dropdown hidden-caret">
+                    <a
+                      className="nav-link"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      aria-expanded="false"
+                    >
+                      <i className="fas fa-layer-group" />
+                    </a>
+                    <div className="dropdown-menu quick-actions animated fadeIn">
+                      <div className="quick-actions-header">
+                        <span className="title mb-1">Quick Actions</span>
+                        <span className="subtitle op-7">Shortcuts</span>
+                      </div>
+                      <div className="quick-actions-scroll scrollbar-outer">
+                        <div className="quick-actions-items">
+                          <div className="row m-0">
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-danger rounded-circle">
+                                  <i className="far fa-calendar-alt" />
+                                </div>
+                                <span className="text">Calendar</span>
+                              </div>
+                            </a>
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-warning rounded-circle">
+                                  <i className="fas fa-map" />
+                                </div>
+                                <span className="text">Maps</span>
+                              </div>
+                            </a>
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-info rounded-circle">
+                                  <i className="fas fa-file-excel" />
+                                </div>
+                                <span className="text">Reports</span>
+                              </div>
+                            </a>
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-success rounded-circle">
+                                  <i className="fas fa-envelope" />
+                                </div>
+                                <span className="text">Emails</span>
+                              </div>
+                            </a>
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-primary rounded-circle">
+                                  <i className="fas fa-file-invoice-dollar" />
+                                </div>
+                                <span className="text">Invoice</span>
+                              </div>
+                            </a>
+                            <a className="col-6 col-md-4 p-0" href="#">
+                              <div className="quick-actions-item">
+                                <div className="avatar-item bg-secondary rounded-circle">
+                                  <i className="fas fa-credit-card" />
+                                </div>
+                                <span className="text">Payments</span>
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                  <li className="nav-item topbar-user dropdown hidden-caret">
+                    <a
+                      className="dropdown-toggle profile-pic"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      aria-expanded="false"
+                    >
+                      <div className="avatar-sm">
+                        <img
+                          src="assets/img/profile.jpg"
+                          alt="..."
+                          className="avatar-img rounded-circle"
+                        />
+                      </div>
+                      <span className="profile-username">
+                        <span className="op-7">Hi,</span>
+                        <span className="fw-bold">Hizrian</span>
+                      </span>
+                    </a>
+                    <ul className="dropdown-menu dropdown-user animated fadeIn">
+                      <div className="dropdown-user-scroll scrollbar-outer">
+                        <li>
+                          <div className="user-box">
+                            <div className="avatar-lg">
+                              <img
+                                src="assets/img/profile.jpg"
+                                alt="image profile"
+                                className="avatar-img rounded"
+                              />
+                            </div>
+                            <div className="u-text">
+                              <h4>Hizrian</h4>
+                              <p className="text-muted">hello@example.com</p>
+                              <a
+                                href="profile.html"
+                                className="btn btn-xs btn-secondary btn-sm"
+                              >
+                                View Profile
+                              </a>
+                            </div>
+                          </div>
+                        </li>
+                        <li>
+                          <div className="dropdown-divider" />
+                          <a className="dropdown-item" href="#">
+                            My Profile
+                          </a>
+                          <a className="dropdown-item" href="#">
+                            My Balance
+                          </a>
+                          <a className="dropdown-item" href="#">
+                            Inbox
+                          </a>
+                          <div className="dropdown-divider" />
+                          <a className="dropdown-item" href="#">
+                            Account Setting
+                          </a>
+                          <div className="dropdown-divider" />
+                          <a className="dropdown-item" href="#">
+                            Logout
+                          </a>
+                        </li>
+                      </div>
+                    </ul>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+            {/* End Navbar */}
+          </div>
+          <div className="container">
+            <Outlet/>
+          </div>
+        </div>
+      </div>
+      {/* <footer className="footer">
+        <div className="container-fluid d-flex justify-content-between">
+          <nav className="pull-left">
+            <ul className="nav">
+              <li className="nav-item">
+                <a className="nav-link" href="http://www.themekita.com">
+                  ThemeKita
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  {" "}
+                  Help{" "}
+                </a>
+              </li>
+              <li className="nav-item">
+                <a className="nav-link" href="#">
+                  {" "}
+                  Licenses{" "}
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <div className="copyright">
+            2024, made with <i className="fa fa-heart heart text-danger" /> by
+            <a href="http://www.themekita.com">ThemeKita</a>
+          </div>
+          <div>
+            Distributed by
+            <a target="_blank" href="https://themewagon.com/">
+              ThemeWagon
+            </a>
+            .
+          </div>
+        </div>
+      </footer> */}
+      
+    </>
+  )
 }
-
 export default Index;
