@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClothingStore.Data;
 using ClothingStore.Models;
+using Microsoft.CodeAnalysis;
 
 namespace ClothingStore.Controllers
 {
@@ -128,6 +129,8 @@ namespace ClothingStore.Controllers
                     Name = product.Name,
                     Description = product.Description,
                     Price = product.Price,
+                    Brand = product.Brand,
+                    Origin = product.Origin,
                     CreateTime = time,
                     CategoryName = product.Category.Name,
 					ImageName = image?.ImageURL,
@@ -138,10 +141,60 @@ namespace ClothingStore.Controllers
 		}
 
         [HttpGet]
-        [Route("productDetail")]
-		public async Task<ActionResult<IEnumerable<Product>>> GetDetailOneProduct()
+        [Route("productDetail/{id}")]
+		public async Task<ActionResult<IEnumerable<Product>>> GetDetailOneProduct(int id)
 		{
-			return Ok();
+            var products = await _context.Product.Include(e => e.Category).FirstOrDefaultAsync(a => a.Id == id);
+
+			var createTime = $"{products.CreateTime.Day}/{products.CreateTime.Month}/{products.CreateTime.Year}";
+			List<Models.Image> images = await _context.Image.Where(i => i.ProductId == products.Id).ToListAsync();
+			List<Models.ProductDetail> variant = await _context.ProductDetail.Include(a => a.Size).Include(a => a.Color).Where(i=> i.ProductId == products.Id).ToListAsync();
+            List<Models.InvoiceDetail> invoiceDetails = await _context.InvoiceDetail.Include(i => i.ProductDetail).Include(a=> a.Invoice).ToListAsync();
+            List<Models.Review> reviews1 = await _context.Review.Include(i => i.User).Include(a=> a.Product).Where(i => i.ProductId == products.Id).ToListAsync();
+
+			if (products == null)
+			{
+				return NotFound();
+            }
+
+            var detailProducts = new ProductDetailViewModel {
+                Id = products.Id,
+                Name = products.Name,
+                Description = products.Description,
+                Price = products.Price,
+                Brand = products.Brand,
+                Origin = products.Origin,
+                CreateTime = createTime,
+                CategoryName = products.Category.Name,
+                Images = images.Select(img => new ImageViewModel
+                {
+                    Id = img.Id,
+                    FileName = img.ImageURL
+                }).ToList(),
+                Sizes = variant.GroupBy(s => s.Size.Id).Select(g => g.First().Size).Select(size => new Size
+                {
+                    Id  = size.Id,
+                    NameSize = size.NameSize,
+                    Status = size.Status,
+                }).ToList(),
+				Colors = variant.GroupBy(s => s.Color.Id).Select(g => g.First().Color).Select(color => new Color
+				{
+                    Id = color.Id,
+					NameColor = color.NameColor,
+                    Status = color.Status,
+				}).ToList(),
+
+				Reviews = reviews1.Select(r => new ReviewViewModel
+				{
+					Id = r.Id,
+					UserName = r.User.FullName, 
+					Content = r.Content,
+					ReviewDate = r.ReviewDate.ToString("dd/MM/yyyy"),
+					StarNumber = r.StarNumber,
+				}).ToList()
+			};
+
+            return Ok(detailProducts);
 		}
 
 	}
