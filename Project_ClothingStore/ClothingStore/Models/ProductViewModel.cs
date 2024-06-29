@@ -11,6 +11,10 @@
 
 		public double Price { get; set; }
 
+		public string Brand { get; set; }
+
+		public string Origin { get; set; }
+
 		public string CreateTime { get; set; }
 
 		public string ImageName { get; set; }
