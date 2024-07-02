@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <>
-      <div className="newsletter">
+      {/* <div className="newsletter">
         <div className="container">
           <div className="row">
             <div className="col-lg-6">
@@ -36,14 +36,14 @@ const Footer = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <footer className="footer">
         <div className="container">
           <div className="row">
             <div className="col-lg-6">
               <div className="footer_nav_container d-flex flex-sm-row flex-column align-items-center justify-content-lg-start justify-content-center text-center">
-                <ul className="footer_nav">
+                <ul className="footer_nav" style={{display:"flex"}}>
                   <li>
                     <a href="#">Blog</a>
                   </li>

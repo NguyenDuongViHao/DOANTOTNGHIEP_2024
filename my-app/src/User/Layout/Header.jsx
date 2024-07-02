@@ -3,29 +3,41 @@ import { Link, NavLink } from "react-router-dom";
 import "./style.css";
 import { Button, Modal } from "react-bootstrap";
 import AxiosClient from "../../Axios/AxiosClient";
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faSignOutAlt, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Header = () => {
   const [filteredItems, setFilteredItems] = useState([]);
   const [show, setShow] = useState(false);
-
+  const [allItems, setAllItems] = useState([]);
   const [query, setQuery] = useState("");
 
-  const handleSearch = (query) => {
+  const handleSearch = (event) => {
+    setQuery(event.target.value); // Lưu query vào state
     setShow(true);
+
+    if (event.target.value.trim() === "") {
+      const randomItems = getRandomItems(allItems, 5);
+      setFilteredItems(randomItems);
+    } else {
+      const filtered = allItems.filter((item) =>
+        item.name.toLowerCase().includes(event.target.value.toLowerCase())
+      );
+      setFilteredItems(filtered.slice(0, 8));
+    }
   };
+
+  const getRandomItems = (array, number) => {
+    const shuffled = array.sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, number);
+  };
+
   const handleClose = () => {
     setShow(false);
   };
 
-  const handleInputChange = (event) => {
-    handleSearch(event.target.value);
-  };
-
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`).then((res) => {
-      setFilteredItems(res.data);
+      setAllItems(res.data); // Lưu toàn bộ sản phẩm vào state
+      setFilteredItems(res.data); // Hiển thị tất cả sản phẩm lúc đầu
     });
   }, []);
 
@@ -66,21 +78,29 @@ const Header = () => {
                             id=""
                             className="IXqBC"
                             style={{ height: "100%" }}
-                            onChange={handleInputChange}
+                            value={query}
+                            onChange={handleSearch}
                           />
-                          <button className="LdVUr" style={{ height: "100%" }}>
-                            Tìm kiếm
-                          </button>
-                          {show && 
+                           <Link to={`/search-results?query=${encodeURIComponent(query)}`}>Tìm kiếm</Link>
+                          {show && (
                             <div className="jlBoKO">
                               <div className="gyELMq">
-                                <a href="" className="item"> 
-                                  <img src="https://salt.tikicdn.com/ts/upload/e8/aa/26/42a11360f906c4e769a0ff144d04bfe1.png" class="item-icon"/>
-                                  <div class="keyword">áo thun nam</div>
-                                </a>
-                               
+                                {filteredItems.map((item) => (
+                                  <a
+                                    href={`detail/${item.id}`}
+                                    className="item"
+                                    key={item.id}
+                                  >
+                                    <img
+                                      src="https://salt.tikicdn.com/ts/upload/e8/aa/26/42a11360f906c4e769a0ff144d04bfe1.png"
+                                      class="item-icon"
+                                    />
+                                    <div className="keyword">{item.name}</div>
+                                  </a>
+                                ))}
                               </div>
-                            </div>}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -101,19 +121,19 @@ const Header = () => {
                         />
                         <span>Tài khoản</span>
                         <div className="hvGJCW toggler">
-                          <a href="" className="kjhfd">
+                          <Link to="info" className="kjhfd">
                             <p className="brEmWQ">Thông tin tài khoản</p>
-                          </a>
-                          <a href="" className="kjhfd">
+                          </Link>
+                          <Link href="order" className="kjhfd">
                             <p className="brEmWQ">Đơn hàng của tôi</p>
-                          </a>
-                          <a href="" className="kjhfd">
+                          </Link>
+                          <Link to="" className="kjhfd">
                             <p className="brEmWQ">Đăng xuất</p>
-                          </a>
+                          </Link>
                         </div>
                       </div>
                       <div className="hfiWvr">
-                        <a href="">
+                        <Link to="/cart">
                           <div className="iZYkSb bhXqXQ">
                             <div className="cart-wrapper">
                               <img
@@ -125,7 +145,7 @@ const Header = () => {
                               <span className="jbrHBQ">0</span>
                             </div>
                           </div>
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
