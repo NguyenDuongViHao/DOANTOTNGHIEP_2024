@@ -15,6 +15,7 @@ namespace ClothingStore.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private readonly ClothingStoreContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -26,7 +27,7 @@ namespace ClothingStore.Controllers
             IConfiguration configuration
             )
         {
-            
+            _context= context;
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
@@ -34,9 +35,7 @@ namespace ClothingStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>>GetUsers()
         {
-            var users = await _userManager.Users
-                .Where(u => u.Status)
-                .ToListAsync();
+            var users = await _userManager.Users.ToListAsync();
             List<UserViewModel> list = new List<UserViewModel>();
             foreach (var user in users)
             {
@@ -52,74 +51,119 @@ namespace ClothingStore.Controllers
             }
             return Ok(list);
         }
+
 		[HttpGet("{id}")]
 		public async Task<ActionResult<User>> GetUser(string id)
 		{
 			return await _userManager.FindByIdAsync(id);
 
 		}
+		[HttpDelete("{id}")]
+		public async Task<IActionResult> DeleteUser(string id)
+		{
+			var user = await _context.Users.FindAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			user.Status = false;
+			_context.Users.Update(user);
+			var result = await _context.SaveChangesAsync();
+			if (result > 0)
+			{
+				return Ok();
+			}
+			else
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to");
+			}
+		}
 		[HttpPost]
-        [Route("login")]
-        public async Task<IActionResult> Login(string Username, string Password)
-        {
-            var user = await _userManager.FindByNameAsync(Username);
-            if (user != null && await _userManager.CheckPasswordAsync(user, Password))
-            {
-                var userRoles = await _userManager.GetRolesAsync(user);
+		[Route("login")]
+		public async Task<IActionResult> Login(LoginViewModel login)
+		{
+			if (ModelState.IsValid)
+			{
+				var user = await _userManager.FindByNameAsync(login.Username);
 
-                var authClaims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-                };
+				if (user != null && await _userManager.CheckPasswordAsync(user, login.Password))
+				{
+					var userRoles = await _userManager.GetRolesAsync(user);
+					var UserId = user.Id.ToString();
+					var authClaims = new List<Claim>
+					{
+						new Claim(ClaimTypes.Name, user.UserName),
+						new Claim(ClaimTypes.NameIdentifier, UserId),
+						new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+					};
 
-                foreach (var userRole in userRoles)
-                {
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));
-                }
+					foreach (var userRole in userRoles)
+					{
+						authClaims.Add(new Claim(ClaimTypes.Role, userRole));
+					}
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+					var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
 
-                var token = new JwtSecurityToken(
-                    issuer: _configuration["JWT:ValidIssuer"],
-                    audience: _configuration["JWT:ValidAudience"],
-                    expires: DateTime.Now.AddHours(3),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    );
+					var token = new JwtSecurityToken(
+						issuer: _configuration["JWT:ValidIssuer"],
+						audience: _configuration["JWT:ValidAudience"],
+						expires: DateTime.Now.AddHours(3),
+						claims: authClaims,
+						signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+					);
 
-                return Ok(new
-                {
-                    token = new JwtSecurityTokenHandler().WriteToken(token),
-                    expiration = token.ValidTo
-                });
-            }
-            return Unauthorized();
-        }
 
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register(string Username, string Password, string Email)
-        {
-            var userExists = await _userManager.FindByNameAsync(Username);
-            if (userExists != null)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+					return Ok(new
+					{
+						token = new JwtSecurityTokenHandler().WriteToken(token),
+						userRoles = userRoles.ToList(),
+						userId = UserId,
+						expiration = token.ValidTo
+					});
+				}
 
-            User user = new User()
-            {
-                Email = Email,
-                SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = Username,
-                Status = true
-            };
-            var result = await _userManager.CreateAsync(user, Password);
-            if (!result.Succeeded)
-                return StatusCode(StatusCodes.Status500InternalServerError);
+				return Unauthorized(new { message = "Invalid username or password" });
+			}
 
-            return Ok();
-        }
+			return BadRequest(ModelState);
+		}
 
-        [HttpPost]
+		[HttpPost]
+		[Route("register")]
+		public async Task<IActionResult> Register(RegisterViewModel re)
+		{
+			var userExists = await _userManager.FindByNameAsync(re.UserName);
+			if (userExists != null)
+				return StatusCode(StatusCodes.Status500InternalServerError);
+
+			User user = new User()
+			{
+				Email = re.Email,
+				SecurityStamp = Guid.NewGuid().ToString(),
+				UserName = re.UserName,
+				Status = true
+
+			};
+			var result = await _userManager.CreateAsync(user, re.PassWord);
+
+			if (!result.Succeeded)
+				return StatusCode(StatusCodes.Status500InternalServerError);
+
+			if (!await _roleManager.RoleExistsAsync("Admin"))
+				await _roleManager.CreateAsync(new IdentityRole("Admin"));
+
+			if (!await _roleManager.RoleExistsAsync("User"))
+				await _roleManager.CreateAsync(new IdentityRole("User"));
+
+			if (await _roleManager.RoleExistsAsync("User"))
+			{
+				await _userManager.AddToRoleAsync(user, "User");
+			}
+
+			return Ok();
+		}
+
+		[HttpPost]
         [Route("register-admin")]
         public async Task<IActionResult> RegisterAdmin(string Username, string Password, string Email)
         {
