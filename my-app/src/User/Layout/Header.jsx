@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./style.css";
 import { Button, Modal } from "react-bootstrap";
 import AxiosClient from "../../Axios/AxiosClient";
+import ModalLogin from "../../ModalLogin";
 
 const Header = () => {
   var menu;
@@ -12,6 +13,9 @@ const Header = () => {
   const [show, setShow] = useState(false);
   const [allItems, setAllItems] = useState([]);
   const [query, setQuery] = useState("");
+  const [showLogin, setShowLogin] = useState(false);
+  const handleCloseLogin = () => setShowLogin(false);
+  
 
   const handleSearch = (event) => {
     setQuery(event.target.value); // Lưu query vào state
@@ -36,6 +40,7 @@ const Header = () => {
   const handleClose = () => {
     setShow(false);
   };
+  const handleShowLogin = () => setShowLogin(true);
 
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`).then((res) => {
@@ -63,7 +68,7 @@ const Header = () => {
           <p className="brEmWQ">Đơn hàng của tôi</p>
         </Link>
         <Link to="" className="kjhfd">
-          <p className="brEmWQ">Đăng xuất</p>
+          <p className="brEmWQ" onClick={logout}>Đăng xuất</p>
         </Link>
       </div>
     );
@@ -71,7 +76,7 @@ const Header = () => {
     menu = (
       <div className="hvGJCW toggler">
         <Link to="" className="kjhfd">
-          <p className="brEmWQ">Đăng nhập</p>
+          <p className="brEmWQ" onClick={handleShowLogin}>Đăng nhập</p>
         </Link>
         <Link to="" className="kjhfd">
           <p className="brEmWQ">Đăng ký</p>
@@ -193,6 +198,7 @@ const Header = () => {
           </div>
         </div>
       </header>
+      <ModalLogin show={showLogin} handleClose={handleCloseLogin} />
     </>
   );
 };
