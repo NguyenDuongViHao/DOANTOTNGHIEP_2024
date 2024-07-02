@@ -4,6 +4,7 @@ import "./style.css";
 import { Button, Modal } from "react-bootstrap";
 import AxiosClient from "../../Axios/AxiosClient";
 import ModalLogin from "../../ModalLogin";
+import ModalRegister from "../../ModalRegister";
 
 const Header = () => {
   var menu;
@@ -15,6 +16,8 @@ const Header = () => {
   const [query, setQuery] = useState("");
   const [showLogin, setShowLogin] = useState(false);
   const handleCloseLogin = () => setShowLogin(false);
+  const [showRegister, setShowRegister] = useState(false);
+  const handleCloseRegister = () => setShowRegister(false);
   
 
   const handleSearch = (event) => {
@@ -41,6 +44,7 @@ const Header = () => {
     setShow(false);
   };
   const handleShowLogin = () => setShowLogin(true);
+  const handleShowRegister = () => setShowRegister(true);
 
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`).then((res) => {
@@ -79,7 +83,7 @@ const Header = () => {
           <p className="brEmWQ" onClick={handleShowLogin}>Đăng nhập</p>
         </Link>
         <Link to="" className="kjhfd">
-          <p className="brEmWQ">Đăng ký</p>
+          <p className="brEmWQ"onClick={handleShowRegister}>Đăng ký</p>
         </Link>
         <Link to="" className="kjhfd">
           <p className="brEmWQ">Quên mật khẩu</p>
@@ -199,6 +203,7 @@ const Header = () => {
         </div>
       </header>
       <ModalLogin show={showLogin} handleClose={handleCloseLogin} />
+      <ModalRegister show={showRegister} handleClose={handleCloseRegister} />
     </>
   );
 };
