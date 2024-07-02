@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import "./style.css";
 import { Button, Modal } from "react-bootstrap";
 import AxiosClient from "../../Axios/AxiosClient";
 
 const Header = () => {
+  var menu;
+  var jwt = localStorage.getItem("jwt");
+  var navigate = useNavigate();
   const [filteredItems, setFilteredItems] = useState([]);
   const [show, setShow] = useState(false);
   const [allItems, setAllItems] = useState([]);
@@ -40,6 +43,45 @@ const Header = () => {
       setFilteredItems(res.data); // Hiển thị tất cả sản phẩm lúc đầu
     });
   }, []);
+
+  const logout = async () => {
+    try {
+      localStorage.clear();
+      navigate("/");
+    } catch (error) {
+      console.log("Logout error", error);
+    }
+  };
+
+  if (jwt) {
+    menu = (
+      <div className="hvGJCW toggler">
+        <Link to="info" className="kjhfd">
+          <p className="brEmWQ">Thông tin tài khoản</p>
+        </Link>
+        <Link to="order" className="kjhfd">
+          <p className="brEmWQ">Đơn hàng của tôi</p>
+        </Link>
+        <Link to="" className="kjhfd">
+          <p className="brEmWQ">Đăng xuất</p>
+        </Link>
+      </div>
+    );
+  } else {
+    menu = (
+      <div className="hvGJCW toggler">
+        <Link to="" className="kjhfd">
+          <p className="brEmWQ">Đăng nhập</p>
+        </Link>
+        <Link to="" className="kjhfd">
+          <p className="brEmWQ">Đăng ký</p>
+        </Link>
+        <Link to="" className="kjhfd">
+          <p className="brEmWQ">Quên mật khẩu</p>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -81,7 +123,13 @@ const Header = () => {
                             value={query}
                             onChange={handleSearch}
                           />
-                           <Link to={`/search-results?query=${encodeURIComponent(query)}`}>Tìm kiếm</Link>
+                          <Link
+                            to={`/search-results?query=${encodeURIComponent(
+                              query
+                            )}`}
+                          >
+                            Tìm kiếm
+                          </Link>
                           {show && (
                             <div className="jlBoKO">
                               <div className="gyELMq">
@@ -120,17 +168,7 @@ const Header = () => {
                           alt="header_header_account_img"
                         />
                         <span>Tài khoản</span>
-                        <div className="hvGJCW toggler">
-                          <Link to="info" className="kjhfd">
-                            <p className="brEmWQ">Thông tin tài khoản</p>
-                          </Link>
-                          <Link href="order" className="kjhfd">
-                            <p className="brEmWQ">Đơn hàng của tôi</p>
-                          </Link>
-                          <Link to="" className="kjhfd">
-                            <p className="brEmWQ">Đăng xuất</p>
-                          </Link>
-                        </div>
+                        {menu}
                       </div>
                       <div className="hfiWvr">
                         <Link to="/cart">
