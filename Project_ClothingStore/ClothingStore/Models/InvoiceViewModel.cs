@@ -8,6 +8,8 @@
 
 		public string IssueDate { get; set; }
 
+		public string Code { get; set; }
+
 		public string ShippingAddress { get; set; }
 
 		public string ShippingPhone { get; set; }

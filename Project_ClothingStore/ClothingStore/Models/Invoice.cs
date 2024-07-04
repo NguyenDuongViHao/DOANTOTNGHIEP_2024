@@ -7,6 +7,8 @@
 		public string UserId { get; set; }
 		public User User { get; set; }
 
+		public string Code { get; set; }
+
 		public DateTime IssueDate { get; set;}
 
 		public string ShippingAddress { get; set; }
