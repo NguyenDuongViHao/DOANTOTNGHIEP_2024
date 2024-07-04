@@ -104,5 +104,75 @@ namespace ClothingStore.Controllers
         {
             return _context.InvoiceDetail.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet("infoOrder/{id}")]
+		public async Task<ActionResult<InvoiceDetail>> GetInfoOrder(int id)
+		{
+            var timeInvoice = "";
+			var infoOrder = await _context.InvoiceDetail
+                .Include(i=>i.Invoice.User)
+                .Include(i=>i.ProductDetail.Product)
+				.Include(i => i.ProductDetail)
+				.FirstOrDefaultAsync(a=> a.Invoice.Id == id);
+			
+			if (infoOrder == null)
+			{
+				return NotFound();
+			}
+			timeInvoice = $"{infoOrder.Invoice.IssueDate.Day}/{infoOrder.Invoice.IssueDate.Month}/{infoOrder.Invoice.IssueDate.Year}";
+			
+            var detailOrder = new InvoiceViewModel
+			{
+				Code = infoOrder.Invoice.Code,
+				IssueDate = timeInvoice,
+				UserName = infoOrder.Invoice.User.FullName,
+				ShippingAddress = infoOrder.Invoice.ShippingAddress,
+				ShippingPhone = infoOrder.Invoice.ShippingPhone,
+                Discount = infoOrder.Invoice.Discount,   
+                COD = infoOrder.Invoice.COD,
+                MoMo = infoOrder.Invoice.MoMo,
+			};
+
+            return Ok(detailOrder);
+		}
+
+		[HttpGet("detailsOfAnOrder/{id}")]
+		public async Task<ActionResult<InvoiceDetail>> detailsOfAnOrder(int id)
+		{
+			var invoiceDetail = await _context.InvoiceDetail
+					  .Include(i => i.ProductDetail.Product)
+					  .Include(i => i.ProductDetail.Size)
+					  .Include(i => i.ProductDetail.Color)
+					  .Include(i => i.Invoice.User)
+					  .Where(a => a.Invoice.Id == id).ToListAsync();
+			if (invoiceDetail == null)
+			{
+				return NotFound();
+			}
+			var listInvoiceDetails = new List<InvoiceDetailsViewModel>();
+			foreach (InvoiceDetail item in invoiceDetail)
+            {
+				Models.Image image = _context.Image.FirstOrDefault(x => x.ProductId == item.ProductDetail.Product.Id);
+                double totalOfProduct = (item.Quantity * item.Price);
+                listInvoiceDetails.Add(new InvoiceDetailsViewModel
+                {
+                    Id = item.Id,
+                    Price = item.Price,
+                    Quantity = item.Quantity,
+                    SubtotalProduct = totalOfProduct,
+
+                    InvoiceId = item.Invoice.Id,
+                    ApproveOrder = item.Invoice.ApproveOrder,
+
+                    ProductId = item.ProductDetail.Product.Id,
+                    ProductName = item.ProductDetail.Product.Name,
+                    Image = image?.ImageURL,
+                    NameSize = item.ProductDetail.Size.NameSize,
+                    NameColor = item.ProductDetail.Color.NameColor,
+				});
+			}
+
+			return Ok(listInvoiceDetails);
+		}
+	}
 }

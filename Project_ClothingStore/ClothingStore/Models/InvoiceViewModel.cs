@@ -28,6 +28,8 @@
 
 		public string NameProduct { get; set; }
 
+		public int ProductId { get; set; }
+
 		public bool Status { get; set; }
 
 	}

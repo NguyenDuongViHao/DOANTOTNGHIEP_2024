@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClothingStore.Data;
 using ClothingStore.Models;
+using ClothingStore.Helpers;
 
 namespace ClothingStore.Controllers
 {
@@ -104,5 +105,62 @@ namespace ClothingStore.Controllers
         {
             return _context.Invoice.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet]
+        [Route("UserListOfOrder/{str}/{UserId}")]
+		public async Task<ActionResult<IEnumerable<Invoice>>> UserListOfOrder(string str, string UserId)
+		{
+            var invoices = await _context.Invoice.ToListAsync();
+			//var UserId = User.GetUserId().ToString();
+
+			if(UserId != null)
+            {
+				invoices = await _context.Invoice.Include(i => i.User)
+				.Where(i => str == "default" ? true
+				: str == "ordered" ? i.ApproveOrder == "Đã đặt"
+				: str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
+				: str == "delivered" ? i.ApproveOrder == "Đã giao"
+				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId == UserId).OrderByDescending(i => i.Id).ToListAsync();
+			}
+            var invoiceDetails = await _context.InvoiceDetail.Include(i=> i.Invoice)
+                                                            .Include(i=>i.ProductDetail)
+                                                                .ThenInclude(i=>i.Product).ToListAsync();
+			var listOfOrder = new List<InvoiceViewModel>();
+			foreach (var invoice in invoices)
+            {
+                string nameProduct = "";
+                string timeOrder = "";
+                int productid=0;
+			    timeOrder = $"{invoice.IssueDate.Day}/{invoice.IssueDate.Month}/{invoice.IssueDate.Year}";
+				List<string> templist = new List<string>();
+
+
+                foreach (var invoicedetail in invoiceDetails)
+                {
+                    if(invoicedetail.Invoice.Id == invoice.Id)
+                    {
+                        productid = invoicedetail.ProductDetail.Product.Id;
+                        templist.Add(invoicedetail.ProductDetail.Product.Name);
+                    }
+                }
+
+                nameProduct = string.Join(", ", templist);
+                listOfOrder.Add(new InvoiceViewModel
+                {
+                    Id = invoice.Id,
+                    Code = invoice.Code,
+                    IssueDate = timeOrder,
+                    ShippingAddress = invoice.ShippingAddress,
+                    ShippingPhone = invoice.ShippingPhone,
+                    Total = invoice.Total,
+                    ApproveOrder = invoice.ApproveOrder,
+                    NameProduct = nameProduct,
+                    ProductId = productid,
+                    Status = invoice.Status,
+                });
+            }
+
+			return Ok(listOfOrder);
+		}
+	}
 }
