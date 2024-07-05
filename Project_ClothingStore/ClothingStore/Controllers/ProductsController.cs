@@ -33,7 +33,9 @@ namespace ClothingStore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            var product = await _context.Product.FindAsync(id);
+            var product = await _context.Product
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(c=>c.Id==id);
 
             if (product == null)
             {
@@ -79,6 +81,10 @@ namespace ClothingStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
+            
+            
+            
+            product.CreateTime = DateTime.Now;
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
 
@@ -95,7 +101,8 @@ namespace ClothingStore.Controllers
                 return NotFound();
             }
 
-            _context.Product.Remove(product);
+            product.Status = false;
+            _context.Product.Update(product);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -139,8 +146,24 @@ namespace ClothingStore.Controllers
             }
 			return Ok(rows);
 		}
+		//Get: api/Products/search? name = productname
+		[HttpGet("searchProduct")]
+		public async Task<ActionResult<IEnumerable<Product>>> SeacrhProducts(string name)
+		{
+			var query = _context.Product.AsQueryable();
 
-        [HttpGet]
+			if (!string.IsNullOrEmpty(name))
+			{
+				query = query.Where(p => p.Name.Contains(name));
+			}
+
+			query = query.Where(p => p.Status);
+
+			return await query.ToListAsync();
+		}
+
+
+		[HttpGet]
         [Route("productDetail/{id}")]
 		public async Task<ActionResult<IEnumerable<Product>>> GetDetailOneProduct(int id)
 		{

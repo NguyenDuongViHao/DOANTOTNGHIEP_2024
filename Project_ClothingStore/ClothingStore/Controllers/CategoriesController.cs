@@ -25,7 +25,8 @@ namespace ClothingStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategory()
         {
-            return await _context.Category.ToListAsync();
+            return await _context.Category.Where(c => c.Status)
+                .ToListAsync();
         }
 
         // GET: api/Categories/5
@@ -41,10 +42,11 @@ namespace ClothingStore.Controllers
 
             return category;
         }
+		
 
-        // PUT: api/Categories/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		// PUT: api/Categories/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutCategory(int id, Category category)
         {
             if (id != category.Id)
@@ -94,13 +96,38 @@ namespace ClothingStore.Controllers
                 return NotFound();
             }
 
-            _context.Category.Remove(category);
+            category.Status = false;
+            _context.Category.Update(category);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
+		////Get: api/Products/search? name = productname
+		//[HttpGet("searchCategories")]
+		//public async Task<ActionResult<IEnumerable<Category>>> SeacrhCategories(string name)
+		//{
+		//	return await _context.Category
+		//		  .Where(p => p.Name.Contains(name))
+		//		  .ToListAsync();
 
-        private bool CategoryExists(int id)
+		//}
+		[HttpGet("searchCategories")]
+		public async Task<ActionResult<IEnumerable<Category>>> SearchCategories(string name, bool status)
+		{
+			var query = _context.Category.AsQueryable();
+
+			if (!string.IsNullOrEmpty(name))
+			{
+				query = query.Where(p => p.Name.Contains(name));
+			}
+
+			query = query.Where(p => p.Status);
+
+			return await query.ToListAsync();
+		}
+
+
+		private bool CategoryExists(int id)
         {
             return _context.Category.Any(e => e.Id == id);
         }

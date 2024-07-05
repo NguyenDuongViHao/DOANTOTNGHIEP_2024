@@ -32,7 +32,10 @@ namespace ClothingStore.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDetail>> GetProductDetail(int id)
         {
-            var productDetail = await _context.ProductDetail.FindAsync(id);
+            var productDetail = await _context.ProductDetail.Include(d => d.Size)
+                .Include(d=>d.Color)
+                .Include(d => d.Product)
+                .FirstOrDefaultAsync(d => d.Id == id);
 
             if (productDetail == null)
             {
@@ -42,50 +45,75 @@ namespace ClothingStore.Controllers
             return productDetail;
         }
 
-        // PUT: api/ProductDetails/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutProductDetail(int id, ProductDetail productDetail)
-        {
-            if (id != productDetail.Id)
-            {
-                return BadRequest();
-            }
+		// PUT: api/ProductDetails/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 
-            _context.Entry(productDetail).State = EntityState.Modified;
+		[HttpPut("{id}")]
+		public async Task<IActionResult> PutBook(int id, ProductDetail productDetail)
+		{
+			if (id != productDetail.Id)
+			{
+				return BadRequest();
+			}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ProductDetailExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+			_context.Entry(productDetail).State = EntityState.Modified;
 
-            return NoContent();
-        }
+			try
+			{
+				await _context.SaveChangesAsync();
+			}
+			catch (DbUpdateConcurrencyException)
+			{
+				if (!ProductDetailExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
 
-        // POST: api/ProductDetails
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<ProductDetail>> PostProductDetail(ProductDetail productDetail)
-        {
-            _context.ProductDetail.Add(productDetail);
-            await _context.SaveChangesAsync();
+			return NoContent();
+		}
 
-            return CreatedAtAction("GetProductDetail", new { id = productDetail.Id }, productDetail);
-        }
+		private bool ProductDetailExists(int id)
+		{
+			return _context.ProductDetail.Any(e => e.Id == id);
+		}
 
-        // DELETE: api/ProductDetails/5
-        [HttpDelete("{id}")]
+
+		// POST: api/ProductDetails
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<ProductDetail>> PostProductDetail(ProductDetail productDetail)
+		{
+			try
+			{
+				if (productDetail == null)
+				{
+					return BadRequest("ProductDetail is null.");
+				}
+
+				_context.ProductDetail.Add(productDetail);
+				await _context.SaveChangesAsync();
+
+				return CreatedAtAction(nameof(GetProductDetail), new { id = productDetail.Id }, productDetail);
+			}
+			catch (Exception ex)
+			{
+				// Log the exception details
+				Console.WriteLine($"Error: {ex.Message}");
+				Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+
+				// Return a 500 error with the exception message for debugging
+				return StatusCode(500, $"Internal server error: {ex.Message}");
+			}
+		}
+
+
+		// DELETE: api/ProductDetails/5
+		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProductDetail(int id)
         {
             var productDetail = await _context.ProductDetail.FindAsync(id);
@@ -99,10 +127,22 @@ namespace ClothingStore.Controllers
 
             return NoContent();
         }
+		[HttpGet("listProductDetail/{id}")]
+		public async Task<ActionResult<List<ProductDetail>>> GetProductDetailAdmin(int id)
+		{
+			var productDetails = await _context.ProductDetail.Include(d => d.Size)
+				.Include(d => d.Color)
+				.Include(d => d.Product)
+				.Where(d => d.ProductId == id).ToListAsync();
 
-        private bool ProductDetailExists(int id)
-        {
-            return _context.ProductDetail.Any(e => e.Id == id);
-        }
-    }
+			if (productDetails == null || productDetails.Count == 0)
+			{
+				return NotFound();
+			}
+
+			return productDetails;
+		}
+
+
+	}
 }
