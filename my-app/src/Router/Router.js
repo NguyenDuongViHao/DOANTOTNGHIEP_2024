@@ -16,10 +16,12 @@ import ProductAdd from "../Admin/Product/ProductAdd"
 // import InvoiceDetails from "../User/Account/InvoiceDetails"
 import ProductEdit from "../Admin/Product/ProductEdit"
 import ProductDetailAdmin from "../Admin/Product/ProductDetailAmdmin"
-import ProductDetailAdminEdit from "../Admin/Product/ProcducDetailAdminEdit"
+import ProductDetailAdminEdit from "../Admin/Product/ProductDetailAdminEdit"
 import CategoryList from "../Admin/Category/Category"
 import CategoryAdd from "../Admin/Category/CategoryAdd"
 import CategoryEdit from "../Admin/Category/CategoryEdit"
+import ProductDetailAdminAdd from "../Admin/Product/ProductDetailAdminAdd"
+import OrderList from "../Admin/Order/OrderList"
 
 const Router = () => {
     return (
@@ -38,6 +40,7 @@ const Router = () => {
                                 <Route path="edit/:id" element={<ProductEdit />} />
                             </Route>
                             <Route path="productdetails">
+                                <Route path="add/:id" element={<ProductDetailAdminAdd/>}/>
                                 <Route path="detail/:id" element={<ProductDetailAdmin />} />
                                 <Route path="edit/:id" element={<ProductDetailAdminEdit />} />
                             </Route>
@@ -46,6 +49,7 @@ const Router = () => {
                                 <Route path="add" element={<CategoryAdd />} />
                                 <Route path="edit/:id" element={<CategoryEdit />} />
                             </Route>
+                            <Route path="orders" element={<OrderList />} />
                         </Route>
 
                     </Route>

@@ -1,58 +1,92 @@
-import { faCheck, faPlus, faTimes, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBan, faCheck, faPlus, faTimes, faToggleOn, faTrash, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button, Col, Modal, Row } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 
-const AccountList = () =>{
+const AccountList = () => {
     const [users, setUser] = useState([]);
-    var i = 1;
+    var id = 1;
     const [show, setShow] = useState(false);
     const [selectedUsers, setSelectedUsers] = useState({});
     const [showDelete, setShowDelete] = useState(false);
     const handleCloseDelete = () => setShowDelete(false);
     const handleClose = () => setShow(false);
-    const handleShow = (id) =>{
+    const handleShow = (id) => {
         setSelectedUsers(users.find(u => u.id === id));
         setShow(true);
     }
 
-    const handleShowDelete = (id) =>{
+    const handleShowDelete = (id) => {
         setSelectedUsers(users.find(u => u.id === id));
         setShowDelete(true);
 
     };
 
-    const handleDelete = (e) =>{
+    // const handleDelete = async (e) => {
+    //     e.preventDefault();
+    //     if (!selectedUsers || !selectedUsers.id) {
+    //         console.error('No user selected for deletion');
+    //         return;
+    //     }
+    //     try {
+    //         const id = selectedUsers.id; // Lấy ID của người dùng được chọn
+    //         await AxiosClient.delete(`Users/${id}`);
+
+    //         // Tạo một bản sao mới của mảng users, loại bỏ user đã bị xóa
+    //         const updatedUsers = users.filter(u => u.id !== id);
+    //         setUser(updatedUsers);
+    //         setShowDelete(false);
+    //     } catch (error) {
+    //         console.error('Error deleting user:', error);
+    //     }
+    // }
+
+    const handleDelete = async (e) => {
         e.preventDefault();
-        AxiosClient.delete(`Users/${selectedUsers.id}`)
-        let list = users;
-        list.splice(users.findIndex(u => u.id == selectedUsers.id));
-        setUser(list);
-        setShowDelete(false);
-       
+        if (!selectedUsers || !selectedUsers.id) {
+            console.error('No user selected for deletion');
+            return;
+        }
+
+        try {
+            const id = selectedUsers.id; // Lấy ID của người dùng được chọn
+            await AxiosClient.delete(`Users/${id}`);
+
+            // Cập nhật trạng thái của người dùng trong mảng users
+            const updatedUsers = users.map(user =>
+                user.id === id ? { ...user, status: false } : user
+            );
+            setUser(updatedUsers);
+            setShowDelete(false);
+        } catch (error) {
+            console.error('Error deleting user:', error);
+        }
     }
 
-    useEffect(() =>{
+
+
+    useEffect(() => {
         AxiosClient.get(`/Users`)
-            .then((res)=>{
+            .then((res) => {
                 setUser(res.data)
                 console.log(users);
+                console.log(res.data);
             });
-    },[])
-    return(
+    }, [])
+    return (
         <>
             <div>
                 <div className="page-breadcrumb">
                     <div className="row">
                         <div className="col-12 d-flex no-block align-items-center">
-                            <h4 className="page-title">Danh sách loại tài khoản</h4>
+                            <h4 className="page-title"style={{fontSize:"30px"}}>Danh sách loại tài khoản</h4>
                             <div className="ml-auto text-right">
                                 <nav aria-label="breadcrumb">
                                     <ol className="breadcrumb">
-                                        <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                        <li className="breadcrumb-item active" aria-current="page">Library</li>
+                                        {/* <li className="breadcrumb-item"><a href="#">Home</a></li>
+                                        <li className="breadcrumb-item active" aria-current="page">Library</li> */}
                                     </ol>
                                 </nav>
                             </div>
@@ -72,6 +106,7 @@ const AccountList = () =>{
                                                     <th>STT</th>
                                                     <th>Tên</th>
                                                     <th>Email</th>
+                                                    <th>Trạng thái</th>
                                                     <th>Chức năng</th>
                                                 </tr>
                                             </thead>
@@ -80,16 +115,20 @@ const AccountList = () =>{
                                                     users.map(item => {
                                                         return (
                                                             <tr>
-                                                                <td>{i++}</td>
+                                                                <td>{id++}</td>
                                                                 <td>{item.userName}</td>
                                                                 <td>{item.email}</td>
+                                                                <td style={{ color: item.status ? 'green' : 'red' }}>
+                                                                    {item.status ? 'Hoạt động' : 'Đã chặn'}
+                                                                </td>
+
                                                                 <td>
                                                                     <td>
                                                                         <Button variant="info" onClick={() => handleShow(item.id)} className="ml-2">
                                                                             <FontAwesomeIcon icon={faUser} />
                                                                         </Button>
-                                                                        <Button variant="danger ml-2" onClick={() => handleShowDelete(item.id)}>
-                                                                            <FontAwesomeIcon icon={faTrash} />
+                                                                        <Button variant="warning ml-2" onClick={() => handleShowDelete(item.id)}>
+                                                                            <FontAwesomeIcon icon={faBan} />
                                                                         </Button>
                                                                     </td>
                                                                 </td>
@@ -103,6 +142,7 @@ const AccountList = () =>{
                                                     <th>STT</th>
                                                     <th>Tên</th>
                                                     <th>Email</th>
+                                                    <th>Trạng thái</th>
                                                     <th>Chức năng</th>
                                                 </tr>
                                             </tfoot>
@@ -122,6 +162,9 @@ const AccountList = () =>{
 
                                                             <dt>Email:</dt>
                                                             <dd>{selectedUsers.email}</dd>
+
+                                                            <dt>Trạng thái:</dt>
+                                                            <dd style={{ color: selectedUsers.status ? 'green' : 'red' }}>{selectedUsers.status ? 'Hoạt động' : 'Đã chặn'}</dd>
                                                         </dl>
                                                     </Col>
                                                 </Row>
@@ -135,9 +178,9 @@ const AccountList = () =>{
 
                                         <Modal show={showDelete} onHide={handleCloseDelete} centered>
                                             <Modal.Header closeButton>
-                                                <Modal.Title>Xác nhận xóa</Modal.Title>
+                                                <Modal.Title>Xác nhận chặn tài khoản</Modal.Title>
                                             </Modal.Header>
-                                            <Modal.Body>Bạn có chắc muốn xóa loại sản phẩm <span style={{ fontWeight: "bold" }}>{selectedUsers.name}</span> ?</Modal.Body>
+                                            <Modal.Body>Bạn có chắc muốn chặn loại tài khoản  <span style={{ fontWeight: "bold" }}>{selectedUsers.name}</span> ?</Modal.Body>
                                             <Modal.Footer>
                                                 <Button variant="danger" onClick={handleDelete}>
                                                     <FontAwesomeIcon icon={faCheck} /> Đồng ý
