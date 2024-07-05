@@ -7,7 +7,7 @@ import { Container, Row, Col, Card, Form, InputGroup, Button } from 'react-boots
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import "../Login/Login.css";
-import { faFacebook, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 // import ModalRegister from "../User/ModalRegister";
 
 const Login = ({ onSuccess }) => {
@@ -152,11 +152,6 @@ const Login = ({ onSuccess }) => {
             <Button className="mb-2 w-100" size="lg" style={{ backgroundColor: '#dd4b39' }}>
               <FontAwesomeIcon icon={faGoogle} className="mx-2" />
               Sign in with Google
-            </Button>
-
-            <Button className="mb-4 w-100" size="lg" style={{ backgroundColor: '#3b5998' }}>
-            <FontAwesomeIcon icon={faFacebook} />
-              Sign in with Facebook
             </Button>
           </Card.Body>
         </Col>
