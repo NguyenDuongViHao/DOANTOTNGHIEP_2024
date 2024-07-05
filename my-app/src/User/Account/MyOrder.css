@@ -1,0 +1,106 @@
+*{
+    box-sizing: border-box;
+}
+
+
+
+.navbarMyorder1 {
+    cursor: pointer;
+    background: rgb(255, 255, 255);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    position: sticky;
+    top: 0px;
+    z-index: 10;
+}
+
+.itemnavbarMyorder1 {
+    width: 16.6667%;
+    white-space: nowrap;
+    text-align: center;
+    border-bottom: none;
+}
+/* .navbaritem0{
+    width: 16.6667%;
+    padding: 12px 0px;
+    text-align: center;
+    color: rgb(13, 92, 182);
+    border-bottom: 2px solid rgb(13, 92, 182);
+} */
+
+.itemnavbarMyorder1 a{
+   color: black;
+}
+.backgroundInfo1 {
+    padding-bottom: 1rem;  
+}
+
+.backgroundInfo1 div{
+    border-radius: 0;
+}
+
+
+/* invoicedetails */
+.hhOLsC {
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+.itemI{
+    width: 33.3333%;    
+}
+.item1{
+    background-color: #efefef;
+}
+.item2{
+    background-color: #efefef;
+}
+.parentInvoice{
+    background-color: #efefef;
+}
+.detailInvoiceNavbar{
+    margin-bottom: 3rem;
+}
+.detailInvoiceNavbarItem1{
+    width: 84%;
+}
+
+.fontSize20{
+    font-size: 20px;
+}
+.displayFLEX{
+    display: flex;
+}
+ .totalInvoice .floatRightInvoice{
+    float: right;
+    padding:  2rem 2rem;
+    padding-left: 0;
+}
+.totalInvoice .floatRightInvoice .totalResult{
+    display: flex;
+}
+.totalInvoice .floatRightInvoice .totalResult div:nth-child(2) p{
+    text-align: end;
+}
+.totalInvoice .floatRightInvoice button{
+    float: right;
+    padding: 0.5rem 1rem;
+}
+
+.fgsfgs{
+    padding: 0px !important;
+}
+
+.itemnavbarMyorder1 {
+    width: 16.6667%;
+    padding: 12px 0px;
+    text-align: center;
+    color: rgb(13, 92, 182);
+    border-bottom: 2px solid transparent; /* Đặt mặc định là trong suốt */
+    cursor: pointer; /* Thêm con trỏ để chỉ ra rằng mục có thể click */
+}
+
+.itemnavbarMyorder1.active {
+    border-bottom: 2px solid rgb(13, 92, 182); /* Đặt gạch chân cho mục đang chọn */
+}

@@ -1,0 +1,231 @@
+.backgroundInfo{
+    background-color:  #efefef;
+   
+    padding: 2rem 0;
+}
+
+.cardBody {
+    width: 98%;
+    border: none;
+}
+
+.iconOrderManagement {
+    width: 24px;
+    height: 24px;
+    margin: 0px 22px 0px 0px;
+    font-size: 24px;
+    color: rgb(155, 155, 155);
+}
+
+.myOrder {
+    font-size: 19px;
+    margin: 20px 0px 15px;
+}
+
+.managementInfo {
+    margin: 20px;
+    list-style: none;
+    font-size: 13px;
+}
+
+.managementInfo a {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 13px 20px;
+    color: rgb(74, 74, 74);
+}
+
+.cardBody .list {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+.cardBody .item {
+    background-color: rgb(255, 255, 255);
+    margin-bottom: 2px;
+    border-radius: 2px;
+    padding: 20px 70px 20px 15px;
+    display: flex;
+    position: relative;
+}
+
+.cardBody .item::before {
+    content: "";
+        height: 2px;
+        width: 955px;
+        background-color: rgb(245, 245, 250);
+        position: absolute;
+        left: -5px;
+        top: 170px;
+        z-index: 1;
+}
+
+.cardBody .item:last-child::before {
+    display: none;
+}
+
+.cardBody .btn-delete {
+    width: 40px;
+    height: 40px;
+    padding: 0px;
+    background: 0px center;
+    color: rgb(153, 153, 153);
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    border: 0px;
+    font-size: 30px;
+    box-shadow: none;
+    cursor: pointer;
+}
+
+.cardBody .item .thumbnail {
+    width: 130px;
+    min-width: 130px;
+    margin: 0px 25px;
+}
+
+.jDowEZ {
+    position: relative;
+    z-index: 1;
+    display: block;
+}
+
+.jDowEZ.loaded .image {
+    display: inline-block;
+}
+
+.jDowEZ .image {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    display: none;
+    vertical-align: middle;
+}
+
+.cardBody .item .body {
+    flex: 1 1 0%;
+}
+
+.cardBody .item .name {
+    font-size: 14px;
+    margin: 0px 0px 15px;
+    line-height: 20px;
+    font-weight: 400;
+    color: rgb(51, 51, 51);
+    display: block;
+}
+
+.cardBody .rating {
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+.cardBody .rating__base {
+    color: rgb(222, 221, 220);
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.cardBody .rating__progress {
+    color: rgb(255, 195, 36);
+    position: absolute;
+    z-index: 2;
+    left: 0px;
+    top: 0px;
+    overflow: hidden;
+}
+
+.cardBody .review-count {
+    font-size: 12px;
+    color: rgb(102, 102, 102);
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0px 0px 0px 4px;
+}
+
+.cardBody .footer {
+    width: 190px;
+    min-width: 230px;
+    margin-left: 25px;
+    text-align: right;
+}
+
+.cardBody .footer .price.has-discount {
+    color: rgb(255, 66, 78);
+}
+
+.cardBody .footer .price {
+    font-size: 22px;
+    line-height: 24px;
+    font-weight: 500;
+    margin: 0px 0px 8px;
+    color: rgb(56, 56, 61);
+}
+
+.cardBody .footer .wrap {
+    display: flex;
+    -webkit-box-pack: end;
+    justify-content: flex-end;
+    font-size: 13px;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+.cardBody .footer .list-price {
+    color: rgb(128, 128, 137);
+    text-decoration: line-through;
+    font-size: 14px;
+}
+
+.cardBody .footer .discount {
+    position: relative;
+    z-index: 1;
+    padding: 0px 2px;
+    line-height: 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgb(255, 66, 78);
+    margin-top: 3px;
+    margin-left: 20px;
+}
+
+.cardBody .list .item:nth-child(n+2) {
+    border-top: 1px solid rgb(102, 102, 102);
+}
+
+.jIFHQL {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+
+    margin: 20px
+}
+.jIFHQL .info {
+    flex: 1 1 0%;
+    font-size: 13px;
+    line-height: 15px;
+    color: rgb(51, 51, 51);
+    font-weight: 300;
+}
+.jIFHQL .info strong {
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 400;
+    display: block;
+    margin: 4px 0px 0px;
+}
+
+.jIFHQL .iconstt{
+    width: 45px;
+    margin: 0px 12px 0px 0px;
+    border-radius: 50%;
+}

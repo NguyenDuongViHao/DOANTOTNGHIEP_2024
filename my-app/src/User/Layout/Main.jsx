@@ -73,31 +73,38 @@ const Main = () => {
     setFilteredProducts(sortedIncrease);
   };
 
+  const handProductNews = () => {
+    const sortedNews = [...filteredProducts].sort(
+      (a, b) => new Date(b.createTime) - new Date(a.createTime)
+    );
+    setFilteredProducts(sortedNews);
+  };
+
   useEffect(() => {
-    AxiosClient.get(`/Products/listProduct`).then((res) => {
-      setFilteredProducts(res.data);
-      setProductList(res.data);
-      setTheHasBeenFilter(res.data);
-    })
-    .catch((error)=>{
-      console.error("There was an error fetching the products!", error);
-    })
+    AxiosClient.get(`/Products/listProduct`)
+      .then((res) => {
+        setFilteredProducts(res.data);
+        setProductList(res.data);
+        setTheHasBeenFilter(res.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
   }, []);
 
   console.log(ProductList);
 
   useEffect(() => {
     AxiosClient.get(`/Categories`)
-    .then((res) => {
-      setCategoryList(res.data)
-    })
-    .catch((error)=>{
-      console.error("There was an error fetching the products!", error);
-    })
+      .then((res) => {
+        setCategoryList(res.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
   }, []);
 
-
-  console.log(CategoryList)
+  console.log(CategoryList);
 
   return (
     <>
@@ -106,49 +113,30 @@ const Main = () => {
           <div className="jZosWU">
             <div className="cjqkgR">
               <div className="efUuhP">Danh muc</div>
-              {CategoryList.map((item)=>{
+              {CategoryList.map((item) => {
                 return (
                   <>
-                  <div className="bHIPhv">
-                <a
-                  href="#"
-                  title={item.name}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleCatagories(item.name);
-                  }}
-                >
-                  <div className="iFfPOy">
-                    <img
-                      src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
-                      alt="hinhanh"
-                    />
-                  </div>
-                  <div className="ctcPzh">{item.name}</div>
-                </a>
-              </div>
+                    <div className="bHIPhv">
+                      <a
+                        href="#"
+                        title={item.name}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleCatagories(item.name);
+                        }}
+                      >
+                        <div className="iFfPOy">
+                          <img
+                            src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
+                            alt="hinhanh"
+                          />
+                        </div>
+                        <div className="ctcPzh">{item.name}</div>
+                      </a>
+                    </div>
                   </>
-                )
+                );
               })}
-              
-              {/* <div className="bHIPhv">
-                <a
-                  href="#"
-                  title="Fragrances"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleCatagories("fragrances");
-                  }}
-                >
-                  <div className="iFfPOy">
-                    <img
-                      src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
-                      alt="hinhanh"
-                    />
-                  </div>
-                  <div className="ctcPzh">Fragrances</div>
-                </a>
-              </div> */}
             </div>
           </div>
 
@@ -177,8 +165,7 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
- />
+                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -186,8 +173,7 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
- />
+                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -195,8 +181,7 @@ const Main = () => {
                       <SwiperSlide className="main-swiper-slide">
                         <a href="" className="wbnRK">
                           <div className={`carousel-item active`}>
-                            <img                       src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
- />
+                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
                           </div>
                         </a>
                       </SwiperSlide>
@@ -209,7 +194,7 @@ const Main = () => {
             <div className="cFhbdX" style={{ marginTop: "1rem" }}>
               <div className="sort-list mb-3" id="noanim-tab-example">
                 <Nav variant="pills">
-                  <Nav.Item>
+                  <Nav.Item className="navitem1">
                     <Nav.Link
                       eventKey="first"
                       onClick={handProductDefault}
@@ -218,7 +203,7 @@ const Main = () => {
                       Phổ Biến
                     </Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
+                  <Nav.Item className="navitem1">
                     <Nav.Link
                       eventKey="second"
                       onClick={handProductIncrease}
@@ -226,8 +211,8 @@ const Main = () => {
                     >
                       Giá Thấp Đến Cao
                     </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
+                  </Nav.Item >
+                  <Nav.Item className="navitem1">
                     <Nav.Link
                       eventKey="third"
                       onClick={handProductDecrease}
@@ -237,11 +222,15 @@ const Main = () => {
                       Giá Cao Đến Thấp
                     </Nav.Link>
                   </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="">mmm</Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item>
-                    <Nav.Link eventKey="">mmm</Nav.Link>
+                  <Nav.Item className="navitem1">
+                    <Nav.Link
+                      eventKey="Fourth"
+                      onClick={handProductNews}
+                      style={{ border: "solid 1px gray", borderRadius: "16px" }}
+                    >
+                      {" "}
+                      Hàng mới
+                    </Nav.Link>
                   </Nav.Item>
                 </Nav>
                 <div
@@ -265,7 +254,7 @@ const Main = () => {
                             return (
                               <>
                                 <div className="product-item men">
-                                  <div className="product discount product_filter">
+                                  <div className="product discount product_filter" style={{margin:"0 auto", width:"90%"}}>
                                     <div className="product_background">
                                       <div className="product_border">
                                         <div className="product_image">
@@ -285,12 +274,11 @@ const Main = () => {
                                       </h6>
                                       <div className="product_price">
                                         {item.price}
-                                        <span>{item.price}</span>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">add to cart</a>
+                                    <a href="#">Thêm vào giỏ hàng</a>
                                   </div>
                                 </div>
                               </>
@@ -338,16 +326,17 @@ const Main = () => {
                                     <div className="favorite favorite_left" />
                                     <div className="product_info">
                                       <h6 className="product_name">
-                                        <Link to="detail/1">{item.title}</Link>
+                                      <Link to={`detail/${item.id}`}>
+                                          {item.name}
+                                        </Link>
                                       </h6>
                                       <div className="product_price">
                                         {item.price}
-                                        <span>{item.price}</span>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">add to cart</a>
+                                    <a href="#">Thêm vào giỏ hàng</a>
                                   </div>
                                 </div>
                               </>
@@ -395,16 +384,75 @@ const Main = () => {
                                     <div className="favorite favorite_left" />
                                     <div className="product_info">
                                       <h6 className="product_name">
-                                        <Link to="detail/1">{item.title}</Link>
+                                      <Link to={`detail/${item.id}`}>
+                                          {item.name}
+                                        </Link>
                                       </h6>
                                       <div className="product_price">
                                         {item.price}
-                                        <span>{item.price}</span>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">add to cart</a>
+                                    <a href="#">Thêm vào giỏ hàng</a>
+                                  </div>
+                                </div>
+                              </>
+                            );
+                          })}
+                        </div>
+                        <div>
+                          <ul className="pagination">
+                            {pageNumber.map((item) => {
+                              return (
+                                <li className="page-item" key={item}>
+                                  <a
+                                    href="#"
+                                    className="page-link"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      paginate(item);
+                                    }}
+                                  >
+                                    {item}
+                                  </a>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      </Tab.Pane>
+                      <Tab.Pane eventKey="Fourth">
+                        <div className="product-main">
+                          {CurrentProducts.map((item) => {
+                            return (
+                              <>
+                                <div className="product-item men">
+                                  <div className="product discount product_filter">
+                                    <div className="product_background">
+                                      <div className="product_border">
+                                        <div className="product_image">
+                                          <img
+                                            src={`https://localhost:7073/images/${item.imageName}`}
+                                            alt=""
+                                          />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div className="favorite favorite_left" />
+                                    <div className="product_info">
+                                      <h6 className="product_name">
+                                      <Link to={`detail/${item.id}`}>
+                                          {item.name}
+                                        </Link>
+                                      </h6>
+                                      <div className="product_price">
+                                        {item.price}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div className="red_button add_to_cart_button">
+                                    <a href="#">Thêm vào giỏ hàng</a>
                                   </div>
                                 </div>
                               </>

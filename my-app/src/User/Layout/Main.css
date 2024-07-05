@@ -269,8 +269,40 @@ div{
 }
 
 
-.cFhbdX .nav-item{
+.cFhbdX .navitem1{
     margin-right: 20px;
 }
 
+
+.breadcrumb {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+}
+
+a.breadcrumb-item {
+    position: relative;
+    color: rgb(128, 128, 137);
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.resultSearch{
+    position: relative;
+    color: rgb(128, 128, 137);
+    font-size: 18px;
+    line-height: 21px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.brLIEg {
+    width: 200px;
+    gap: 12px;
+    flex-shrink: 0;
+    top: 28px;
+    height: 300px;
+}
 

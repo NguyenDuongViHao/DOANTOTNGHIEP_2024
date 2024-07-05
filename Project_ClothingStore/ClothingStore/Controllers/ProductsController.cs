@@ -81,9 +81,6 @@ namespace ClothingStore.Controllers
         [HttpPost]
         public async Task<ActionResult<Product>> PostProduct(Product product)
         {
-            
-            
-            
             product.CreateTime = DateTime.Now;
             _context.Product.Add(product);
             await _context.SaveChangesAsync();
@@ -168,7 +165,6 @@ namespace ClothingStore.Controllers
 		public async Task<ActionResult<IEnumerable<Product>>> GetDetailOneProduct(int id)
 		{
             var products = await _context.Product.Include(e => e.Category).FirstOrDefaultAsync(a => a.Id == id);
-
 			var createTime = $"{products.CreateTime.Day}/{products.CreateTime.Month}/{products.CreateTime.Year}";
 			List<Models.Image> images = await _context.Image.Where(i => i.ProductId == products.Id).ToListAsync();
 			List<Models.ProductDetail> variant = await _context.ProductDetail.Include(a => a.Size).Include(a => a.Color).Where(i=> i.ProductId == products.Id).ToListAsync();
@@ -179,7 +175,6 @@ namespace ClothingStore.Controllers
 			{
 				return NotFound();
             }
-
             var detailProducts = new ProductDetailViewModel {
                 Id = products.Id,
                 Name = products.Name,

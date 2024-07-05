@@ -104,5 +104,34 @@ namespace ClothingStore.Controllers
         {
             return _context.Review.Any(e => e.Id == id);
         }
-    }
+
+		[HttpGet]
+        [Route("detailReview/{id}")]
+		public async Task<ActionResult<IEnumerable<Review>>> GetListReview(int id)
+		{
+            var listReview = await _context.Review.Include(r => r.User).Include(r=> r.Product).Where(r => r.ProductId == id).ToListAsync();
+			var oneStars = listReview.Count(r => r.StarNumber == 1);
+			var twoStars = listReview.Count(r => r.StarNumber == 2);
+			var threeStars = listReview.Count(r => r.StarNumber == 3);
+			var fourStars = listReview.Count(r => r.StarNumber == 4);
+			var fiveStars = listReview.Count(r => r.StarNumber == 5);
+
+			var totalReviews = listReview.Count();
+			var totalStars = (oneStars * 1) + (twoStars * 2) + (threeStars * 3) + (fourStars * 4) + (fiveStars * 5);
+
+			var averageRating = totalReviews == 0 ? 0 : Math.Round((double)totalStars / totalReviews, 1); // Làm tròn đến 1 chữ số thập phân
+			var reviewSummary = new ReviewViewModel
+			{
+		        oneStars = oneStars,
+                twoStars = twoStars,
+                threeStars = threeStars,
+                fourStars = fourStars,
+                fiveStars = fiveStars,
+                totalStars = totalReviews,
+                averageRating = averageRating,
+			};
+
+			return Ok(reviewSummary);
+		}
+	}
 }

@@ -134,7 +134,6 @@ namespace ClothingStore.Controllers
 			    timeOrder = $"{invoice.IssueDate.Day}/{invoice.IssueDate.Month}/{invoice.IssueDate.Year}";
 				List<string> templist = new List<string>();
 
-
                 foreach (var invoicedetail in invoiceDetails)
                 {
                     if(invoicedetail.Invoice.Id == invoice.Id)

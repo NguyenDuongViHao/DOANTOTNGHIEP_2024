@@ -572,7 +572,9 @@ sub, sup {
     border-radius: 4px;
 }
 
-
+.jZCrXg:hover{
+    background-color: #efefef;
+}
 
 .bPRVIq {
     font-weight: 600;
@@ -767,6 +769,7 @@ element.style {
     background-color: rgb(255, 255, 255);
     border-radius: 4px;
     padding-top: 8px;
+    padding-left: 10px;
 }
 .gCaHEu .customer-reviews__inner {
     padding-bottom: 16px;
@@ -775,13 +778,12 @@ element.style {
     display: flex;
 }
 .dZYmgO {
+    padding: 0rem 0rem 3rem 0rem;
     user-select: none;
 }
 .gtPdrn {
     display: block;
     background: white;
-    border-left: 1px solid rgb(235, 235, 240);
-    padding-left: 12px;
 }
 .dZYmgO .review-rating__heading {
     margin: 0px 0px 16px;
@@ -867,10 +869,9 @@ element.style {
 }
 
 .dpVjwc {
-    padding: 16px 0px;
     display: flex;
+    padding: 16px 0px; 
     border-top: 1px solid rgb(242, 242, 242);
-    gap: 24px;
 }
 .dpVjwc .review-comment__user {
     flex-basis: 240px;
@@ -995,3 +996,34 @@ element.style {
     display: inline-block;
     padding: 0px 8px 0px 10px;
 }
+
+
+.circle-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden; /* Đảm bảo hình ảnh bên trong không vượt ra khỏi khung hình tròn */
+    border: 2px solid #ccc; /* Viền màu xám, độ dày 2px */
+  }
+  
+  .circle-image__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Đảm bảo hình ảnh vừa khít với khung hình tròn */
+  }
+
+.lturye::after{
+    content: "";
+    display: block;
+    height: 224px;
+    position: absolute;
+    left: -12px;
+    border: 1px solid rgb(235, 235, 240);
+}
+
+.custom-toast-container {
+    margin-bottom: 3rem; /* Điều chỉnh khoảng cách từ dưới lên trên (ở đây là 3rem) */
+  }
+
+
+  

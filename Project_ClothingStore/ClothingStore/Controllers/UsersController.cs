@@ -55,8 +55,13 @@ namespace ClothingStore.Controllers
 		[HttpGet("{id}")]
 		public async Task<ActionResult<User>> GetUser(string id)
 		{
-			return await _userManager.FindByIdAsync(id);
+			var user = await _userManager.FindByIdAsync(id);
+			if (user == null || !user.Status)
+			{
+				return NotFound();
+			}
 
+			return Ok(user);
 		}
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteUser(string id)
@@ -193,5 +198,35 @@ namespace ClothingStore.Controllers
 
             return Ok();
         }
-    }
+
+		[HttpPut("{UserId}")]
+		public async Task<ActionResult<User>> PutAddressAndPhone(string UserId, [FromBody] ShippingViewModel model)
+		{
+			if (UserId != model.Id)
+			{
+				return BadRequest("User ID mismatch");
+			}
+			var user = await _userManager.FindByIdAsync(UserId);
+			if (user == null)
+			{
+				return NotFound("User not found");
+			}
+			user.PhoneNumber = model.PhoneNumber;
+			user.Address = model.Address;
+			user.FullName = model.FullName;
+
+			var result = await _userManager.UpdateAsync(user);
+			if (result.Succeeded)
+			{
+				return NoContent();
+			}
+
+			foreach (var error in result.Errors)
+			{
+				ModelState.AddModelError(string.Empty, error.Description);
+			}
+
+			return BadRequest(ModelState);
+		}
+	}
 }
