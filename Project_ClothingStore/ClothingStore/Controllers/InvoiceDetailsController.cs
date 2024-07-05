@@ -174,5 +174,40 @@ namespace ClothingStore.Controllers
 
 			return Ok(listInvoiceDetails);
 		}
+		[HttpGet("orderer/{id}")]
+		public async Task<ActionResult<InvoiceDetail>> Orderer(int id)
+		{
+			var timeOrderer = "";
+
+			var orderer = await _context.InvoiceDetail
+				.Include(i => i.ProductDetail.Product)
+				.Include(i => i.Invoice.User)
+				.FirstOrDefaultAsync(a => a.Invoice.Id == id);
+
+			if (orderer == null)
+			{
+				return NotFound();
+			}
+			timeOrderer = $"{orderer.Invoice.IssueDate.Day}/{orderer.Invoice.IssueDate.Month}/{orderer.Invoice.IssueDate.Year}";
+
+            var detailOrderer = new InvoiceViewModel
+            {
+                Code = orderer.Invoice.Code,
+                IssueDate = timeOrderer,
+				UserName = orderer.Invoice.User.FullName,
+                ShippingAddress = orderer.Invoice.ShippingAddress,
+                ShippingPhone = orderer.Invoice.ShippingPhone,
+                Discount = orderer.Invoice.Discount,
+                Total = orderer.Invoice.Total,
+                ApproveOrder = orderer.Invoice.ApproveOrder,
+                COD = orderer.Invoice.COD,
+                MoMo = orderer.Invoice.MoMo
+			};
+
+			return Ok(detailOrderer);
+		}
+		// chiều fix tiếp
 	}
+
 }
+

@@ -162,5 +162,123 @@ namespace ClothingStore.Controllers
 
 			return Ok(listOfOrder);
 		}
+		[HttpDelete("AdminConfirmOrder/{id}")]
+		public async Task<IActionResult> ConfirmOrder(int id)
+		{
+			var invoice = await _context.Invoice.FindAsync(id);
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đã xác nhận"; // or whatever field you use to confirm the order
+			_context.Invoice.Update(invoice);
+			await _context.SaveChangesAsync();
+
+			return Ok(invoice);
+		}
+		[HttpDelete("AdminTransport/{id}")]
+		public async Task<IActionResult> AdminTransport(int id)
+		{
+			var invoice = await _context.Invoice.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			invoice.ApproveOrder = "Đã giao";
+			_context.Invoice.Update(invoice);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
+		[HttpDelete("UpdateQuantityOrder/{id}")]
+		public async Task<IActionResult> Canceled(int id)
+		{
+			var invoice = await _context.Invoice.FindAsync(id);
+			var productDetails = await _context.ProductDetail.ToListAsync();
+			var invoice_Detail = await _context.InvoiceDetail
+					  .Include(i => i.ProductDetail)
+					  .Include(i => i.Invoice)
+					  .Where(a => a.InvoiceId == id).ToListAsync();
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+
+			foreach (InvoiceDetail details in invoice_Detail)
+			{
+				var productDetail = productDetails.FirstOrDefault(p => p.Id == details.ProductDetailId);
+				if (productDetail != null)
+				{
+					productDetail.Quantity += details.Quantity;
+					_context.ProductDetail.Update(productDetail);
+					await _context.SaveChangesAsync();
+				}
+			}
+
+			invoice.Status = false;
+			_context.Invoice.Update(invoice);
+			await _context.SaveChangesAsync();
+			return NoContent();
+		}
+
+
+		[HttpGet("ListOfOrder/{str}")]
+		public async Task<ActionResult<IEnumerable<InvoiceViewModel>>> ListOfOrderAdmin(string str)
+		{
+			var invoices = await _context.Invoice
+				.Include(i => i.User)
+				.Where(i => str == "default" ? true
+						 : str == "approveOrder" ? i.ApproveOrder == "Chờ xử lý"
+						 : str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
+						 : str == "delivered" ? i.ApproveOrder == "Đã giao"
+						 : str == "canceled" ? i.ApproveOrder == "Đã hủy"
+						 : i.ApproveOrder == "Đã đặt")
+				.ToListAsync();
+
+			var listInvoices = new List<InvoiceViewModel>();
+			foreach (var invoice in invoices)
+			{
+				var totalQuantity = 0;
+				var productNameList = new List<string>();
+				var issuedDate = $"{invoice.IssueDate.Day}/{invoice.IssueDate.Month}/{invoice.IssueDate.Year}";
+
+				var detailInvoices = await _context.InvoiceDetail
+					.Include(pd => pd.ProductDetail)
+					.Include(pd => pd.ProductDetail.Product)
+					//.Where(pd => pd.ProductDetailId == invoice.Id)
+					.ToListAsync();
+				foreach (var detail in detailInvoices)
+				{
+					totalQuantity += detail.Quantity;
+					productNameList.Add(detail.ProductDetail.Product.Name);
+				}
+
+				var productList = string.Join(", ", productNameList);
+
+				listInvoices.Add(new InvoiceViewModel
+				{
+					Id = invoice.Id,
+					UserName = invoice.User.UserName,
+					IssueDate = issuedDate,
+					Code = invoice.Code,
+					ShippingAddress = invoice.ShippingAddress,
+					ShippingPhone = invoice.ShippingPhone,
+                    Discount = invoice.Discount,
+					Total = invoice.Total,
+					TotalQuantity = totalQuantity,
+					ApproveOrder = invoice.ApproveOrder,
+					COD = invoice.COD,
+					MoMo = invoice.MoMo,
+					NameProduct = productList,
+					Status = invoice.Status
+				});
+			}
+
+			return Ok(listInvoices);
+		}
 	}
 }
