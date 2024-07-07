@@ -61,9 +61,9 @@ const CancelOrder = ({ ListOfInvoice }) => {
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Mã đơn hàng/ Ngày đặt hàng
               </th>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+              {/* <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Trạng thái
-              </th>
+              </th> */}
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Số lượng/ GTĐH
               </th>
@@ -84,9 +84,9 @@ const CancelOrder = ({ ListOfInvoice }) => {
                       </div>
                       <div>{item.issuedDate}</div>
                     </td>
-                    <td>
+                    {/* <td>
                     <div style={{backgroundColor:"#f97474", width:"35%", border:"1px solid #ccc", borderRadius:"4px", textAlign:"center"}}>{item.approveOrder}</div>
-                    </td>
+                    </td> */}
                     <td>
                       <p>x{item.totalQuantity}</p>
                       <div>{item.total.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>

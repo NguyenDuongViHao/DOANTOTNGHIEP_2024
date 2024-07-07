@@ -117,7 +117,7 @@ namespace ClothingStore.Controllers
             {
 				invoices = await _context.Invoice.Include(i => i.User)
 				.Where(i => str == "default" ? true
-				: str == "ordered" ? i.ApproveOrder == "Đã đặt"
+				: str == "ordered" ? i.ApproveOrder == "Chờ xử lý"
 				: str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
 				: str == "delivered" ? i.ApproveOrder == "Đã giao"
 				: str == "canceled" ? i.ApproveOrder == "Đã hủy" : true).Where(i => i.UserId == UserId).OrderByDescending(i => i.Id).ToListAsync();

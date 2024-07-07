@@ -235,7 +235,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
           <tr>
             <th style={{ width: "2%" }}></th>
             <th style={{ width: "20%" }}>Mã đơn hàng/ Ngày đặt hàng</th>
-            <th style={{ width: "20%" }}>Trạng thái</th>
+            {/* <th style={{ width: "20%" }}>Trạng thái</th> */}
             <th style={{ width: "20%" }}>Số lượng/ GTĐH</th>
             <th style={{ width: "20%" }}>Thao tác</th>
           </tr>
@@ -253,7 +253,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
                 <p style={{ color: "#2962FF", margin: 0 }}>{item.code}</p>
                 <small>{item.issuedDate}</small>
               </td>
-              <td className="text-center">
+              {/* <td className="text-center">
                 <span
                   className="badge badge-success"
                   style={{
@@ -264,7 +264,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
                 >
                   {item.approveOrder}
                 </span>
-              </td>
+              </td> */}
               <td>
                 <p style={{ margin: 0 }}>x{item.totalQuantity}</p>
                 <small>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</small>

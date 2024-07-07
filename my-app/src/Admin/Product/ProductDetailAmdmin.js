@@ -11,6 +11,11 @@ const ProductDetailAdmin = () => {
     const [Products, setProducts] = useState([
 
     ]);
+    function storeCurrentPageUrl() {
+        const currentPageUrl = window.location.href;
+        localStorage.setItem('previousPageUrl', currentPageUrl);
+    }
+    storeCurrentPageUrl()
     const fetchProducts = () => {
         AxiosClient.get(`/ProductDetails/listProductDetail/${id}`)
             .then((res) => {

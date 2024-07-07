@@ -303,11 +303,12 @@ namespace ClothingStore.Controllers
 		[Route("pay/{UserId}")]
 		public async Task<ActionResult<Cart>> PostPayment(string UserId, [FromBody] Invoice invoiceRequest)
 		{
+			//var UserId = User.GetUserId().ToString();
 			if (UserId != null)
 			{
 				var cartOfUser = await _context.Cart
 					.Include(c => c.User)
-					.Include(c => c.ProductDetail)
+					.Include(c => c.ProductDetail.Product)
 					.Where(i => i.UserId == UserId).ToListAsync();
 				Invoice invoice = new Invoice()
 				{
@@ -318,7 +319,7 @@ namespace ClothingStore.Controllers
 					ShippingPhone = invoiceRequest.ShippingPhone,
 					Discount = invoiceRequest.Discount,
 					Total = invoiceRequest.Total,
-					ApproveOrder = "Đã đặt",
+					ApproveOrder = "Chờ xử lý",
 					COD = invoiceRequest.COD,
 					MoMo = invoiceRequest.MoMo,
 					Status = true,
@@ -332,7 +333,7 @@ namespace ClothingStore.Controllers
 						InvoiceId = invoice.Id,
 						ProductDetailId = item.ProductDetailId,
 						Quantity = item.Quantity,
-						Price = item.ProductDetail.Quantity,
+						Price = item.ProductDetail.Product.Price,
 					};
 					item.ProductDetail.Quantity -= item.Quantity;
 					_context.InvoiceDetail.Add(indetail);

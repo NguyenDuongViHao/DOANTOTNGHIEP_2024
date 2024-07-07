@@ -327,7 +327,6 @@ const ApproveOrder = ({ ListOfInvoice }) => {
             <tr>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Mã đơn hàng</th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Ngày đặt hàng</th>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Trạng thái</th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Số lượng/ GTĐH</th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Thao tác</th>
             </tr>
@@ -344,19 +343,7 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                   <td>
                     <div>{item.issueDate}</div>
                   </td>
-                  <td>
-                    <div
-                      style={{
-                        backgroundColor: "#fcfca1",
-                        width: "35%",
-                        border: "1px solid #ccc",
-                        borderRadius: "4px",
-                        textAlign: "center",
-                      }}
-                    >
-                      {item.approveOrder}
-                    </div>
-                  </td>
+    
                   <td>
                     <p>x{item.totalQuantity}</p>
                     <div>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>

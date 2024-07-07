@@ -8,11 +8,31 @@ import { faEdit } from "@fortawesome/free-solid-svg-icons";
 const ProductDetailAdminEdit = () => {
     const { id } = useParams();
     const navigate = useNavigate();
+    
+    // Lấy đường dẫn của trang trước đó từ localStorage
+    function getPreviousPageUrl() {
+        return localStorage.getItem('previousPageUrl') || '';
+    }
+    // Sử dụng hàm lấy đường dẫn của trang trước đó khi cần
+    const previousPageUrl = getPreviousPageUrl();
+
+    const urlObj = new URL(previousPageUrl);
+        // Lấy đường dẫn từ URL (pathname)
+    const pathname = urlObj.pathname;
+
+    // Tách các phần của đường dẫn bằng dấu '/'
+    const pathSegments = pathname.split('/');
+
+    // Lấy phần tử cuối cùng từ các phần của đường dẫn
+    const idOfProductDetail = pathSegments[pathSegments.length - 1];
+
+    console.log(idOfProductDetail, "idd"); 
+    console.log('Previous page URL:', previousPageUrl);
+    
     const [ProductDetails, setProductDetails] = useState({
         size:{},
         color:{},
         product:{},
-
     });
     const handleChange = (e) => {
         let name = e.target.name;
@@ -26,7 +46,7 @@ const ProductDetailAdminEdit = () => {
         e.preventDefault();
         AxiosClient.put(`/ProductDetails/${id}`, ProductDetails)
             .then(() => {
-                navigate(`/admin/Productdetails/detail/${id}`);
+                navigate(`/admin/Productdetails/detail/${idOfProductDetail}`);
             })
             .catch((error) => {
                 console.error("There was an error!", error);

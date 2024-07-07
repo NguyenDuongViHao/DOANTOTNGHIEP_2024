@@ -34,7 +34,7 @@ const MyOrder = () => {
             </Nav.Item>
 
             <Nav.Item className={`itemnavbarMyorder1 ${activeKey === 'ordered' ? 'active' : ''}`}>
-              <Nav.Link eventKey="ordered">Chờ xử lý</Nav.Link>
+              <Nav.Link eventKey="ordered">Chờ xử lí</Nav.Link>
             </Nav.Item>
 
             <Nav.Item className={`itemnavbarMyorder1 ${activeKey === 'confirmed' ? 'active' : ''}`}>
