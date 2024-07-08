@@ -188,7 +188,11 @@ const Cart = () => {
   };
 
   const handleBuyProduct = () => {
-    const selectedCartItems = Cart.filter((item) => item.selected);
+    if(User.phoneNumber == null){
+      navigate("/cart/shipping")
+    }
+    else{
+      const selectedCartItems = Cart.filter((item) => item.selected);
 
     if (selectedCartItems.length > 0) {
       const selectedDetails = selectedCartItems.map((item) => ({
@@ -211,6 +215,7 @@ const Cart = () => {
         });
     } else {
       toast.warning("Không có sản phẩm nào được chọn.");
+    }
     }
   };
 

@@ -322,7 +322,7 @@ namespace ClothingStore.Controllers
 					ApproveOrder = "Chờ xử lý",
 					COD = invoiceRequest.COD,
 					MoMo = invoiceRequest.MoMo,
-					Status = true,
+					Status = false,
 				};
 				_context.Invoice.Add(invoice);
 				await _context.SaveChangesAsync();

@@ -18,8 +18,8 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
   const [PaymentList, setPaymentList] = useState([]);
 
   const [selectedOption, setSelectedOption] = useState("COD");
-  const [momo, setMomo] = useState(0);
-  const [cod, setCod] = useState(1);
+  const [momo, setMomo] = useState(false); 
+  const [cod, setCod] = useState(true);
 
   var Discount = 0;
   var totalInvoice = 0;
@@ -34,11 +34,11 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
     const value = event.target.value;
     setSelectedOption(value);
     if (value == "MoMo") {
-      setMomo(1);
-      setCod(0);
+      setMomo(true);
+      setCod(false);
     } else if (value == "COD") {
-      setMomo(0);
-      setCod(1);
+      setMomo(false);
+      setCod(true);
     }
   };
 
@@ -50,16 +50,16 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
 
   const handlePayment = () => {
     const invoiceData = {
-      UserId: UserId,
+      // UserId: UserId,
       ShippingAddress: User.address,
       ShippingPhone: User.phoneNumber,
       Total: totalInvoice,
       Discount: Discount,
       COD: cod,
       MoMo: momo,
-      IssueDate: new Date(),
-      ApproveOrder: "Đã đặt",
-      Status: true,
+      // IssueDate: new Date(),
+      // ApproveOrder: "Đã đặt",
+      // Status: true,
     };
 
     AxiosClient.post(`/Carts/pay/${UserId}`, invoiceData)

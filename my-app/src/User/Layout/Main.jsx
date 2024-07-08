@@ -278,7 +278,7 @@ const Main = () => {
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">Thêm vào giỏ hàng</a>
+                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
                                   </div>
                                 </div>
                               </>
@@ -336,7 +336,7 @@ const Main = () => {
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">Thêm vào giỏ hàng</a>
+                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
                                   </div>
                                 </div>
                               </>
@@ -394,7 +394,7 @@ const Main = () => {
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">Thêm vào giỏ hàng</a>
+                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
                                   </div>
                                 </div>
                               </>
@@ -452,7 +452,7 @@ const Main = () => {
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <a href="#">Thêm vào giỏ hàng</a>
+                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
                                   </div>
                                 </div>
                               </>

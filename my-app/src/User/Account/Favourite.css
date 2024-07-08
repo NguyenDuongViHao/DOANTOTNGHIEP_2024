@@ -1,0 +1,130 @@
+.product-info-body .product-info-star-book-name .bExXAB button {
+    background-color: #ff0000; /* Màu đỏ (hoặc màu bạn muốn) */
+    color: #ffffff; /* Màu chữ trắng (hoặc màu bạn muốn) */
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+  }
+
+.jXurFV1 {
+    flex: 1 1 0%;
+    overflow: hidden;
+}
+
+.kagiDG1 .heading1 {
+  font-size: 19px;
+  line-height: 21px;
+  font-weight: 300;
+  margin: 20px 0px 15px;
+}
+.kagiDG1 .inner1 {
+  border-radius: 4px;
+  padding: 1px;
+
+}
+.kagiDG1 .list1 {
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+.kagiDG1 .item1 {
+  background-color: rgb(255, 255, 255);
+  margin-bottom: 2px;
+  border-radius: 2px;
+  padding: 20px 70px 20px 15px;
+  display: flex;
+  position: relative;
+}
+.kagiDG1 .btn-delete1 {
+  width: 40px;
+  height: 40px;
+  padding: 0px;
+  background: 0px center;
+  color: rgb(153, 153, 153);
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  border: 0px;
+  font-size: 30px;
+  box-shadow: none;
+  cursor: pointer;
+}
+.kagiDG1 .item1 .thumbnail1 {
+  width: 130px;
+  min-width: 130px;
+  margin: 0px 25px;
+}
+.jDowEZ1 {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+.jDowEZ1.loaded1 .image1 {
+  display: inline-block;
+}
+.jDowEZ1 .image1 {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  display: none;
+  vertical-align: middle;
+}
+.kagiDG1 .item1 .body1 {
+  flex: 1 1 0%;
+}
+.kagiDG1 .item1 .name1 {
+  font-size: 14px;
+  margin: 0px 0px 15px;
+  line-height: 20px;
+  font-weight: 400;
+  color: rgb(51, 51, 51);
+  display: block;
+}
+.kagiDG1 .rating1 {
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+}
+.kagiDG1 .review-count1 {
+  font-size: 12px;
+  color: rgb(102, 102, 102);
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0px 0px 0px 4px;
+}
+.kagiDG1 .item1 .description1 {
+  font-size: 13px;
+  line-height: 20px;
+  color: rgb(102, 102, 102);
+}
+
+.kagiDG1 .footer1 {
+  width: 190px;
+  min-width: 230px;
+  margin-left: 25px;
+  text-align: right;
+}
+
+.kagiDG1 .footer1 .price1.has-discount1 {
+  color: rgb(255, 66, 78);
+}
+.kagiDG1 .footer1 .price1 {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  margin: 0px 0px 8px;
+  color: rgb(56, 56, 61);
+}
+.kagiDG1 .footer1 .wrap1 {
+  display: flex;
+  -webkit-box-pack: end;
+  justify-content: flex-end;
+  font-size: 13px;
+  -webkit-box-align: center;
+  align-items: center;
+}

@@ -1,4 +1,5 @@
 ﻿using ClothingStore.Data;
+using ClothingStore.Helpers;
 using ClothingStore.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -227,6 +228,32 @@ namespace ClothingStore.Controllers
 			}
 
 			return BadRequest(ModelState);
+		}
+
+		[HttpPut("updateInfoUser/{id}")]
+		public async Task<IActionResult> PutUser(string id, UserViewModel userViewModel)
+		{
+			var user = await _userManager.FindByIdAsync(id);
+			if (user == null)
+			{
+				return NotFound();
+			}
+			// Update user properties
+			user.UserName = userViewModel.UserName;
+			user.FullName = userViewModel.FullName;
+			user.Address = userViewModel.Address;
+			user.Email = userViewModel.Email;
+			user.PhoneNumber = userViewModel.PhoneNumber;
+
+			var result = await _userManager.UpdateAsync(user);
+			if (result.Succeeded)
+			{
+				return Ok(); // Successful update
+			}
+			else
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to update user.");
+			}
 		}
 	}
 }

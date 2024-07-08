@@ -167,9 +167,9 @@ const Header = () => {
                           src="https://salt.tikicdn.com/ts/upload/b4/90/74/6baaecfa664314469ab50758e5ee46ca.png"
                           alt="header_menu_item_home"
                         />
-                        <a href="" style={{ color: "rgb(128, 128, 137)" }}>
+                        <Link to="/" style={{ color: "rgb(128, 128, 137)" }}>
                           Trang chủ
-                        </a>
+                        </Link>
                       </div>
                       <div className="fUChpf">
                         <img
