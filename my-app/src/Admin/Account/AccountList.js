@@ -114,7 +114,7 @@ const AccountList = () => {
                                                 {
                                                     users.map(item => {
                                                         return (
-                                                            <tr>
+                                                            <tr key={item.id}>
                                                                 <td>{id++}</td>
                                                                 <td>{item.userName}</td>
                                                                 <td>{item.email}</td>
@@ -123,14 +123,12 @@ const AccountList = () => {
                                                                 </td>
 
                                                                 <td>
-                                                                    <td>
-                                                                        <Button variant="info" onClick={() => handleShow(item.id)} className="ml-2">
-                                                                            <FontAwesomeIcon icon={faUser} />
-                                                                        </Button>
-                                                                        <Button variant="warning ml-2" onClick={() => handleShowDelete(item.id)}>
-                                                                            <FontAwesomeIcon icon={faBan} />
-                                                                        </Button>
-                                                                    </td>
+                                                                    <Button variant="info" onClick={() => handleShow(item.id)}>
+                                                                        <FontAwesomeIcon icon={faUser} />
+                                                                    </Button>
+                                                                    <Button variant="warning ml-2" style={{marginLeft: '5px'}} onClick={() => handleShowDelete(item.id)}>
+                                                                        <FontAwesomeIcon icon={faBan} />
+                                                                    </Button>
                                                                 </td>
                                                             </tr>
                                                         )

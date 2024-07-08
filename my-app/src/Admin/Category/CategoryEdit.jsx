@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 const CategoryEdit = () => {
     const { id } = useParams();
 
@@ -32,9 +33,38 @@ const CategoryEdit = () => {
         e.preventDefault();
         AxiosClient.put(`/Categories/${id}`, category)
             .then(() => {
-                navigate(`/admin/categories`);
+                toast.success(() => (
+                    <div>Sửa loại sản phẩm thành công</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast'
+                });
+                setTimeout(() => {
+                    navigate(`/admin/categories`);
+                }, 2000);
+                
             })
             .catch(error => {
+                toast.error(() => (
+                    <div>Sửa loại sản phẩm thất bại</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast-error'
+                });
                 console.error("Error:", error);
             });
     }
@@ -63,6 +93,7 @@ const CategoryEdit = () => {
 
                 </Form>
             </div>
+            <ToastContainer/>
         </>
      );
 }

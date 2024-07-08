@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetailAdminAdd = () => {
     const { id } = useParams();
@@ -32,10 +34,37 @@ const ProductDetailAdminAdd = () => {
         e.preventDefault();
         AxiosClient.post(`/ProductDetails/`, ProductDetails)
             .then(() => {
-                navigate(`/admin/Productdetails/detail/${id}`);
+                toast.success(() => (
+                    <div>Thêm chi tiết sản phẩm thành công</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast'
+                  });
+                  setTimeout(() => {
+                    navigate(`/admin/Productdetails/detail/${id}`);
+                  }, 2000);
             })
             .catch((error) => {
                 console.error("There was an error!", error);
+                toast.error("Thêm chi tiết  sản phẩm thất bại", {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast-error'
+                });
             });
     };
 
@@ -44,7 +73,9 @@ const ProductDetailAdminAdd = () => {
             .then((res) => {
                 setSizes(res.data);
             })
-            .catch(error => console.error("Error fetching sizes:", error));
+            .catch((error) => {
+                console.error("Error fetching sizes:", error);
+            });
     }, []);
 
     useEffect(() => {
@@ -52,7 +83,9 @@ const ProductDetailAdminAdd = () => {
             .then((res) => {
                 setColors(res.data);
             })
-            .catch(error => console.error("Error fetching colors:", error));
+            .catch((error) => {
+                console.error("Error fetching colors:", error);
+            });
     }, []);
 
     useEffect(() => {
@@ -60,7 +93,9 @@ const ProductDetailAdminAdd = () => {
             .then((res) => {
                 setProducts(res.data);
             })
-            .catch(error => console.error("Error fetching products:", error));
+            .catch((error) => {
+                console.error("Error fetching products:", error);
+            });
     }, []);
 
     const widthInput = {
@@ -72,6 +107,7 @@ const ProductDetailAdminAdd = () => {
     };
 
     return (
+        <>
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
@@ -150,6 +186,9 @@ const ProductDetailAdminAdd = () => {
                 </div>
             </div>
         </section>
+        <ToastContainer/>
+        </>
+
     );
 };
 

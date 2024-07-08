@@ -79,7 +79,7 @@ const ProductList = () => {
         <h2>Danh sách sản phẩm</h2>
         <div>
           <button onClick={handleButtonClick}>
-            <FontAwesomeIcon icon={faPlus} />Tạo nhóm sản phẩm
+            <span style={{marginRight: '5px'}}><FontAwesomeIcon icon={faPlus} /></span>Tạo nhóm sản phẩm
           </button>
         </div>
       </div>
@@ -111,7 +111,7 @@ const ProductList = () => {
           <tbody>
             {Products.map((item) => {
               return (
-                <tr>
+                <tr key={item.id}>
                   {/* <td className="product-name">
                 //     <img src="https://via.placeholder.com/50" alt="Product Image" />
                 //     Thanh Selenite Thô - Raw Selenite Bar
@@ -213,7 +213,7 @@ const ProductList = () => {
                 {Products.map(item => {
                   return (
                     <>
-                      <div className="product_body" style={{ marginLeft: "0", marginRight: "0" }}>
+                      <div className="product_body" style={{ marginLeft: "0", marginRight: "0" }} key={item.id}>
                         <div className="product_main">
                           <Row className="">
                             {/* <Col className="product_image_main" style={{width:"96%"}}>

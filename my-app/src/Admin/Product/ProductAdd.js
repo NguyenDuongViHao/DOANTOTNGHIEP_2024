@@ -2,65 +2,95 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductAdd = () => {
   const [Products, setProducts] = useState({
     category: {},
     status: true
   });
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
   const [Categories, setCategories] = useState([]);
-  const[ProductDetails, setProductDetails] = useState([]);
+  const [ProductDetails, setProductDetails] = useState({});
+
   const handleChange = (e) => {
     let name = e.target.name;
     let value = e.target.value;
     setProducts((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleCheck = (e) => {
-    let name = e.target.name;
-    let checked = e.target.checked;
-    setProducts((prev) => ({ ...prev, [name]: checked }));
-  };
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submitting Product:", Products); // Log Products state before submitting
     AxiosClient.post(`/Products`, Products)
       .then(() => {
-        Navigate("/admin/products");
+        toast.success(() => (
+          <div>Thêm sản phẩm thành công</div>), {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          closeButton: false,
+          className: "custom-toast",
+          toastId: 'custom-toast'
+        });
+        setTimeout(() => {
+          navigate("/admin/products");
+        }, 2000);
       })
       .catch((error) => {
+        toast.error(() => (
+          <div>Thêm sản phẩm thất bại</div>), {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          closeButton: false,
+          className: "custom-toast",
+          toastId: 'custom-toast-error'
+        });
         console.error("There was an error!", error);
       });
   };
+
   useEffect(() => {
     AxiosClient.get(`/Categories`)
       .then((res) => {
         setCategories(res.data);
         console.log(res.data);
       })
+      .catch((error) => console.error("There was an error!", error));
   }, []);
+
   useEffect(() => {
     AxiosClient.get(`/ProductDetails`)
       .then((res) => {
         setProductDetails(res.data);
         console.log(res.data);
       })
+      .catch((error) => console.error("There was an error!", error));
   }, []);
 
-  var widthInput = {
+  const widthInput = {
     width: "100%",
   };
 
-  var content = {
+  const content = {
     display: "flex",
   };
 
-
   return (
     <>
+      <ToastContainer />
       <section className="content">
         <div className="container-fluid">
           <div className="row">
@@ -106,12 +136,11 @@ const ProductAdd = () => {
                           style={widthInput}
                           placeholder="Nhập số lượng"
                           value={ProductDetails.quantity}
-
                         />
                       </Form.Group>
 
                       <Form.Group>
-                        <Form.Label>Loại sản phẩm</Form.Label>
+                        <Form.Label>Loại sản phẩm:</Form.Label>
                         <Form.Select
                           onChange={handleChange}
                           name="categoryId"
@@ -119,21 +148,11 @@ const ProductAdd = () => {
                         >
                           <option value={Products.categoryId}>-- Chọn --</option>
                           {Categories.map((item) => {
-                            return <option value={item.id}>{item.name}</option>;
+                            return <option key={item.id} value={item.id}>{item.name}</option>;
                           })}
                         </Form.Select>
                       </Form.Group>
-                      <Form.Group>
-                        <Form.Label>Số lượng sản phẩm:</Form.Label>
-                        <Form.Control
-                          type="number"
-                          name="quantity"
-                          onChange={handleChange}
-                          style={widthInput}
-                          placeholder="Nhập số lượng"
-                          value={ProductDetails.quantity}
-                        />
-                      </Form.Group>
+
                       <Form.Group>
                         <Form.Label>Thương hiệu:</Form.Label>
                         <Form.Control
@@ -166,18 +185,11 @@ const ProductAdd = () => {
                         />
                       </Form.Group>
                     </div>
-                    {/* <div style={{ width: "70%" }}>          
-                      <div style={{ width: "60%", margin:"0 auto", paddingTop:"7rem" }}>
-                        <img style={{width:"60%"}}
-                        src="https://localhost:7106/Images/TrenDuongBang.png"
-                        
-                      /></div>
-                    </div> */}
                   </div>
                   {/* /.card-body */}
                   <div className="card-footer">
                     <Button type="submit" variant="btn btn-success" style={{ width: "10rem" }}>
-                      <FontAwesomeIcon icon={faPlus} />Thêm sản phẩm
+                      <FontAwesomeIcon icon={faPlus} /> Thêm sản phẩm
                     </Button>
                   </div>
                 </Form>
@@ -186,7 +198,9 @@ const ProductAdd = () => {
           </div>
         </div>
       </section>
+      <ToastContainer/>
     </>
   );
 }
+
 export default ProductAdd;

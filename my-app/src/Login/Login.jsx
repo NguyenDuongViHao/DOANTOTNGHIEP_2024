@@ -101,7 +101,7 @@ const Login = ({ onSuccess }) => {
 
   return (
     <>
-      <Row className='d-flex justify-content-center align-items-center h-100'>
+      <Row className='d-flex justify-content-center align-items-center h-100 login'>
         <Col col='12'>
           <Card.Body className='p-5 w-100 d-flex flex-column'>
             <h2 className="text-center fw-bold mb-5">Sign in</h2>
@@ -127,12 +127,11 @@ const Login = ({ onSuccess }) => {
             </Form.Group>
 
             {errors.general && <div className="text-danger mb-3">{errors.general}</div>}
-            <Row>
+            <Row style={{alignItems: 'center'}}>
               <Col md={7}>
                 <Form.Check
                   type='checkbox'
                   id='flexCheckDefault'
-                  className='mb-4'
                   label='Remember password'
                 />
               </Col>

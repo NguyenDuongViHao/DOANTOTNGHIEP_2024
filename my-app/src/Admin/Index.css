@@ -1,0 +1,3 @@
+.new-orders .table>tbody>tr>td, .table>tbody>tr>th {
+    padding: 10px 15px !important;
+}

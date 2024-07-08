@@ -2,6 +2,7 @@ import { faColonSign, faExchange, faSign, faSignIn } from '@fortawesome/free-sol
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
+import './Index.css';
 const Index = () => {
   const navigate = useNavigate();
   const logout = async () => {
@@ -95,7 +96,7 @@ const Index = () => {
                         </a>
                       </li>
                       <li>
-                        <a href="#">
+                        <a href="reviews">
                           <span className="sub-item">Quản lý đánh giá</span>
                         </a>
                       </li>
@@ -103,25 +104,12 @@ const Index = () => {
                   </div>
                 </li>
                 <li className="nav-item">
-                  <a data-bs-toggle="collapse" href="#charts">
+                  <a  href="chart"> 
                     <i className="far fa-chart-bar" />
                     <p>Thống kê</p>
-                    <span className="caret" />
+                    {/* <span className="caret" /> */}
+                    {/*data-bs-toggle="collapse" */}
                   </a>
-                  <div className="collapse" id="charts">
-                    <ul className="nav nav-collapse">
-                      <li>
-                        <a href="#">
-                          <span className="sub-item">Thống kê bán hàng</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a href="#">
-                          <span className="sub-item">Thống kê nhân vi</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
                 </li>
                 <li className="nav-item">
                   <a data-bs-toggle="collapse" href="#submenu">

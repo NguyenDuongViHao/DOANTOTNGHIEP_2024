@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductEdit = () => {
     const {id} = useParams();
@@ -25,9 +26,38 @@ const ProductEdit = () => {
             console.log("Submitting Product:", Products); // Log Products state before submitting
             AxiosClient.put(`/Products/${id}`, Products)
               .then(() => {
-                Navigate("/admin/products");
+                toast.success(() => (
+                    <div>Sửa sản phẩm thành công</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast'
+                  });
+                  setTimeout(() => {
+                    Navigate("/admin/products");
+                  }, 2000);
+               
               })
               .catch((error) => {
+                toast.error(() => (
+                    <div>Sửa sản phẩm thất bại</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast-error'
+                  });
                 console.error("There was an error!", error);
               });
         };
@@ -164,6 +194,7 @@ const ProductEdit = () => {
                         </div>
                     </div>
                 </section>
+                <ToastContainer/>
             </>
         )
     }

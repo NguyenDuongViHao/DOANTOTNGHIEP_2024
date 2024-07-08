@@ -6,3 +6,11 @@
     display: block;
     margin-bottom: 5px;
 }
+
+.login .form-check {
+    margin-bottom: 0;
+}
+
+.login .form-check label {
+    margin: 0;
+}

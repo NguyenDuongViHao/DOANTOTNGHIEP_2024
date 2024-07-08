@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AxiosClient from "../../Axios/AxiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 
 const CategoryAdd= () => {
     const navigate = useNavigate();
@@ -21,8 +22,39 @@ const CategoryAdd= () => {
         e.preventDefault();
         AxiosClient.post(`/Categories`, category)
             .then(() => {
-                navigate("/admin/categories");
-            });
+                toast.success(() => (
+                    <div>Thêm tài khoản thành công</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast'
+                });
+                setTimeout(() => {
+                    navigate("/admin/categories");
+                }, 2000);
+                })
+                .catch((error) => {
+                    toast.error(() => (
+                        <div>Thêm tài khoản thất bại</div>), {
+                        position: "top-right",
+                        autoClose: 2000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        closeButton: false,
+                        className: "custom-toast",
+                        toastId: 'custom-toast-error'
+                    });
+                });
+                
     }
 
     return (
@@ -49,6 +81,7 @@ const CategoryAdd= () => {
                     </div>
                 </Form>
             </div>
+            <ToastContainer/>
         </>
     );
 }

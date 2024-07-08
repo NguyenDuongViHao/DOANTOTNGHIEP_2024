@@ -4,6 +4,7 @@ import AxiosClient from "../../Axios/AxiosClient";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Form } from "react-bootstrap";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 
 const ProductDetailAdminEdit = () => {
     const { id } = useParams();
@@ -46,9 +47,38 @@ const ProductDetailAdminEdit = () => {
         e.preventDefault();
         AxiosClient.put(`/ProductDetails/${id}`, ProductDetails)
             .then(() => {
-                navigate(`/admin/Productdetails/detail/${idOfProductDetail}`);
+                toast.success(() => (
+                    <div>Sửa chi tiết sản phẩm thành công</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast'
+                  });
+                  setTimeout(() => {
+                    navigate(`/admin/Productdetails/detail/${idOfProductDetail}`);
+                  }, 2000);
+                
             })
             .catch((error) => {
+                toast.error(() => (
+                    <div>Sửa chi tiết sản phẩm thất bại</div>), {
+                    position: "top-right",
+                    autoClose: 2000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    closeButton: false,
+                    className: "custom-toast",
+                    toastId: 'custom-toast-error'
+                  });
                 console.error("There was an error!", error);
             });
     };
@@ -86,14 +116,14 @@ const ProductDetailAdminEdit = () => {
     };
 
     return (
-        <section className="content">
+        <>
+         <section className="content">
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-md-12">
                         <div className="card">
                             <div className="card-header" style={{ display: "flex", justifyContent: "space-between" }}>
                                 <h3 className="card-title">Sửa Sản Phẩm</h3>
-                                <Link to={`/admin/productdetails/detail/${id}`} className="btn btn-primary mb-2" style={{ marginLeft: "6rem" }}>Quay lại</Link>
                             </div>
                             <Form onSubmit={handleSubmit}>
                                 <div className="card-body" style={content}>
@@ -131,20 +161,6 @@ const ProductDetailAdminEdit = () => {
 
                                         </Form.Group>
                                         <Form.Group>
-                                                <Form.Label>Tên sản phẩm</Form.Label>
-                                                <Form.Select
-                                                    onChange={handleChange}
-                                                    name="name"
-                                                    style={widthInput}
-                                                    //value={Product.name}
-                                                >
-                                                    <option value={ProductDetails.productId}>{ProductDetails.product.name}</option>
-                                                    {Product.map((item) => {
-                                                        return <option value={item.id}>{item.name}</option>;
-                                                    })}
-                                                </Form.Select>
-                                            </Form.Group>
-                                        <Form.Group>
                                             <Form.Label>Số lượng sản phẩm:</Form.Label>
                                             <Form.Control
                                                 type="number"
@@ -161,7 +177,7 @@ const ProductDetailAdminEdit = () => {
                                     <Button type="submit" variant="btn btn-success" style={{ width: "10rem" }}>
                                         <FontAwesomeIcon icon={faEdit} /> Sửa sản phẩm
                                     </Button>
-
+                                    <Link to={`/admin/productdetails/detail/${idOfProductDetail}`} className="btn btn-primary" style={{ marginLeft: "10px" }}>Quay lại</Link>
                                 </div>
                             </Form>
                         </div>
@@ -169,6 +185,10 @@ const ProductDetailAdminEdit = () => {
                 </div>
             </div>
         </section>
+        <ToastContainer/>
+        </>
+       
+      
     );
 };
 

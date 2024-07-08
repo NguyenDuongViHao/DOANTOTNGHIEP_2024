@@ -45,7 +45,6 @@ const ProductDetailAdmin = () => {
                                 <th>STT</th>
                                 <th>Tên Màu</th>
                                 <th>Kích thước </th>
-                                <th>Tên sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Chức năng</th>
                             </tr>
@@ -62,10 +61,9 @@ const ProductDetailAdmin = () => {
                                         <td>{(str += 1)}</td>
                                         <td>{item.color.nameColor}</td>
                                         <td>{item.size.nameSize}</td>
-                                        <td>{item.product.name}</td>
                                         <td>{item.quantity}</td>
                                         <td> <Link
-                                            to={`/admin/productdetails/edit/${item.id}`}
+                                            to={`/admin/productdetails/variation/${item.id}`}
                                             className="btn btn-warning m-2"
                                         >
                                             <FontAwesomeIcon icon={faEdit} />
@@ -80,7 +78,6 @@ const ProductDetailAdmin = () => {
                                 <th>STT</th>
                                 <th>Tên Màu</th>
                                 <th>Kích thước </th>
-                                <th>Tên sản phẩm</th>
                                 <th>Số lượng</th>
                                 <th>Chức năng</th>
                             </tr>
