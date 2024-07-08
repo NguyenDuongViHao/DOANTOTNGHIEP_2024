@@ -23,9 +23,35 @@ namespace ClothingStore.Controllers
 
         // GET: api/Reviews
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Review>>> GetReview()
+        public async Task<ActionResult<IEnumerable<ReviewViewModel>>> GetReview()
         {
-            return await _context.Review.ToListAsync();
+			var oneStars = _context.Review.Count(rev => rev.StarNumber == 1);
+			var twoStars = _context.Review.Count(rev => rev.StarNumber == 2);
+			var threeStars = _context.Review.Count(rev => rev.StarNumber == 3);
+			var fourStars = _context.Review.Count(rev => rev.StarNumber == 4);
+			var fiveStars = _context.Review.Count(rev => rev.StarNumber == 5);
+			var totalStars = _context.Review.Sum(rev => rev.StarNumber);
+			var averageRating = _context.Review.Average(rev => rev.StarNumber);
+
+			var reviews = _context.Review
+               .Include(r => r.User)
+               .Include(r => r.Product)
+               .Select(r => new ReviewViewModel
+               {
+                   Id = r.Id,
+                   UserName = r.User.UserName,
+                   Content = r.Content,
+                   ReviewDate = r.ReviewDate.ToString("yyyy-MM-dd"),
+                   StarNumber = r.StarNumber,
+                   oneStars = oneStars,
+                   twoStars = twoStars,
+                   threeStars = threeStars,
+                    fourStars = fourStars,
+                    fiveStars = fiveStars,
+                    totalStars = totalStars,
+                    averageRating = averageRating,
+               }).ToList();
+            return Ok(reviews);
         }
 
         // GET: api/Reviews/5

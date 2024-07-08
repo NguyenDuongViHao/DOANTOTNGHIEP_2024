@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using ClothingStore.Data;
+using ClothingStore.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ClothingStore.Data;
-using ClothingStore.Models;
-using ClothingStore.Helpers;
 
 namespace ClothingStore.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
     public class InvoicesController : ControllerBase
     {
@@ -26,7 +20,8 @@ namespace ClothingStore.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoice()
         {
-            return await _context.Invoice.ToListAsync();
+            return await _context.Invoice.Include(u => u.User)
+				.ToListAsync();
         }
 
         // GET: api/Invoices/5
@@ -161,6 +156,21 @@ namespace ClothingStore.Controllers
 
 			return Ok(listOfOrder);
 		}
+		//[HttpDelete("AdminConfirmOrder/{id}")]
+		//public async Task<IActionResult> ConfirmOrder(int id)
+		//{
+		//	var invoice = await _context.Invoice.FindAsync(id);
+		//	if (invoice == null)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	invoice.ApproveOrder = "Đã xác nhận"; // or whatever field you use to confirm the order
+		//	_context.Invoice.Update(invoice);
+		//	await _context.SaveChangesAsync();
+
+		//	return Ok(invoice);
+		//}
 		[HttpDelete("AdminConfirmOrder/{id}")]
 		public async Task<IActionResult> ConfirmOrder(int id)
 		{
@@ -170,12 +180,17 @@ namespace ClothingStore.Controllers
 				return NotFound();
 			}
 
-			invoice.ApproveOrder = "Đã xác nhận"; // or whatever field you use to confirm the order
+			// Cập nhật trạng thái đã xác nhận
+			invoice.ApproveOrder = "Đã xác nhận"; // Hoặc trường tương ứng bạn sử dụng để xác nhận đơn hàng
+												  // Cập nhật trạng thái đã giao
+			invoice.Status = true; // Đánh dấu đơn hàng đã giao là true
+
 			_context.Invoice.Update(invoice);
 			await _context.SaveChangesAsync();
 
 			return Ok(invoice);
 		}
+
 		[HttpDelete("AdminTransport/{id}")]
 		public async Task<IActionResult> AdminTransport(int id)
 		{
@@ -279,5 +294,119 @@ namespace ClothingStore.Controllers
 
 			return Ok(listInvoices);
 		}
+		[HttpGet("totalcount")]
+		public async Task<ActionResult<int>> GetTotalInvoiceCount()
+		{
+			var totalCount = await _context.Invoice.CountAsync();
+			return Ok(totalCount);
+		}
+		[HttpGet("totalrevenue")]
+		public async Task<ActionResult<double>> GetTotalRevenue()
+		{
+			try
+			{
+				var totalRevenue = await _context.Invoice
+					.SumAsync(i => i.Total);
+
+				return Ok(totalRevenue);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, $"Lỗi: {ex.Message}");
+			}
+		}
+		[HttpGet("pendingcount")]
+		public async Task<ActionResult<int>> GetPendingOrderCount()
+		{
+			try
+			{
+				// In tất cả đơn hàng ra console để kiểm tra giá trị
+				var allOrders = await _context.Invoice.ToListAsync();
+				foreach (var order in allOrders)
+				{
+					Console.WriteLine($"OrderId: {order.Id}, ApproveOrder: {order.ApproveOrder}, Status: {order.Status}");
+				}
+
+				// Kiểm tra điều kiện ApproveOrder == "Chờ xử lý"
+				var notApprovedOrders = await _context.Invoice
+					.Where(order => order.ApproveOrder == "Chờ xử lý")
+					.ToListAsync();
+				Console.WriteLine($"Count of orders not approved: {notApprovedOrders.Count}");
+
+				// Kiểm tra điều kiện Status = false
+				var notDeliveredOrders = await _context.Invoice
+					.Where(order => !order.Status)
+					.ToListAsync();
+				Console.WriteLine($"Count of orders not delivered: {notDeliveredOrders.Count}");
+
+				// Kết hợp cả hai điều kiện
+				var pendingOrders = await _context.Invoice
+					.Where(order => order.ApproveOrder == "Chờ xử lý" && !order.Status)
+					.ToListAsync();
+				Console.WriteLine($"Pending orders count: {pendingOrders.Count}");
+
+				return Ok(pendingOrders.Count);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+			}
+		}
+		[HttpGet("latest")]
+		public async Task<ActionResult<IEnumerable<Invoice>>> GetLatestInvoices()
+		{
+			var latestInvoices = await _context.Invoice
+				.Include(i => i.User)
+				.Where(i => i.Status) // Filter for invoices with Status == true (delivered)
+				.OrderByDescending(i => i.IssueDate) // Order by IssueDate descending to get the latest first
+				.Take(7) // Take the latest 7 invoices
+				.ToListAsync();
+
+			return Ok(latestInvoices);
+		}
+
+		// GET: api/users/membercount
+		[HttpGet("membercount")]
+		public async Task<ActionResult<int>> GetMemberCount()
+		{
+			try
+			{
+				var memberCount = await _context.Users.CountAsync();
+				return Ok(memberCount);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+			}
+		}
+		// GET: api/Invoices/MonthlyRevenue?year=2024
+		[HttpGet("MonthlyRevenue")]
+		public async Task<ActionResult<IEnumerable<object>>> GetMonthlyRevenue(int year)
+		{
+			var monthlyData = await _context.Invoice
+				.Where(i => i.IssueDate.Year == year)
+				.GroupBy(i => i.IssueDate.Month)
+				.Select(g => new
+				{
+					Month = g.Key,
+					TotalRevenue = g.Sum(i => i.Total)
+				})
+				.OrderBy(g => g.Month)
+				.ToListAsync();
+
+			return Ok(monthlyData);
+		}
+		[HttpGet("AvailableYears")]
+		public async Task<ActionResult<IEnumerable<int>>> GetAvailableYears()
+		{
+			var years = await _context.Invoice
+				.Select(i => i.IssueDate.Year)
+				.Distinct()
+				.ToListAsync();
+
+			return Ok(years);
+		}
+
+
 	}
 }

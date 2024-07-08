@@ -137,11 +137,14 @@ namespace ClothingStore.Controllers
 
 			if (productDetails == null || productDetails.Count == 0)
 			{
-				return NotFound();
+				// Ghi log thông tin chi tiết về lỗi
+				Console.WriteLine($"Không tìm thấy chi tiết sản phẩm với ProductId = {id}");
+				return NotFound("Không tìm thấy chi tiết sản phẩm.");
 			}
 
 			return productDetails;
 		}
+
 
 
 	}
