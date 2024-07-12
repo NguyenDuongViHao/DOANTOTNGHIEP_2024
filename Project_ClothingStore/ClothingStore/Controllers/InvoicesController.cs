@@ -291,7 +291,7 @@ namespace ClothingStore.Controllers
 					TotalQuantity = totalQuantity,
 					ApproveOrder = invoice.ApproveOrder,
 					COD = invoice.COD,
-					MoMo = invoice.MoMo,
+					Vnpay = invoice.Vnpay,
 					NameProduct = productList,
 					Status = invoice.Status
 				});
@@ -559,6 +559,21 @@ namespace ClothingStore.Controllers
 
 			// Trả về kết quả dưới dạng danh sách các tháng
 			return Ok(months);
+		}
+
+		[HttpDelete("Canceled/{id}")]
+		public async Task<IActionResult> UserCanceled(int id)
+		{
+			var invoice = await _context.Invoice.FindAsync(id);
+
+			if (invoice == null)
+			{
+				return NotFound();
+			}
+			invoice.ApproveOrder = "Đã hủy";
+			_context.Invoice.Update(invoice);
+			await _context.SaveChangesAsync();
+			return NoContent();
 		}
 	}
 

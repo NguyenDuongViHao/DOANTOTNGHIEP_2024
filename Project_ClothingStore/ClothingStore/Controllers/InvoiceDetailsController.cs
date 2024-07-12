@@ -130,7 +130,7 @@ namespace ClothingStore.Controllers
 				ShippingPhone = infoOrder.Invoice.ShippingPhone,
                 Discount = infoOrder.Invoice.Discount,   
                 COD = infoOrder.Invoice.COD,
-                MoMo = infoOrder.Invoice.MoMo,
+				Vnpay = infoOrder.Invoice.Vnpay,
 			};
 
             return Ok(detailOrder);
@@ -201,7 +201,7 @@ namespace ClothingStore.Controllers
 				Total = orderer.Invoice.Total,
 				ApproveOrder = orderer.Invoice.ApproveOrder,
 				COD = orderer.Invoice.COD,
-				MoMo = orderer.Invoice.MoMo
+				Vnpay = orderer.Invoice.Vnpay,
 			};
 
 			return Ok(detailOrderer);
