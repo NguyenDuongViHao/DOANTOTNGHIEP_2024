@@ -11,7 +11,7 @@ const MyOrderInfo = ({ ListOfOrder }) => {
             <th className="fgsfgs" style={{ width: "17%", letterSpacing:"0px", textTransform:"none"}}>Ngày mua</th>
             <th className="fgsfgs" style={{ width: "32%", letterSpacing:"0px", textTransform:"none" }} >Sản phẩm</th>
             <th className="fgsfgs" style={{ width: "17%", letterSpacing:"0px", textTransform:"none"}}>Tổng tiền</th>
-            {/* <th className="fgsfgs" style={{ width: "17%", letterSpacing:"0px", textTransform:"none"}}>Trạng thái</th> */}
+            <th className="fgsfgs" style={{ width: "17%", letterSpacing:"0px", textTransform:"none"}}>Trạng thái</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@ const MyOrderInfo = ({ ListOfOrder }) => {
                 <td>
                   {item.total.toLocaleString("en-US").replace(/,/g, ".")} ₫
                 </td>
-                {/* <td>{item.approveOrder}</td> */}
+                <td>{item.approveOrder}</td>
               </tr>
             );
           })}

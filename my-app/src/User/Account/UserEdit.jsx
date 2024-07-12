@@ -91,7 +91,7 @@ const UserEdit = () => {
   }, [id]);
 
   var widthInput = {
-    width: "68%",
+    width: "150%",
   };
 
   if (loading) {
@@ -185,7 +185,7 @@ const UserEdit = () => {
                     style={{
                       marginTop: "10px",
                       marginLeft: "2px",
-                      width: "68%",
+                      width: "150%",
                     }}
                   >
                     <input

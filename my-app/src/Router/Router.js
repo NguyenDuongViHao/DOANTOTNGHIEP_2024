@@ -25,9 +25,10 @@ import OrderList from "../Admin/Order/OrderList"
 import Reviews from "../Admin/Review/Review"
 import Chart from "../Admin/Chart/Chart"
 import Home from "../Admin/Home/Home"
-import ApproveOrder from "../Admin/Order/ApproveOrder"
-import ConfirmOrder from "../Admin/Order/ConfirmOrder"
-import DeliverOrder from "../Admin/Order/DeliverOrder"
+// import ApproveOrder from "../Admin/Order/ApproveOrder"
+// import ConfirmOrder from "../Admin/Order/ConfirmOrder"
+// import DeliverOrder from "../Admin/Order/DeliverOrder"
+import PaymentResult from "../User/Cart/PaymentResult"
 
 const Router = () => {
     return (
@@ -73,6 +74,7 @@ const Router = () => {
                         <Route path="order" element={<InfoUser />} />
                         <Route path="favourite" element={<InfoUser />} />
                         <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
+                        <Route path="payment_result" element={<PaymentResult />} />
                     </Route>
 
                 </Routes>

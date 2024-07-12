@@ -1,3 +1,7 @@
+*{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .proDetails{    
  
    background-color:  #efefef;
@@ -450,12 +454,13 @@ sub, sup {
     grid-template-columns: 1fr;
     gap: 8px;
 }
-.lgdBsd .label {
+.lgdBsd .labell {
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
     line-height: 150%;
     margin: 0px;
+    color: rgb(39, 39, 42);
 }
 .lgdBsd .group-input {
     display: flex;
@@ -884,7 +889,7 @@ element.style {
 }
 .dpVjwc .review-comment__user-avatar {
     margin: 0px 12px 0px 0px;
-    width: 40px;
+    width: 50px;
     height: 40px;
     background-size: cover;
     border-radius: 50%;

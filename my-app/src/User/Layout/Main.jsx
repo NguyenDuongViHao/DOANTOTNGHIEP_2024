@@ -16,11 +16,17 @@ const Main = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [ProductList, setProductList] = useState([]);
   const [TheHasBeenFilter, setTheHasBeenFilter] = useState([]);
+  const [ListProductFrist, setListProductFrist] = useState();
   const [activeKey, setActiveKey] = useState("first");
+  const [activeKeyCategory, setactiveKeyCategory] = useState(null);
   // pagination
   const [CurentProduct, setCurentProduct] = useState(1);
   const [ProductPerPage, setProductPerPage] = useState(20);
   const pageNumber = [];
+
+  //tim theo giá
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
 
   // danh mục
   const [SelectedCategory, setSelectedCategory] = useState(null);
@@ -52,7 +58,8 @@ const Main = () => {
     setTheHasBeenFilter(filtered); // đã lọc mặc định
     console.log(filtered);
     window.scrollTo(0, 300);
-    setActiveKey("first"); // cần sửa
+    setActiveKey(activeKey);
+    setactiveKeyCategory(item) // cần sửa
   };
 
   const handProductDefault = () => {
@@ -80,12 +87,28 @@ const Main = () => {
     setFilteredProducts(sortedNews);
   };
 
+  const handleFilter = () => {
+    const min = parseFloat(minPrice);
+    const max = parseFloat(maxPrice);
+
+    if (min != 0 && max != 0) {
+      const filtered = filteredProducts.filter(
+        (product) => product.price >= min && product.price <= max
+      );
+      setFilteredProducts(filtered);
+    }
+    else{    
+        setFilteredProducts(ListProductFrist);
+    }
+  };
+
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`)
       .then((res) => {
         setFilteredProducts(res.data);
         setProductList(res.data);
         setTheHasBeenFilter(res.data);
+        setListProductFrist(res.data)
       })
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
@@ -112,11 +135,11 @@ const Main = () => {
         <div className="bsxLcZ">
           <div className="jZosWU">
             <div className="cjqkgR">
-              <div className="efUuhP">Danh muc</div>
+              <div className="efUuhP">Danh mục</div>
               {CategoryList.map((item) => {
                 return (
                   <>
-                    <div className="bHIPhv">
+                    <div className={`bHIPhv ${item.name === activeKeyCategory ? 'active' : ''}`}>
                       <a
                         href="#"
                         title={item.name}
@@ -137,6 +160,41 @@ const Main = () => {
                   </>
                 );
               })}
+            </div>
+
+            <div className="cjqkgR">
+              <div>
+                <div className="efUuhP">Tìm theo giá</div>
+
+                <div class="price-range-container">
+                  <div class="input-group">
+                    <input
+                      className="inputSearch"
+                      type="number"
+                      id="min-price"
+                      name="min-price"
+                      min="0"
+                      step="10000"
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                    <span style={{ margin: "0px", marginTop: "5px" }}>-</span>
+                    <input
+                      className="inputSearch"
+                      type="number"
+                      id="max-price"
+                      name="max-price"
+                      min="0"
+                      step="10000"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                    />
+                  </div>
+                  <button onClick={handleFilter} className="buttonSearch">
+                    Áp dụng
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -211,7 +269,7 @@ const Main = () => {
                     >
                       Giá Thấp Đến Cao
                     </Nav.Link>
-                  </Nav.Item >
+                  </Nav.Item>
                   <Nav.Item className="navitem1">
                     <Nav.Link
                       eventKey="third"
@@ -254,14 +312,19 @@ const Main = () => {
                             return (
                               <>
                                 <div className="product-item men">
-                                  <div className="product discount product_filter" style={{margin:"0 auto", width:"90%"}}>
+                                  <div
+                                    className="product discount product_filter"
+                                    style={{ margin: "0 auto", width: "90%" }}
+                                  >
                                     <div className="product_background">
                                       <div className="product_border">
                                         <div className="product_image">
-                                          <img
+                                        <Link to={`detail/${item.id}`}>
+                                        <img
                                             src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
+                                        </Link>
                                         </div>
                                       </div>
                                     </div>
@@ -273,12 +336,15 @@ const Main = () => {
                                         </Link>
                                       </h6>
                                       <div className="product_price">
-                                        {item.price}
+                                        {item.price.toLocaleString("en-US")
+                                        .replace(/,/g, ".")}<sup>₫</sup>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
+                                    <Link to={`detail/${item.id}`}>
+                                      Xem chi tiết
+                                    </Link>
                                   </div>
                                 </div>
                               </>
@@ -316,27 +382,32 @@ const Main = () => {
                                     <div className="product_background">
                                       <div className="product_border">
                                         <div className="product_image">
-                                          <img
+                                        <Link to={`detail/${item.id}`}>
+                                        <img
                                             src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
+                                        </Link>
                                         </div>
                                       </div>
                                     </div>
                                     <div className="favorite favorite_left" />
                                     <div className="product_info">
                                       <h6 className="product_name">
-                                      <Link to={`detail/${item.id}`}>
+                                        <Link to={`detail/${item.id}`}>
                                           {item.name}
                                         </Link>
                                       </h6>
                                       <div className="product_price">
-                                        {item.price}
+                                        {item.price.toLocaleString("en-US")
+                                        .replace(/,/g, ".")} <sup>₫</sup>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
+                                    <Link to={`detail/${item.id}`}>
+                                      Xem chi tiết
+                                    </Link>
                                   </div>
                                 </div>
                               </>
@@ -374,27 +445,32 @@ const Main = () => {
                                     <div className="product_background">
                                       <div className="product_border">
                                         <div className="product_image">
-                                          <img
+                                        <Link to={`detail/${item.id}`}>
+                                        <img
                                             src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
+                                        </Link>
                                         </div>
                                       </div>
                                     </div>
                                     <div className="favorite favorite_left" />
                                     <div className="product_info">
                                       <h6 className="product_name">
-                                      <Link to={`detail/${item.id}`}>
+                                        <Link to={`detail/${item.id}`}>
                                           {item.name}
                                         </Link>
                                       </h6>
                                       <div className="product_price">
-                                        {item.price}
+                                        {item.price.toLocaleString("en-US")
+                                        .replace(/,/g, ".")} <sup>₫</sup>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
+                                    <Link to={`detail/${item.id}`}>
+                                      Xem chi tiết
+                                    </Link>
                                   </div>
                                 </div>
                               </>
@@ -432,27 +508,32 @@ const Main = () => {
                                     <div className="product_background">
                                       <div className="product_border">
                                         <div className="product_image">
-                                          <img
+                                        <Link to={`detail/${item.id}`}>
+                                        <img
                                             src={`https://localhost:7073/images/${item.imageName}`}
                                             alt=""
                                           />
+                                        </Link>
                                         </div>
                                       </div>
                                     </div>
                                     <div className="favorite favorite_left" />
                                     <div className="product_info">
                                       <h6 className="product_name">
-                                      <Link to={`detail/${item.id}`}>
+                                        <Link to={`detail/${item.id}`}>
                                           {item.name}
                                         </Link>
                                       </h6>
                                       <div className="product_price">
-                                        {item.price}
+                                        {item.price.toLocaleString("en-US")
+                                        .replace(/,/g, ".")} <sup>₫</sup>
                                       </div>
                                     </div>
                                   </div>
                                   <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>Xem chi tiết</Link>
+                                    <Link to={`detail/${item.id}`}>
+                                      Xem chi tiết
+                                    </Link>
                                   </div>
                                 </div>
                               </>

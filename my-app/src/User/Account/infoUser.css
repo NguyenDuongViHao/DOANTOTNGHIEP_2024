@@ -1,3 +1,7 @@
+*{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .backgroundInfo{
     background-color:  #efefef;
    
@@ -214,7 +218,6 @@
     font-size: 13px;
     line-height: 15px;
     color: rgb(51, 51, 51);
-    font-weight: 300;
 }
 .jIFHQL .info strong {
     font-size: 16px;

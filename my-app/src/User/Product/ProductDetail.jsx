@@ -122,30 +122,38 @@ const ProductDetail = () => {
       .join("")
       .toUpperCase();
   };
+console.log(activeIndexColor, "color")
+console.log(activeIndexSize, "size")
 
   const handleSubmitCart = async (e) => {
-    e.preventDefault();
     if (UserId == null) {
       setShowLogin(true);
-    } else {
+      return;
+    }
       if (activeIndexColor && activeIndexSize) {
+        e.preventDefault();
         const productDetailAddCart = ListProductDetail.find(
           (search) =>
             search.sizeId == activeIndexSize &&
             search.colorId == activeIndexColor &&
             search.productId == id
         );
-        if (productDetailAddCart) {
+        console.log(id, "iddd")
+        console.log(productDetailAddCart, "chitiet")
+        if (productDetailAddCart) {//kiểm tra biến thể
           const ProductInCart = ListCart.find(
             (search) =>
               search.productDetailId == productDetailAddCart.id &&
               search.userId == UserId
           ); //undef //thêm user
-          console.log(ProductInCart, "sản phẩm có trong giỏ hàng");
+          console.log(ProductInCart,"kkhfaksf")
           var totalQuantity = 0;
 
           if (ProductInCart) {
             //nếu có trong giỏ hàng
+            console.log(ProductInCart, "cos trong gio hang")
+            console.log(productDetailAddCart.quantity, "soluong san pham ton")
+
             totalQuantity = Quantity + ProductInCart.quantity;
             if (totalQuantity > productDetailAddCart.quantity) {
               //"kiểm tra so lượng sản phẩm được thêm vào khi đã có thêm vào trước đó
@@ -182,6 +190,7 @@ const ProductDetail = () => {
           } else {
             if (Quantity > productDetailAddCart.quantity) {
               //kiểm tra số lựong sản phẩm đc thêm vào khi chưa có sản phẩm đó trong gio hàng,
+              console.log(Quantity, productDetailAddCart.quantity, "soluong, sl đg có trong giỏ hàng")
               toast.info(
                 () => (
                   <div>
@@ -228,23 +237,30 @@ const ProductDetail = () => {
           return false;
         }
       }
+      else{
+        toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>)
+        }
       return false;
-    }
   };
 
-  console.log(Carts, "cart");
+  console.log(ListCart, "cart");
 
   const handlePurchase = async (e) => {
     if (UserId == null) {
       setShowLogin(true);
-    } else {
+      return;
+    } 
+    if (activeIndexColor && activeIndexSize){
       const shouldProceed = await handleSubmitCart(e);
       if (shouldProceed) {
         const timer = setTimeout(() => {
           navigate("/cart");
         }, 300);
-        return () => clearTimeout(timer);
+        return () => clearTimeout(timer);    
       }
+    }
+    else{
+      toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>)
     }
   };
 
@@ -291,8 +307,37 @@ const ProductDetail = () => {
       })
       .catch((error) => {
         console.error("Lỗi khi thêm mục yêu thích", error);
-      });
+      }); 
   };
+
+  const handleQuantityChange = (e, IdProduct) => {
+    const ColorId = parseInt(activeIndexColor, 10);
+    const SizeId = parseInt(activeIndexSize, 10);
+    const newQuantity = Number(e.target.value);
+
+    if (isNaN(newQuantity)) {
+      toast.error("Vui lòng chỉ nhập số!");
+      return;
+    }
+    const quantityProductDetail = ListProductDetail.find((search)=> search.productId == IdProduct && search.colorId == ColorId && search.sizeId == SizeId)
+    if (!quantityProductDetail) {
+      toast.error("Không tìm thấy sản phẩm!");
+      return;
+    }
+    if(newQuantity > quantityProductDetail.quantity){
+      toast.warning(() => (<div>Sản phẩm này chỉ còn {quantityProductDetail.quantity} !</div>));
+      return;
+    }
+   
+    updateQuantity(newQuantity);
+    console.log(quantityProductDetail,"productdetail ")
+    console.log(newQuantity,"so luong cart thay đoi")
+  };
+
+  const updateQuantity = (newQuantity) => {
+    setQuantity(newQuantity)
+  };
+
 
   useEffect(() => {
     AxiosClient.get(`Favourites/${UserId}/${id}`)
@@ -338,7 +383,7 @@ const ProductDetail = () => {
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
       });
-  }, []);
+  }, [shouldSubmit, Carts]);
 
   useEffect(() => {
     if (
@@ -508,7 +553,7 @@ const ProductDetail = () => {
                                       <sup>₫</sup>
                                     </div>
                                     <div className="product-price__discount-rate">
-                                      -43%
+                                     {/* khuyến mãi */}
                                     </div>
                                   </div>
                                 </div>
@@ -1105,7 +1150,7 @@ const ProductDetail = () => {
                       <div className="eEcWHI">
                         <div className="cbfhs">
                           <div className="lgdBsd">
-                            <p className="label">số lượng</p>
+                            <p className="labell">số lượng</p>
                             <div className="group-input">
                               <button
                                 className="disable"
@@ -1120,6 +1165,7 @@ const ProductDetail = () => {
                                 type="text"
                                 className="input"
                                 value={Quantity}
+                                onChange={(e)=>{handleQuantityChange(e, item.id)}}
                               />
                               <button onClick={handleIncrease}>
                                 <img

@@ -1,3 +1,7 @@
+*{
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .product-info-body .product-info-star-book-name .bExXAB button {
     background-color: #ff0000; /* Màu đỏ (hoặc màu bạn muốn) */
     color: #ffffff; /* Màu chữ trắng (hoặc màu bạn muốn) */

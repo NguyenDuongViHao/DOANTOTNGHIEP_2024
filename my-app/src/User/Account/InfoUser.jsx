@@ -12,6 +12,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import UserEdit from "./UserEdit";
 import Favourite from "./Favourite";
+import AxiosClient from "../../Axios/AxiosClient";
 
 const InfoUser = () => {
   const { id } = useParams();
@@ -19,10 +20,17 @@ const InfoUser = () => {
   const location = useLocation();
   const cleanPathname = location.pathname.replace("/", "");
   console.log(cleanPathname);
-  const [user, setUser] = useState({});
+  const [User, setUser] = useState({});
   const UserId = localStorage.getItem("userId");
   const [errors, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  
+  useEffect(() => {
+    AxiosClient.get(`/Users/${UserId}`).then((res) => {
+      setUser(res.data);
+    });
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -45,7 +53,7 @@ const InfoUser = () => {
                   />
                   <div className="info ">
                     Tài khoản của
-                    <strong>{user.fullName}</strong>
+                    <strong>{User.fullName}</strong>
                   </div>
                 </div>
                 <Nav variant="pills" className="flex-column managementInfo">

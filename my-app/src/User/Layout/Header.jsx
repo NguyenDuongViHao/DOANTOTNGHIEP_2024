@@ -9,6 +9,7 @@ import ModalRegister from "../../ModalRegister";
 const Header = () => {
   var menu;
   var jwt = localStorage.getItem("jwt");
+  const UserId = localStorage.getItem("userId");
   var navigate = useNavigate();
   const [filteredItems, setFilteredItems] = useState([]);
   const [show, setShow] = useState(false);
@@ -35,6 +36,11 @@ const Header = () => {
     }
   };
 
+  const handleButtonSearch = (event) => {
+    if (event.key === 'Enter') {
+      navigate(`/search-results?query=${encodeURIComponent(query)}`);
+    }
+  };
   const getRandomItems = (array, number) => {
     const shuffled = array.sort(() => 0.5 - Math.random());
     return shuffled.slice(0, number);
@@ -45,6 +51,14 @@ const Header = () => {
   };
   const handleShowLogin = () => setShowLogin(true);
   const handleShowRegister = () => setShowRegister(true);
+
+  const handleSwitchCart=()=>{
+    if(UserId==null){
+      setShowLogin(true)
+      return;
+    }
+    navigate('/cart')
+  }
 
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`).then((res) => {
@@ -92,6 +106,11 @@ const Header = () => {
     );
   }
 
+  const navigateToNewPage = () => {
+    // Dùng window.location.href để chuyển hướng và tải lại trang
+    window.location.href = '/';
+  };
+
   return (
     <>
       <header
@@ -107,7 +126,7 @@ const Header = () => {
             <div className="row" style={{ height: "100%" }}>
               <div className="col-lg-12 text-right" style={{ height: "100%" }}>
                 <div className="logo_container" style={{ zIndex: 2 }}>
-                  <Link to="/">
+                  <Link onClick={navigateToNewPage}>
                     clt<span>shop</span>
                   </Link>
                 </div>
@@ -131,11 +150,13 @@ const Header = () => {
                             style={{ height: "100%" }}
                             value={query}
                             onChange={handleSearch}
+                            onKeyDown={handleButtonSearch}
                           />
                           <Link
                             to={`/search-results?query=${encodeURIComponent(
                               query
                             )}`}
+                            style={{marginRight:"1rem"}}
                           >
                             Tìm kiếm
                           </Link>
@@ -167,7 +188,7 @@ const Header = () => {
                           src="https://salt.tikicdn.com/ts/upload/b4/90/74/6baaecfa664314469ab50758e5ee46ca.png"
                           alt="header_menu_item_home"
                         />
-                        <Link to="/" style={{ color: "rgb(128, 128, 137)" }}>
+                        <Link onClick={navigateToNewPage} style={{ color: "rgb(128, 128, 137)" }}>
                           Trang chủ
                         </Link>
                       </div>
@@ -179,8 +200,8 @@ const Header = () => {
                         <span>Tài khoản</span>
                         {menu}
                       </div>
-                      <div className="hfiWvr">
-                        <Link to="/cart">
+                      <div className="hfiWvr" onClick={handleSwitchCart}>
+                        <div>
                           <div className="iZYkSb bhXqXQ">
                             <div className="cart-wrapper">
                               <img
@@ -192,7 +213,7 @@ const Header = () => {
                               <span className="jbrHBQ">0</span>
                             </div>
                           </div>
-                        </Link>
+                        </div>
                       </div>
                     </div>
                   </div>

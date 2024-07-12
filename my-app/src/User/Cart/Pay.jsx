@@ -18,9 +18,11 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
   const [PaymentList, setPaymentList] = useState([]);
 
   const [selectedOption, setSelectedOption] = useState("COD");
-  const [momo, setMomo] = useState(false); 
+  const [vnpay, setVnpay] = useState(false);
   const [cod, setCod] = useState(true);
 
+  const [paymentUrl, setPaymentUrl] = useState("");
+ 
   var Discount = 0;
   var totalInvoice = 0;
   var Subtotal = 0;
@@ -33,11 +35,11 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
   const handleRadioChange = (event) => {
     const value = event.target.value;
     setSelectedOption(value);
-    if (value == "MoMo") {
-      setMomo(true);
+    if (value == "Vnpay") {
+      setVnpay(true);
       setCod(false);
     } else if (value == "COD") {
-      setMomo(false);
+      setVnpay(false);
       setCod(true);
     }
   };
@@ -48,7 +50,12 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
     });
   }, []);
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
+    function totalPaymentOnline() {
+      localStorage.setItem("TotalPaymentOnline", totalInvoice);
+      localStorage.setItem("DiscountOnline", Discount);
+    }
+    totalPaymentOnline();
     const invoiceData = {
       // UserId: UserId,
       ShippingAddress: User.address,
@@ -56,19 +63,41 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
       Total: totalInvoice,
       Discount: Discount,
       COD: cod,
-      MoMo: momo,
-      // IssueDate: new Date(),
-      // ApproveOrder: "Đã đặt",
-      // Status: true,
+      Vnpay: vnpay,
+    };
+    const listnameproduct = PaymentList.map(payment => payment.productName);
+    const productNamesString = listnameproduct.join(", ");
+
+    const model= {
+      orderType: productNamesString,
+      amount: totalInvoice,
+      orderDescription: "Thanh toán VNPAY",
+      name: User.fullName,
     };
 
-    AxiosClient.post(`/Carts/pay/${UserId}`, invoiceData)
-      .then(() => {
-        navigate("/order");
-      })
-      .catch((error) => {
-        console.error("Error while posting payment:", error);
-      });
+    if (cod) {
+      AxiosClient.post(`/Carts/pay/${UserId}`, invoiceData)
+        .then(() => {
+          navigate("/order");
+        })
+        .catch((error) => {
+          console.error("Error while posting COD payment:", error);
+        });
+    }
+
+    if (vnpay) {
+      try {
+        const response = await AxiosClient.post(
+          "/Payment/CreatePaymentUrl",
+          model
+        );
+        setPaymentUrl(response.data);
+        // Redirect to paymentUrl
+        window.location.href = response.data;
+      } catch (error) {
+        console.error("Error creating payment URL:", error);
+      }
+    }
   };
 
   useEffect(() => {
@@ -171,8 +200,8 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
                         type="radio"
                         name=""
                         id=""
-                        value="MoMo"
-                        checked={selectedOption === "MoMo"}
+                        value="Vnpay"
+                        checked={selectedOption === "Vnpay"}
                         onChange={handleRadioChange}
                       />
                       <span className="radio-fake"></span>
@@ -188,7 +217,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
                             />{" "}
                             <div className="method-content">
                               <div className="method-content__title ">
-                                <span>Ví MoMo</span>
+                                <span>VnPay</span>
                               </div>
                               <div className="method-content__sub-title"></div>
                             </div>

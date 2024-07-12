@@ -86,6 +86,7 @@ const Shipping = () => {
             background: "rgb(245, 245, 250)",
             backgroundColor: "#efefef",
             paddingTop: "2rem",
+            paddingBottom:"2rem"
           }}
         >
           <div className="hfMLFx">

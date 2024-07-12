@@ -27,6 +27,7 @@ const Register = ({ onSuccess }) => {
         try {
             await AxiosClient.post('/Users/register', account);
             onSuccess();
+            navigate('/login');
         } catch (error) {
             console.error('Error during registration:', error);
         }

@@ -23,9 +23,12 @@ const Cart = () => {
   const [showAll, setShowAll] = useState(false);
   const [selectedCart, setSelectedCart] = useState({});
 
-
   const [User, setUser] = useState({});
-  //xóa một
+
+  const [ListProductDetail, setListProductDetail] = useState([]);
+  // const [quantityOnChange, setquantityOnChange] = useState("");
+
+
   const handleCloseDeleteCart = () => setShow(false);
   const handleShowDeleteCart = (id) => {
     setSelectedCart(Cart.find((a) => a.id == id));
@@ -145,6 +148,44 @@ const Cart = () => {
     console.log(updateQuantityOfProduct, "giảm");
   };
 
+  const handleQuantityChange = (e, Idcart) => {
+    const cartSelected = Cart.find((search) => search.id == Idcart); 
+    const newQuantity = e.target.value;
+    const productAddToCart = ListProductDetail.find((search)=> search.id == cartSelected.productDetailId)
+    if (isNaN(newQuantity)) {
+      toast.error("Vui lòng chỉ nhập số!");
+      return;
+    }
+    if (!productAddToCart) {
+      toast.error("Không tìm thấy sản phẩm!");
+      return;
+    }
+    if(newQuantity > productAddToCart.quantity){
+      toast.warning(() => (<div>Sản phẩm này chỉ còn {productAddToCart.quantity} !</div>));   
+      return;
+    }
+    updateQuantity(Idcart, newQuantity, cartSelected.productDetailId);
+    console.log(productAddToCart,"productdetail ")
+    console.log(newQuantity,"so luong cart thay đoi")
+  };
+
+  const updateQuantity = (Idcart, newQuantity, productDetailId) => {
+    setCart((prevItems) =>
+      prevItems.map((item) =>
+        item.id === Idcart ? { ...item, quantity: Number(newQuantity) } : item
+      )
+    );
+    
+    AxiosClient.put( `/Carts/updateQuantityCart`, {quantity: newQuantity, userId: UserId, id: Idcart, productDetailId: productDetailId, selected: false})
+        .then((response) => {
+          console.log("Cart items updated quantity successfully", response);
+        })
+        .catch((error) => {
+          console.error("Error updating cart items", error);
+          toast.error("Có lỗi xảy ra khi cập nhật số lượng giỏ hàng.");
+        });
+  };
+
   const calculateTotalForProduct = (pro) => {
     const totalPrice = pro.price * pro.quantity;
     return totalPrice;
@@ -256,8 +297,6 @@ const Cart = () => {
       });
   }, []);
 
-
-
   useEffect(() => {
     if (location.pathname === "/cart") {
       const updateSelectedBackToFalse = async () => {
@@ -283,7 +322,7 @@ const Cart = () => {
 
       updateSelectedBackToFalse();
     }
-  }, [location.pathname, Cart]);
+  }, [location.pathname]);
 
   useEffect(() => {
     AxiosClient.get(`/Carts`)
@@ -300,6 +339,16 @@ const Cart = () => {
       setUser(res.data);
     });
   }, [UserId]);
+
+  useEffect(() => {
+    AxiosClient.get(`/ProductDetails`)
+      .then((res) => {
+        setListProductDetail(res.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -324,7 +373,7 @@ const Cart = () => {
                     onClick={handleCheckAll}
                   />
                   <span className="checkbox-fake "></span>
-                  <span className="label">Tất cả (2 sản phẩm)</span>
+                  <span className="label">Tất cả ({quantityInCart()})</span>
                 </label>
                 <span>Đơn giá</span>
                 <span>Số lượng </span>
@@ -420,6 +469,7 @@ const Cart = () => {
                                     type="tel"
                                     className="qty-input "
                                     value={item.quantity}
+                                    onChange={(e)=>{handleQuantityChange(e, item.id)}}
                                   />
                                   <span
                                     className="qty-increase"
@@ -542,7 +592,7 @@ const Cart = () => {
                 </div>
 
                 <div className="dGoOLh" onClick={handleBuyProduct}>
-                  Mua Hàng ({quantityInCart()})
+                  Mua Hàng
                 </div>
 
                 <div style={{ marginTop: "12px" }}></div>

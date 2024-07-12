@@ -11,11 +11,13 @@ const SearchResultComponent = () => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [ProductList, setProductList] = useState([]);
   const [activeKey, setActiveKey] = useState("first");
+
+  const [minPrice, setMinPrice] = useState(0);
+  const [maxPrice, setMaxPrice] = useState(0);
   // pagination
   const [CurentProduct, setCurentProduct] = useState(1);
   const [ProductPerPage, setProductPerPage] = useState(20);
   const pageNumber = [];
-
   // pagination
   const indexOfLastProduct = CurentProduct * ProductPerPage;
   const indexOfFristProduct = indexOfLastProduct - ProductPerPage;
@@ -32,6 +34,17 @@ const SearchResultComponent = () => {
     pageNumber.push(i);
   }
 
+  const handleFilter = () => {
+    const min = parseFloat(minPrice);
+    const max = parseFloat(maxPrice);
+
+    if (!isNaN(min) && !isNaN(max)) {
+      const filtered = ProductList.filter(
+        (product) => product.price >= min && product.price <= max
+      );
+      setFilteredProducts(filtered);
+    }
+  };
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`)
       .then((res) => {
@@ -74,7 +87,7 @@ const SearchResultComponent = () => {
           style={{
             backgroundColor: "#efefef",
             display: "grid",
-            gridTemplateColumns: "1fr 230px",
+            gridTemplateColumns: "1fr 250px",
             gap: "24px",
             width: "80%",
             margin: "0 auto",
@@ -119,10 +132,12 @@ const SearchResultComponent = () => {
                                       <div className="product_background">
                                         <div className="product_border">
                                           <div className="product_image">
-                                            <img
-                                              src={`https://localhost:7073/images/${item.imageName}`}
-                                              alt=""
-                                            />
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={`https://localhost:7073/images/${item.imageName}`}
+                                                alt=""
+                                              />
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
@@ -134,8 +149,9 @@ const SearchResultComponent = () => {
                                           </Link>
                                         </h6>
                                         <div className="product_price">
-                                          {item.price}
-                                          <span>{item.price}</span>
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")} <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
@@ -178,10 +194,12 @@ const SearchResultComponent = () => {
                                       <div className="product_background">
                                         <div className="product_border">
                                           <div className="product_image">
-                                            <img
-                                              src={`https://localhost:7073/images/${item.imageName}`}
-                                              alt=""
-                                            />
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={`https://localhost:7073/images/${item.imageName}`}
+                                                alt=""
+                                              />
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
@@ -193,8 +211,9 @@ const SearchResultComponent = () => {
                                           </Link>
                                         </h6>
                                         <div className="product_price">
-                                          {item.price}
-                                          <span>{item.price}</span>
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")} <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
@@ -237,10 +256,12 @@ const SearchResultComponent = () => {
                                       <div className="product_background">
                                         <div className="product_border">
                                           <div className="product_image">
-                                            <img
-                                              src={`https://localhost:7073/images/${item.imageName}`}
-                                              alt=""
-                                            />
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={`https://localhost:7073/images/${item.imageName}`}
+                                                alt=""
+                                              />
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
@@ -252,8 +273,9 @@ const SearchResultComponent = () => {
                                           </Link>
                                         </h6>
                                         <div className="product_price">
-                                          {item.price}
-                                          <span>{item.price}</span>
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")} <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
@@ -296,10 +318,12 @@ const SearchResultComponent = () => {
                                       <div className="product_background">
                                         <div className="product_border">
                                           <div className="product_image">
-                                            <img
-                                              src={`https://localhost:7073/images/${item.imageName}`}
-                                              alt=""
-                                            />
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={`https://localhost:7073/images/${item.imageName}`}
+                                                alt=""
+                                              />
+                                            </Link>
                                           </div>
                                         </div>
                                       </div>
@@ -311,8 +335,9 @@ const SearchResultComponent = () => {
                                           </Link>
                                         </h6>
                                         <div className="product_price">
-                                          {item.price}
-                                          <span>{item.price}</span>
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")} <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
@@ -355,8 +380,48 @@ const SearchResultComponent = () => {
 
           <div
             className="brLIEg"
-            style={{ backgroundColor: "rgb(255, 255, 255)" }}
-          ></div>
+            style={{
+              backgroundColor: "rgb(255, 255, 255)",
+              width: "100%",
+              height: "200px",
+            }}
+          >
+            <div className="cjqkgR">
+              <div style={{ margin: "0 auto" }}>
+                <div className="efUuhP">Tìm theo giá</div>
+
+                <div class="price-range-containerSearch">
+                  <div class="input-group">
+                    <input
+                      className="inputSearch"
+                      type="number"
+                      id="min-price"
+                      name="min-price"
+                      min="0"
+                      step="10000"
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                    />
+                    <span style={{ margin: "0px", marginTop: "5px" }}>-</span>
+                    <input
+                      className="inputSearch"
+                      type="number"
+                      id="max-price"
+                      name="max-price"
+                      min="0"
+                      step="10000"
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      style={{width:"45%"}}
+                    />
+                  </div>
+                  <button onClick={handleFilter} className="buttonSearch">
+                    Áp dụng
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </>

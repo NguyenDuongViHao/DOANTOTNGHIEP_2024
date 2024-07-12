@@ -4,10 +4,14 @@
         }
     }
    
+    *{
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    }
+    
     .dOGdaN {
         width: 100%;
-        padding-left: 25px;
-        padding-right: 25px;
+        padding-left: 40px;
+        padding-right: 40px;
         margin-right: auto;
         margin-left: auto;
         background: #efefef;
@@ -77,6 +81,10 @@
     cursor: pointer;
 }
 
+.bHIPhv.active {
+    background-color: #efefef;
+  }
+  
 a {
     color: rgb(11, 116, 229);
     text-decoration: none;
@@ -306,3 +314,64 @@ a.breadcrumb-item {
     height: 300px;
 }
 
+.price-range-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.price-range-container h3 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.input-group .inputSearch {
+    width: 90px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.input-group span {
+    margin: 0 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.buttonSearch {
+    width: 100%;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.buttonSearch:hover {
+    background-color: #0056b3;
+}
+
+.price-range-containerSearch{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+}
