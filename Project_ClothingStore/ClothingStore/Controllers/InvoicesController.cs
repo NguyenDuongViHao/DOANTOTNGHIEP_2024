@@ -291,6 +291,7 @@ namespace ClothingStore.Controllers
 					TotalQuantity = totalQuantity,
 					ApproveOrder = invoice.ApproveOrder,
 					COD = invoice.COD,
+
 					Vnpay = invoice.Vnpay,
 					NameProduct = productList,
 					Status = invoice.Status

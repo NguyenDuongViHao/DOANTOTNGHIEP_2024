@@ -130,6 +130,7 @@ namespace ClothingStore.Controllers
 				ShippingPhone = infoOrder.Invoice.ShippingPhone,
                 Discount = infoOrder.Invoice.Discount,   
                 COD = infoOrder.Invoice.COD,
+
 				Vnpay = infoOrder.Invoice.Vnpay,
 			};
 
@@ -201,6 +202,7 @@ namespace ClothingStore.Controllers
 				Total = orderer.Invoice.Total,
 				ApproveOrder = orderer.Invoice.ApproveOrder,
 				COD = orderer.Invoice.COD,
+
 				Vnpay = orderer.Invoice.Vnpay,
 			};
 
