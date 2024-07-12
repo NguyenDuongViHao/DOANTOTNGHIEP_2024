@@ -24,7 +24,7 @@
 
 		public bool COD { get; set; }
 
-		public bool MoMo { get; set; }
+		public bool Vnpay { get; set; }
 
 		public string NameProduct { get; set; }
 

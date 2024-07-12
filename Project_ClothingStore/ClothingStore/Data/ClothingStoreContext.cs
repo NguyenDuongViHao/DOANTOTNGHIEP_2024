@@ -44,5 +44,16 @@ namespace ClothingStore.Data
         public DbSet<ClothingStore.Models.InvoiceDetail> InvoiceDetail { get; set; }
 
         public DbSet<ClothingStore.Models.Messages> Messages { get; set; }
-    }
+
+		protected override void OnModelCreating(ModelBuilder modelBuilder)
+		{
+			base.OnModelCreating(modelBuilder);
+
+			// Thiết lập chỉ mục duy nhất trên sự kết hợp của ProductId, SizeId, và ColorId
+			modelBuilder.Entity<ProductDetail>()
+				.HasIndex(p => new { p.ProductId, p.SizeId, p.ColorId })
+				.IsUnique();
+
+		}
+	}
 }

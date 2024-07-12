@@ -159,5 +159,16 @@ namespace ClothingStore.Controllers
 
 			return Ok(reviewSummary);
 		}
+		[HttpPost]
+		[Route("{UserId}")]
+		public async Task<ActionResult<Review>> PostReviewUer(string UserId, Review review)
+		{
+            review.UserId = UserId;
+            review.ReviewDate = DateTime.Now;
+			_context.Review.Add(review);
+			await _context.SaveChangesAsync();
+
+			return CreatedAtAction("GetReview", new { id = review.Id }, review);
+		}
 	}
 }

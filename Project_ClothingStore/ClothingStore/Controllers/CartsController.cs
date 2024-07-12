@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ClothingStore.Data;
 using ClothingStore.Models;
 using ClothingStore.Helpers;
+using System.Drawing;
 
 namespace ClothingStore.Controllers
 {
@@ -310,9 +311,10 @@ namespace ClothingStore.Controllers
 					.Include(c => c.User)
 					.Include(c => c.ProductDetail.Product)
 					.Where(i => i.UserId == UserId).ToListAsync();
+				var codeOrder = DateTime.Now.ToString("yyMMddhhmmss");
 				Invoice invoice = new Invoice()
 				{
-					Code = DateTime.Now.ToString("yyMMddhhmmss"),
+					Code = codeOrder,
 					UserId = UserId,
 					IssueDate = DateTime.Now,
 					ShippingAddress = invoiceRequest.ShippingAddress,
@@ -321,7 +323,7 @@ namespace ClothingStore.Controllers
 					Total = invoiceRequest.Total,
 					ApproveOrder = "Chờ xử lý",
 					COD = invoiceRequest.COD,
-					MoMo = invoiceRequest.MoMo,
+					Vnpay = invoiceRequest.Vnpay,
 					Status = false,
 				};
 				_context.Invoice.Add(invoice);
@@ -340,9 +342,11 @@ namespace ClothingStore.Controllers
 					_context.ProductDetail.Update(item.ProductDetail);
 					_context.Cart.Remove(item);
 				}
+				await _context.SaveChangesAsync();
+				return Ok(new { CodeOnline = codeOrder });
 			}
-			await _context.SaveChangesAsync();
-			return Ok();
+			return BadRequest("UserId is null");
 		}
+
 	}
 }

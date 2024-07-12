@@ -6,12 +6,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CodeMegaVNPay.Services;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ClothingStoreContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("ClothingStoreContext") ?? throw new InvalidOperationException("Connection string 'ClothingStoreContext' not found.")));
 
-// Add services to the container.
+// Register VNPay service
+//builder.Services.AddScoped<IVnPayService, VnPayService>();
+builder.Services.AddTransient<IVnPayService, VnPayService>();
+
+// Cấu hình để sử dụng Configuration
 
 //Config cho Indentity
 builder.Services.AddIdentity<User, IdentityRole>()
