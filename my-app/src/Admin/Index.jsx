@@ -72,7 +72,7 @@ const Index = () => {
                     <ul className="nav nav-collapse">
                       <li className={`nav-item ${path === '/admin/accounts' ? 'active' : ''}`}>
                         <Link to="/admin/accounts">
-                          <span className="sub-item">Quản lý loại tài khoản</span>
+                          <span className="sub-item">Quản lý  tài khoản</span>
                         </Link>
                       </li>
                       <li className={`nav-item ${path === '/admin/products' ? 'active' : ''}`}>
