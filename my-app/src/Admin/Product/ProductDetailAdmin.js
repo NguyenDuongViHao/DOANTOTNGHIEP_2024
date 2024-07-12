@@ -34,7 +34,7 @@ const ProductDetailAdmin = () => {
           <Link
             to="/admin/products"
             className="btn btn-primary mb-2"
-            style={{ marginLeft: "670px" }}
+            style={{ marginLeft: "625px" }}
           >
             Quay lại
           </Link>
@@ -43,7 +43,7 @@ const ProductDetailAdmin = () => {
             className="btn btn-primary mb-2"
             style={{}}
           >
-            Thêm sản phẩm
+            Thêm chi tiết sản phẩm
           </Link>
         </div>
 
