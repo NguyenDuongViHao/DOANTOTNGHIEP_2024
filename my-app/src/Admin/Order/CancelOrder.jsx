@@ -153,10 +153,10 @@ const CancelOrder = ({ ListOfInvoice }) => {
                                             width: "10%",
                                           }}
                                         >
-                                          <img
+                                          {/* <img
                                             src={`https://localhost:7106/Images/${orderdetail.images}`}
                                             alt="hinh anh"
-                                          />
+                                          /> */}
                                         </div>
                                         <div style={{ width: "85%" }}>
                                           <div>{orderdetail.bookName}</div>

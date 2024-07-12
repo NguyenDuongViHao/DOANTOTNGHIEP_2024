@@ -26,7 +26,7 @@ const Reviews = () => {
     }
 
     if (error) {
-        return <div>Error: {error.message}</div>;
+        return <div>Không có dữ liệu</div>;
     }
 
     const renderStarIcons = (starNumber) => {
@@ -62,16 +62,6 @@ const Reviews = () => {
                     ))}
                 </tbody>
             </table>
-            {/* <div className="mt-4">
-                <h4>Statistics</h4>
-                <p>1 Star: {reviews[0]?.oneStars || 0}</p>
-                <p>2 Stars: {reviews[0]?.twoStars || 0}</p>
-                <p>3 Stars: {reviews[0]?.threeStars || 0}</p>
-                <p>4 Stars: {reviews[0]?.fourStars || 0}</p>
-                <p>5 Stars: {reviews[0]?.fiveStars || 0}</p>
-                <p>Total Stars: {reviews[0]?.totalStars || 0}</p>
-                <p>Average Rating: {reviews[0]?.averageRating || 0}</p>
-            </div> */}
         </div>
     );
 };

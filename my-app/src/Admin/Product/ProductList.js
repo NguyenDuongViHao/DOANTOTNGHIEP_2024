@@ -79,7 +79,7 @@ const ProductList = () => {
         <h2>Danh sách sản phẩm</h2>
         <div>
           <button onClick={handleButtonClick}>
-            <span style={{marginRight: '5px'}}><FontAwesomeIcon icon={faPlus} /></span>Tạo nhóm sản phẩm
+            <span style={{marginRight: '5px'}}><FontAwesomeIcon icon={faPlus} /></span>Tạo sản phẩm
           </button>
         </div>
       </div>

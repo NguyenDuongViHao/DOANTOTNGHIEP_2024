@@ -24,6 +24,10 @@ import ProductDetailAdminAdd from "../Admin/Product/ProductDetailAdminAdd"
 import OrderList from "../Admin/Order/OrderList"
 import Reviews from "../Admin/Review/Review"
 import Chart from "../Admin/Chart/Chart"
+import Home from "../Admin/Home/Home"
+import ApproveOrder from "../Admin/Order/ApproveOrder"
+import ConfirmOrder from "../Admin/Order/ConfirmOrder"
+import DeliverOrder from "../Admin/Order/DeliverOrder"
 
 const Router = () => {
     return (
@@ -31,6 +35,7 @@ const Router = () => {
             <BrowserRouter>
                 <Routes>
                     <Route path="admin" element={<Index />}>
+                        <Route path="" element={<Home />} />
                         <Route path="accounts">
                             <Route path="" element={<AccountList />} />
                             <Route path="add" element={<AccountAdd />} />
@@ -41,18 +46,20 @@ const Router = () => {
                             <Route path="edit/:id" element={<ProductEdit />} />
                         </Route>
                         <Route path="productdetails">
-                            <Route path="add/:id" element={<ProductDetailAdminAdd/>}/>
+                            <Route path="add/:id" element={<ProductDetailAdminAdd />} />
                             <Route path="detail/:id" element={<ProductDetailAdmin />} />
                             <Route path="variation/:id" element={<ProductDetailAdminEdit />} />
                         </Route>
                         <Route path="categories">
-                            <Route path="" element={<CategoryList  />} />
+                            <Route path="" element={<CategoryList />} />
                             <Route path="add" element={<CategoryAdd />} />
                             <Route path="edit/:id" element={<CategoryEdit />} />
                         </Route>
                         <Route path="orders" element={<OrderList />} />
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="chart" element={<Chart />} />
+                        
+
                     </Route>
                     <Route path="/" element={<IndexUser />}>
                         <Route path="" element={<Main />}></Route>

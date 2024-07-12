@@ -1,7 +1,7 @@
 import { faColonSign, faExchange, faSign, faSignIn } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import './Index.css';
 const Index = () => {
   const navigate = useNavigate();
@@ -13,6 +13,11 @@ const Index = () => {
       console.log("Logout error", error);
     }
   }
+
+  const location = useLocation();
+  const path = location.pathname;
+  const [active, setActive] = useState(false);
+
   return (
     <>
       <div className="wrapper">
@@ -21,14 +26,14 @@ const Index = () => {
           <div className="sidebar-logo">
             {/* Logo Header */}
             <div className="logo-header" data-background-color="dark">
-              <a href="index.html" className="logo">
+              <Link to='/admin' className="logo">
                 <img
-                  src="../Admin/assets/img/kaiadmin/logo_light.svg"
-                  alt="navbar brand"
-                  className="navbar-brand"
-                  height={20}
-                />
-              </a>
+                    src="../Admin/assets/img/kaiadmin/logo_light.svg"
+                    alt="navbar brand"
+                    className="navbar-brand"
+                    height={20}
+                  />
+              </Link>
               <div className="nav-toggle">
                 <button className="btn btn-toggle toggle-sidebar">
                   <i className="gg-menu-right" />
@@ -46,27 +51,17 @@ const Index = () => {
           <div className="sidebar-wrapper scrollbar scrollbar-inner">
             <div className="sidebar-content">
               <ul className="nav nav-secondary">
-                <li className="nav-item active">
-                  <a
-                    data-bs-toggle="collapse"
-                    href="#dashboard"
-                    className="collapsed"
+                <li className={`nav-item ${path === '/admin' ? 'active' : ''}`}>
+                  <Link
+                    to="/admin"
+                    className="nav-link collapsed"
                     aria-expanded="false"
                   >
                     <i className="fas fa-home" />
-                    <p>Home</p>
-                    <span className="caret" />
-                  </a>
-                  <div className="collapse" id="dashboard">
-                    <ul className="nav nav-collapse">
-                      <li>
-                        <a href="">
-                          <span className="sub-item">Dashboard 1</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                    <p>Trang chủ</p>
+                  </Link>
                 </li>
+
                 <li className="nav-item">
                   <a data-bs-toggle="collapse" href="#base">
                     <i className="fas fa-edit" />
@@ -75,62 +70,38 @@ const Index = () => {
                   </a>
                   <div className="collapse" id="base">
                     <ul className="nav nav-collapse">
-                      <li>
-                        <Link to="accounts">
-                          <span className="sub-item">Quản lý nhân viên</span>
+                      <li className={`nav-item ${path === '/admin/accounts' ? 'active' : ''}`}>
+                        <Link to="/admin/accounts">
+                          <span className="sub-item">Quản lý loại tài khoản</span>
                         </Link>
                       </li>
-                      <li>
-                        <a href="products">
-                          <span className="sub-item">Quản lý sản phẩm</span>
-                        </a>
+                      <li className={`nav-item ${path === '/admin/products' ? 'active' : ''}`}>
+                        <Link to='/admin/products'>
+                        <span className="sub-item">Quản lý sản phẩm</span>
+                        </Link>
                       </li>
-                      <li>
-                        <a href="categories">
-                          <span className="sub-item">Quản lý loại sản phẩm</span>
-                        </a>
+                      <li className={`nav-item ${path === '/admin/categories' ? 'active' : ''}`}>
+                        <Link to="/admin/categories">
+                        <span className="sub-item">Quản lý loại sản phẩm</span></Link>
                       </li>
-                      <li>
-                        <a href="orders">
-                          <span className="sub-item">Quản lý đơn hàng</span>
-                        </a>
+                      <li className={`nav-item ${path === '/admin/orders' ? 'active' : ''}`}>
+                        <Link to="/admin/orders">
+                        <span className="sub-item">Quản lý đơn hàng</span>
+                        </Link>
                       </li>
-                      <li>
-                        <a href="reviews">
-                          <span className="sub-item">Quản lý đánh giá</span>
-                        </a>
+                      <li className={`nav-item ${path === '/admin/reviews' ? 'active' : ''}`}>
+                        <Link to="/admin/reviews">
+                        <span className="sub-item">Quản lý đánh giá</span>
+                        </Link>
                       </li>
                     </ul>
                   </div>
                 </li>
-                <li className="nav-item">
-                  <a  href="chart"> 
-                    <i className="far fa-chart-bar" />
-                    <p>Thống kê</p>
-                    {/* <span className="caret" /> */}
-                    {/*data-bs-toggle="collapse" */}
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a data-bs-toggle="collapse" href="#submenu">
-                    <i className="fas fa-users" />
-                    <p>Tài khoản</p>
-                    <span className="caret" />
-                  </a>
-                  <div className="collapse" id="submenu">
-                    <ul className="nav nav-collapse">
-                      <li>
-                        <a data-bs-toggle="collapse" href="#subnav1">
-                          <span className="sub-item">Thay đổi thông tin</span>
-                        </a>
-                      </li>
-                      <li>
-                        <a data-bs-toggle="collapse" href="#subnav2">
-                          <span className="sub-item">Thoát</span>
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
+                <li className={`nav-item ${path === '/admin/chart' ? 'active' : ''}`}>
+                  <Link to="/admin/chart">
+                  <i className="far fa-chart-bar" />
+                  <p>Thống kê</p>
+                  </Link>
                 </li>
               </ul>
             </div>
@@ -142,14 +113,14 @@ const Index = () => {
             <div className="main-header-logo">
               {/* Logo Header */}
               <div className="logo-header" data-background-color="dark">
-                <a href="index.html" className="logo">
-                  <img
+                <Link to="/admin" className="logo">
+                <img
                     src="assets/img/kaiadmin/logo_light.svg"
                     alt="navbar brand"
                     className="navbar-brand"
                     height={20}
                   />
-                </a>
+                </Link>
                 <div className="nav-toggle">
                   <button className="btn btn-toggle toggle-sidebar">
                     <i className="gg-menu-right" />
@@ -167,8 +138,8 @@ const Index = () => {
             {/* Navbar Header */}
             <nav className="navbar navbar-header navbar-header-transparent navbar-expand-lg">
               <div className="container-fluid">
-               
-                <ul className="navbar-nav topbar-nav ms-md-auto align-items-center" style={{marginRight:"20px"}}>
+
+                <ul className="navbar-nav topbar-nav ms-md-auto align-items-center" style={{ marginRight: "20px" }}>
 
                   <li className="nav-item topbar-user dropdown hidden-caret">
                     <a
@@ -190,10 +161,10 @@ const Index = () => {
                       </span>
                     </a>
                     <ul className="dropdown-menu dropdown-user animated fadeIn">
-                      <div className="dropdown-user-scroll scrollbar-outer" style={{height: "auto !important"}}>
+                      <div className="dropdown-user-scroll scrollbar-outer" style={{ height: "auto !important" }}>
                         <li>
                           <a className="dropdown-item" onClick={logout}>
-                           <FontAwesomeIcon icon={faExchange}/> Logout
+                            <FontAwesomeIcon icon={faExchange} /> Logout
                           </a>
                         </li>
                       </div>
@@ -204,7 +175,7 @@ const Index = () => {
             </nav>
             {/* End Navbar */}
           </div>
-          
+
           <div className="container">
             <Outlet />
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faLocationDot, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
@@ -12,8 +12,8 @@ const ApproveOrder = ({ ListOfInvoice }) => {
   const [showConfirm, setshowConfirm] = useState(false);
   const [selectedIdInvoice, setselectedIdInvoice] = useState({});
   const [Orderer, setOrderer] = useState({});
-
   const handleCloseConfirm = () => setshowConfirm(false);
+
 
   const handleLinkClick = (rowIndex) => {
     setOpenRowIndex((prevIndex) => (prevIndex === rowIndex ? null : rowIndex));

@@ -80,7 +80,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                           handleLinkClickOrderer(item.id);
                         }}
                       >
-                        <p>Xem chi tiết và xác nhận</p>
+                        <p>Xem chi tiết</p>
                       </Link>
                     </td>
                   </tr>

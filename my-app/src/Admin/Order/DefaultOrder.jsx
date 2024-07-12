@@ -219,7 +219,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                                           }}
                                         >
                                           <img
-                                            src={`https://localhost:7106/Images/${orderdetail.images}`}
+                                            src={`https://localhost:7073/Images/${orderdetail.image}`}
                                             alt="hinh anh"
                                           />
                                         </div>
