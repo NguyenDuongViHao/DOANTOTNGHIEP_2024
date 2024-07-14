@@ -23,12 +23,10 @@ import CategoryEdit from "../Admin/Category/CategoryEdit"
 import ProductDetailAdminAdd from "../Admin/Product/ProductDetailAdminAdd"
 import OrderList from "../Admin/Order/OrderList"
 import Reviews from "../Admin/Review/Review"
-import Chart from "../Admin/Chart/Chart"
-import Home from "../Admin/Home/Home"
-// import ApproveOrder from "../Admin/Order/ApproveOrder"
-// import ConfirmOrder from "../Admin/Order/ConfirmOrder"
-// import DeliverOrder from "../Admin/Order/DeliverOrder"
 import PaymentResult from "../User/Cart/PaymentResult"
+import Home from "../Admin/Home/Home"
+import Chart from "../Admin/Chart/Chart"
+import ImagesAdd from "../Admin/Image/Image"
 
 const Router = () => {
     return (
@@ -59,6 +57,7 @@ const Router = () => {
                         <Route path="orders" element={<OrderList />} />
                         <Route path="reviews" element={<Reviews />} />
                         <Route path="chart" element={<Chart />} />
+                        <Route path="images" element={<ImagesAdd />} />
                         
 
                     </Route>

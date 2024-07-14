@@ -26,15 +26,31 @@ const ProductDetailAdmin = () => {
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const [productName, setProductName] = useState('');
+
+  useEffect(() => {
+    const fetchProductName = async () => {
+      try {
+        const response = await AxiosClient.get(`/Products/${id}`);
+        setProductName(response.data.name);
+      } catch (error) {
+        console.error('Error fetching the product name:', error);
+      }
+    };
+
+    fetchProductName();
+  }, [id]);
+  
   return (
     <>
       <div className="container productadmin">
         <div className="header productadmin">
-          <h2>Chi tiết sản phẩm</h2>
+          <h2 style={{fontSize:"20px"}}>Chi tiết sản phẩm: {productName}</h2>
           <Link
             to="/admin/products"
             className="btn btn-primary mb-2"
-            style={{ marginLeft: "625px" }}
+            style={{ marginLeft: "289px" }}
           >
             Quay lại
           </Link>

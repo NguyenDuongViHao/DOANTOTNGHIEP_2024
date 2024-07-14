@@ -103,6 +103,12 @@ const Index = () => {
                   <p>Thống kê</p>
                   </Link>
                 </li>
+                <li className={`nav-item ${path === '/admin/images' ? 'active' : ''}`}>
+                  <Link to="/admin/images">
+                  <i className="far fa-images" />
+                  <p>Hình Ảnh sản phẩm</p>
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>

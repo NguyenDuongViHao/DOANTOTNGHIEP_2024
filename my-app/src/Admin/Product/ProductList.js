@@ -84,7 +84,6 @@ const ProductList = () => {
         </div>
       </div>
       <div className="filter-search">
-        <button>Thêm điều kiện lọc</button>
         <input
           type="text"
           placeholder="Tìm kiếm"

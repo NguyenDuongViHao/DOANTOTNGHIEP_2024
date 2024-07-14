@@ -1,110 +1,110 @@
 import React, { useState, useEffect } from "react";
 //import RevenueChart from "./RevenueChart"; // Component để hiển thị biểu đồ doanh thu
 import AxiosClient from "../../Axios/AxiosClient";
-import RevenueHome from "./RevenueHome";
+// import RevenueHome from "./RevenueHome";
+import OrdersHome from "./OrdersHome";
 
-const Chart = () => {
-  const [totalRevenue, setTotalRevenue] = useState(0);
-  const [totalCount, setTotalCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [memberCount, setMemberCount] = useState(0);
-  const [year, setYear] = useState(new Date().getFullYear());
-  const [monthlyRevenueData, setMonthlyRevenueData] = useState([]);
-  const [monthlyOrderData, setMonthlyOrderData] = useState([]);
-  const [revenueCategoryData, setRevenueCategoryData] = useState([
-    { categoryName: 'Quần', productCount: 100 },
-    { categoryName: 'Áo', productCount: 150 },
-    { categoryName: 'Váy', productCount: 70 },
-    { categoryName: 'Vest', productCount: 220 },
-    { categoryName: 'Nón', productCount: 90 },
-  ])
-  const [invoices, setInvoices] = useState([]);
-  const [availableYears, setAvailableYears] = useState([2023, 2024]);
-
+const Home = () => {
+    const [year, setYear] = useState(new Date().getFullYear());
+    const [memberCount, setMemberCount] = useState(0);
+    const [monthlyOrderData, setMonthlyOrderData] = useState([]);
+    const [invoices, setInvoices] = useState([]);
+    const [revenueByMonth, setRevenueByMonth] = useState([]);
+    const [statistics, setStatistics] = useState({
+      currentMonth: '',
+      numberOfInvoices: 0,
+      totalRevenue: 0
+  });
+  const [monthlyStatistics, setMonthlyStatistics] = useState([]);
+  const [availableMonths, setAvailableMonths] = useState([]);
+    
+    useEffect(() => {
+      const fetchStatistics = async () => {
+          try {
+              const response = await AxiosClient.get('/Invoices/statistics');
+              setStatistics(response.data);
+          } catch (error) {
+              console.error('Error fetching statistics:', error);
+          }
+      };
+  
+      fetchStatistics();
+  }, []); //fix rồi
+  
   useEffect(() => {
-    fetchLatestInvoices();
-    fetchAvailableYears();
-  }, []);
-
-  const fetchLatestInvoices = async () => {
-        try {
-          const response = await AxiosClient.get('Invoices/latest');
-          setInvoices(response.data);
-        } catch (error) {
-          console.error('Error fetching latest invoices:', error);
-     }
-  };
-
-  const fetchAvailableYears = async () => {
-    try {
-      const response = await AxiosClient.get("/Invoices/AvailableYears");
-      setAvailableYears(response.data);
-    } catch (error) {
-      console.error("Error fetching available years:", error);
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
+    const fetchMonthlyInvoices = async () => {
       try {
-        const [
-          totalRevenueResponse,
-          totalCountResponse,
-          pendingCountResponse,
-          memberCountResponse,
-        ] = await Promise.all([
-          AxiosClient.get("/Invoices/totalrevenue"),
-          AxiosClient.get("/Invoices/totalcount"),
-          AxiosClient.get("/Invoices/pendingcount"),
-          AxiosClient.get("/Invoices/membercount"),
-        ]);
-
-        setTotalRevenue(totalRevenueResponse.data);
-        setTotalCount(totalCountResponse.data);
-        setPendingCount(pendingCountResponse.data);
-        setMemberCount(memberCountResponse.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchMonthlyStatistics = async () => {
-      try {
-        const response = await AxiosClient.get("/Invoices/MonthlyRevenue");
-        setMonthlyRevenueData(response.data);
-      } catch (error) {
-        console.error("Error fetching monthly statistics:", error);
-      }
-    };
-
-    fetchMonthlyStatistics();
-  }, []);
-
-  useEffect(() => {
-    const fetchMonthlyRevenue = async () => {
-      try {
-        if (year !== null) {
-          const response = await AxiosClient.get(
-            `/Invoices/MonthlyRevenue?year=${year}`
-          );
-          setMonthlyRevenueData(response.data);
+        const response = await AxiosClient.get('/Invoices/monthlyCount'); // Replace with your actual API endpoint
+        if (response.data.length > 0) {
+          setMonthlyStatistics(response.data[0]);
+        } else {
+          setMonthlyStatistics(null);
         }
-      } catch (error) {
-        console.error("Error fetching monthly revenue:", error);
+      } catch (err) {
+        //setError(err.message);
       }
     };
 
-    fetchMonthlyRevenue();
-  }, [year]);
+    fetchMonthlyInvoices();
+  }, []);
+      useEffect(() => {
+        const fetchMemberCount = async () => {
+            try {
+                const response = await AxiosClient.get(`/Invoices/membercount`); // Thay thế URL này bằng URL API thực tế của bạn
+                setMemberCount(response.data); // Giả sử API trả về một đối tượng có thuộc tính 'count'
+            } catch (error) {
+                console.error('Error fetching member count:', error);
+            }
+        };
 
-  const handleYearChange = (e) => {
-    const selectedYear = parseInt(e.target.value);
-    setYear(selectedYear);
-  };
+        fetchMemberCount();
+    }, []);
+    useEffect(() => {
+        const fetchMonthlyRevenue = async () => {
+          try {
+            const response = await AxiosClient.get(
+              `/Invoices/OrderMonthlyRevenue?year=${year}`
+            );
+            setMonthlyOrderData(response.data);
+          } catch (error) {
+            console.error("Error fetching monthly revenue:", error);
+          }
+        };
+    
+        fetchMonthlyRevenue();
+      }, []);
+      const fetchAvailableMonths = async () => {
+        try {
+          const response = await AxiosClient.get("/Invoices/AvailableMonths");
+          setAvailableMonths(response.data);
+        } catch (error) {
+          console.error("Error fetching available years:", error);
+        }
+      };
+      useEffect(() => {
+        const fetchPendingInvoices = async () => {
+          try {
+            const response = await AxiosClient.get(`/Invoices/pending-invoices?year=${year}`); 
+            setInvoices(response.data);
+          } catch (error) {
+            console.error('Error fetching pending invoices:', error);
+          }
+        };
+    
+        const fetchPendingOrdersRevenue = async () => {
+          try {
+            const response = await AxiosClient.get(`/Invoices/pending-orders-revenue?year=${year}`);
+            setRevenueByMonth(response.data);
+          } catch (error) {
+            console.error('Error fetching pending orders revenue:', error);
+          }
+        };
+    
+        fetchPendingInvoices();
+        fetchPendingOrdersRevenue();
+      }, []);
+      
+
 
   return (
     <div className="container">
@@ -115,19 +115,19 @@ const Chart = () => {
               <div className="card-body">
                 <div className="row align-items-center">
                   <div className="col-icon">
-                    <div className="icon-big text-center icon-primary bubble-shadow-small">
+                    <div className="icon-big text-center icon-danger bubble-shadow-small">
                       <i className="fas fa-dollar-sign" />
                     </div>
                   </div>
                   <div className="col col-stats ms-3 ms-sm-0">
-                    <div className="numbers">
-                      <p className="card-category">Tổng doanh thu</p>
-                      <h4 className="card-title">
-                        {totalRevenue.toLocaleString("vi-VN", {
-                          style: "currency",
-                          currency: "VND",
-                        })}
-                      </h4>
+                    <div className="row">
+                      <div className="col col-stats ms-3 ms-sm-0">
+                        <div className="numbers">
+                          <p className="card-category">Doanh thu theo tháng</p>
+                          <h4> {statistics.totalRevenue}</h4>
+
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -145,8 +145,9 @@ const Chart = () => {
                   </div>
                   <div className="col col-stats ms-3 ms-sm-0">
                     <div className="numbers">
-                      <p className="card-category">Tổng đơn hàng</p>
-                      <h4 className="card-title">{totalCount}</h4>
+                      <p className="card-category">Đơn hàng theo tháng</p>
+                      <h4 className="card-title"> {monthlyStatistics.totalInvoices}</h4>
+
                     </div>
                   </div>
                 </div>
@@ -184,31 +185,12 @@ const Chart = () => {
                   <div className="col col-stats ms-3 ms-sm-0">
                     <div className="numbers">
                       <p className="card-category">Đơn hàng chờ duyệt</p>
-                      <h4 className="card-title">{pendingCount}</h4>
+                      <h4 className="card-title">{revenueByMonth}</h4>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="form-group">
-            <label htmlFor="yearSelect">Chọn năm:</label>
-            <select
-              id="yearSelect"
-              className="form-control"
-              style={{width: '30%'}}
-              onChange={handleYearChange}
-              value={year ?? ""}
-            >
-              <option value="" disabled>Select year</option>
-              {availableYears.map((yr) => (
-                <option key={yr} value={yr}>
-                  {yr}
-                </option>
-              ))}
-            </select>
           </div>
         </div>
         <div className="row">
@@ -222,7 +204,7 @@ const Chart = () => {
                 </div>
               </div>
               <div className="card-body">
-                <RevenueHome data={monthlyRevenueData} /> 
+                <OrdersHome data={monthlyOrderData} />
               </div>
             </div>
           </div>
@@ -257,11 +239,10 @@ const Chart = () => {
                             {invoice.code}
                           </th>
                           <td>{invoice.user.fullName}</td>
-                          <td className="text-end">
-                            <span style={{color: 'white'}}
-                              className={`badge badge-${
-                                invoice.status ? "success" : "danger"
-                              }`}
+                          <td className="text-center">
+                            <span
+                              className={`badge badge-${invoice.status ? "success" : "danger"
+                                }`}
                             >
                               {invoice.status ? "Hoàn thành" : "Chưa hoàn thành"}
                             </span>
@@ -280,4 +261,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default Home;
