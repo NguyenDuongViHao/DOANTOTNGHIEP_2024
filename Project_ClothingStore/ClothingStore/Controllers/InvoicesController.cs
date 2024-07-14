@@ -303,7 +303,9 @@ namespace ClothingStore.Controllers
 		[HttpGet("totalcount")] // Route: /Invoices/totalcount
 		public async Task<ActionResult<int>> GetTotalInvoiceCount()
 		{
-			var totalCount = await _context.Invoice.CountAsync();
+			var totalCount = await _context.Invoice
+				.Where(i => i.ApproveOrder == "Đã giao")
+				.CountAsync();
 			return Ok(totalCount);
 		}
 
@@ -452,52 +454,65 @@ namespace ClothingStore.Controllers
 
 			return await query.ToListAsync();
 		}
-		
-		[HttpGet("monthly")] // chart
-		public async Task<ActionResult<double>> GetMonthlyRevenueReport(int year)
+
+		[HttpGet]
+		[Route("statistics")]// fix theo tháng
+		public async Task<ActionResult<IEnumerable<Invoice>>> GetInvoiceStatistics()
 		{
-			try
-			{
-				var monthlyTotalRevenue = await _context.Invoice
-					.Where(i => i.IssueDate.Year == year && i.ApproveOrder == "Đã giao")
-					.GroupBy(i => i.IssueDate.Month)
-					.Select(g => new
-					{
-						Month = g.Key,
-						TotalRevenue = g.Sum(i => i.Total) // Tính tổng doanh thu của các đơn hàng trong tháng
-					})
-					.OrderByDescending(g => g.TotalRevenue) // Sắp xếp giảm dần theo tổng doanh thu
-					.FirstOrDefaultAsync(); // Lấy tháng có doanh thu cao nhất
+			// Lấy tháng và năm hiện tại
 
-				if (monthlyTotalRevenue == null)
-				{
-					return Ok(0); // Trả về 0 nếu không có đơn hàng nào trong năm đó
-				}
+			int currentMonth = DateTime.Now.Month;
+			int currentYear = DateTime.Now.Year;
 
-				return Ok(monthlyTotalRevenue.TotalRevenue); // Trả về tổng doanh thu của tháng cao nhất
-			}
-			catch (Exception ex)
+			// Lọc các hóa đơn cho tháng hiện tại
+			var invoicesThisMonth = _context.Invoice
+				.Where(i => i.IssueDate.Month == currentMonth && i.IssueDate.Year == currentYear && i.ApproveOrder == "đã giao")
+				.ToList();
+
+			// Lọc các hóa đơn cho tháng hiện tại
+			double totalRevenue = invoicesThisMonth.Sum(i => i.Total);
+			int numberOfInvoices = invoicesThisMonth.Count;
+
+			// Chuẩn bị phản hồi
+			var statistics = new
 			{
-				return BadRequest($"Failed to retrieve monthly revenue: {ex.Message}");
-			}
+				CurrentMonth = DateTime.Now.ToString("MMMM yyyy"),
+				NumberOfInvoices = numberOfInvoices,
+				TotalRevenue = totalRevenue
+			};
+
+			return Ok(statistics);
 		}
 
-		[HttpGet("highestmonthcount")] // chart số lượng đơn hàng của tháng có doanh thu cao nhất
-		public async Task<ActionResult<int>> GetHighestMonthCount(int year)
+		[HttpGet]
+		[Route("monthlyCount")] // fix theo tháng
+		public async Task<ActionResult<IEnumerable<Invoice>>> GetMonthlyInvoices()
 		{
 			try
 			{
-				var highestMonthCount = await _context.Invoice
-					.Where(i => i.IssueDate.Year == year && i.ApproveOrder == "Đã giao")
-					.GroupBy(i => i.IssueDate.Month)
-					.Select(g => g.Count())
-					.MaxAsync();
+				// Lấy tháng và năm hiện tại
+				int currentMonth = DateTime.Now.Month;
+				int currentYear = DateTime.Now.Year;
 
-				return Ok(highestMonthCount);
+				// Lọc và nhóm các đơn hàng đã giao theo tháng và năm hiện tại từ cơ sở dữ liệu
+				var monthlyStatistics = await _context.Invoice
+					.Where(i => i.IssueDate.Month == currentMonth && i.IssueDate.Year == currentYear && i.ApproveOrder == "đã giao")
+					.GroupBy(i => new { i.IssueDate.Month, i.IssueDate.Year })
+					.Select(g => new
+					{
+						Month = g.Key.Month,
+						Year = g.Key.Year,
+						TotalInvoices = g.Count(),
+						TotalRevenue = g.Sum(i => i.Total) // Tính tổng doanh thu của các đơn hàng đã giao trong nhóm này
+					})
+					.ToListAsync();
+
+				return Ok(monthlyStatistics);
 			}
 			catch (Exception ex)
 			{
-				return BadRequest($"Failed to retrieve highest month count: {ex.Message}");
+				// Xử lý ngoại lệ nếu có
+				return StatusCode(500, $"Lỗi khi truy xuất dữ liệu: {ex.Message}");
 			}
 		}
 

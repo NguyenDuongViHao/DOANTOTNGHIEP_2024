@@ -73,19 +73,31 @@ namespace ClothingStore.Controllers
             return NoContent();
         }
 
-        // POST: api/Images
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Image>> PostImage(Image image)
-        {
-            _context.Image.Add(image);
-            await _context.SaveChangesAsync();
+		// POST: api/Images
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<Image>> PostImage([FromForm] Image image)
+		{
+			if (image.FileImage != null && image.FileImage.Length > 0)
+			{
+				// Tạo đường dẫn để lưu trữ tệp hình ảnh
+				var filePath = Path.Combine("wwwroot/images", image.ImageURL);
 
-            return CreatedAtAction("GetImage", new { id = image.Id }, image);
-        }
+				// Sử dụng FileStream để ghi dữ liệu tệp vào vị trí lưu trữ
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await image.FileImage.CopyToAsync(stream);
+				}
+			}
+			// Thêm thông tin hình ảnh vào DbSet và lưu vào cơ sở dữ liệu
+			_context.Image.Add(image);
+			await _context.SaveChangesAsync();
+			// Trả về phản hồi 201 (Created) với liên kết đến phương thức GetImage
+			return CreatedAtAction("GetImage", new { id = image.Id }, image);
+		}
 
-        // DELETE: api/Images/5
-        [HttpDelete("{id}")]
+		// DELETE: api/Images/5
+		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteImage(int id)
         {
             var image = await _context.Image.FindAsync(id);
