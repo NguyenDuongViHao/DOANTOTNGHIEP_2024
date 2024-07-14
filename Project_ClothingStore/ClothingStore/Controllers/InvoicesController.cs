@@ -515,25 +515,55 @@ namespace ClothingStore.Controllers
 				return StatusCode(500, $"Lỗi khi truy xuất dữ liệu: {ex.Message}");
 			}
 		}
-
-
-		[HttpGet("pending-orders-revenue")] //tổng doanh thu của các hóa đơn chờ duyệt theo tháng trong một năm cụ thể.
-		public async Task<IActionResult> GetPendingOrdersRevenue([FromQuery] int year)
+		[HttpGet]
+		[Route("monthlyNewMembers")]
+		public async Task<ActionResult<IEnumerable<object>>> GetMonthlyNewMembers(int month, int year)
 		{
 			try
 			{
-				// Lấy các đơn hàng chưa được phê duyệt và chưa được giao trong năm cụ thể
-				var revenue = await _context.Invoice
-					.Where(i => i.ApproveOrder == "Chờ xử lý" && i.IssueDate.Year == year)
-					.CountAsync();
+				// Lọc và nhóm các thành viên có hoá đơn đầu tiên trong tháng và năm từ cơ sở dữ liệu
+				var monthlyNewMembers = await _context.Invoice
+					.Where(i => i.IssueDate.Month == month && i.IssueDate.Year == year)
+					.GroupBy(i => new { i.IssueDate.Month, i.IssueDate.Year, i.UserId })
+					.Select(g => new
+					{
+						Month = g.Key.Month,
+						Year = g.Key.Year,
+						UserId = g.Key.UserId
+					})
+					.Distinct()
+					.ToListAsync();
 
-				return Ok(revenue);
+				var totalNewMembers = monthlyNewMembers.Count();
+
+				return Ok(new { Month = month, Year = year, TotalNewMembers = totalNewMembers });
 			}
 			catch (Exception ex)
 			{
-				return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+				// Xử lý ngoại lệ nếu có
+				return StatusCode(500, $"Lỗi khi truy xuất dữ liệu: {ex.Message}");
 			}
 		}
+
+
+
+		//[HttpGet("pending-orders-revenue")] //tổng doanh thu của các hóa đơn chờ duyệt theo tháng trong một năm cụ thể.
+		//public async Task<IActionResult> GetPendingOrdersRevenue([FromQuery] int year)
+		//{
+		//	try
+		//	{
+		//		// Lấy các đơn hàng chưa được phê duyệt và chưa được giao trong năm cụ thể
+		//		var revenue = await _context.Invoice
+		//			.Where(i => i.ApproveOrder == "Chờ xử lý" && i.IssueDate.Year == year)
+		//			.CountAsync();
+
+		//		return Ok(revenue);
+		//	}
+		//	catch (Exception ex)
+		//	{
+		//		return StatusCode(StatusCodes.Status500InternalServerError, $"Error: {ex.Message}");
+		//	}
+		//}
 		[HttpGet("pending-invoices")] // Endpoint mới để lấy danh sách hóa đơn chờ duyệt
 		public async Task<IActionResult> GetPendingInvoices([FromQuery] int year)
 		{
@@ -546,8 +576,36 @@ namespace ClothingStore.Controllers
 
 			return Ok(pendingInvoices);
 		}
-		[HttpGet("OrderMonthlyRevenue")]
-		public async Task<ActionResult<IEnumerable<object>>> GetMonthlyRevenue1(int year)
+		[HttpGet("PendingOrderByMonth")]// mục đơn hàng chờ duyêt đây
+		public async Task<ActionResult<IEnumerable<Invoice>>> PendingOrderByMonth()
+		{
+			try
+			{
+				// Lấy tháng và năm hiện tại
+				int currentMonth = DateTime.Now.Month;
+				int currentYear = DateTime.Now.Year;
+
+				// Truy vấn cơ sở dữ liệu để lấy số đơn hàng chờ duyệt cho tháng và năm hiện tại
+				var monthlyPendingOrders = await _context.Invoice
+					.Where(i => i.IssueDate.Month == currentMonth && i.IssueDate.Year == currentYear && i.ApproveOrder == "Chờ xử lý") // Điều chỉnh trường status tương ứng
+					.GroupBy(i => i.IssueDate.Month)
+					.Select(g => new
+					{
+						Month = g.Key,
+						PendingOrderCount = g.Count() // Đếm số đơn hàng chờ duyệt
+					})
+					.OrderBy(m => m.Month)
+					.ToListAsync();
+
+				return Ok(monthlyPendingOrders);
+			}
+			catch (Exception ex)
+			{
+				return StatusCode(500, $"Lỗi khi truy xuất dữ liệu: {ex.Message}");
+			}
+		}
+		[HttpGet("OrderCountByMonth")] // biểu đồ: getOrderCountByMonth, đơn hàng chờ duyệt là getPendingOrderByMonth
+		public async Task<ActionResult<IEnumerable<object>>> GetOrderCountByMonth(int year)
 		{
 			var monthlyRevenue = await _context.Invoice
 				.Where(i => i.IssueDate.Year == year)
