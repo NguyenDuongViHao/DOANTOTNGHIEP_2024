@@ -181,7 +181,8 @@ namespace ClothingStore.Controllers
             {
                 Email = Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = Username
+                UserName = Username,
+				Status = true
             };
             var result = await _userManager.CreateAsync(user, Password);
             if (!result.Succeeded)
