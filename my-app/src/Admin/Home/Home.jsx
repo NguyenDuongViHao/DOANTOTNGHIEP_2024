@@ -17,7 +17,7 @@ const Home = () => {
   });
   const [monthlyStatistics, setMonthlyStatistics] = useState([]);
   const [availableMonths, setAvailableMonths] = useState([]);
-    
+    console.log(monthlyStatistics, "KKFJFFHFHFHFFH")
     useEffect(() => {
       const fetchStatistics = async () => {
           try {
@@ -38,7 +38,7 @@ const Home = () => {
         if (response.data.length > 0) {
           setMonthlyStatistics(response.data[0]);
         } else {
-          setMonthlyStatistics(null);
+          setMonthlyStatistics(0);
         }
       } catch (err) {
         //setError(err.message);
@@ -99,7 +99,7 @@ const Home = () => {
             console.error('Error fetching pending orders revenue:', error);
           }
         };
-    
+        fetchAvailableMonths();
         fetchPendingInvoices();
         fetchPendingOrdersRevenue();
       }, []);
@@ -239,14 +239,16 @@ const Home = () => {
                             {invoice.code}
                           </th>
                           <td>{invoice.user.fullName}</td>
-                          <td className="text-center">
-                            <span
-                              className={`badge badge-${invoice.status ? "success" : "danger"
-                                }`}
+                          <td className="text-end">
+                            <span style={{color: 'white'}}
+                              className={`badge badge-${
+                                invoice.status ? "success" : "danger"
+                              }`}
                             >
                               {invoice.status ? "Hoàn thành" : "Chưa hoàn thành"}
                             </span>
                           </td>
+                          
                         </tr>
                       ))}
                     </tbody>
