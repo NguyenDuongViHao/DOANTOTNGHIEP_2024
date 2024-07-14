@@ -73,6 +73,12 @@ const ProductList = () => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  const splitDesc = (desc) => {
+    const newDesc = desc.split('-').filter(item => item);
+    return newDesc;
+  }
+
   return (
     <div className="container productadmin">
       <div className="header productadmin">
@@ -95,19 +101,19 @@ const ProductList = () => {
       <div className="product-section">
         <h3>Tất cả sản phẩm</h3>
         <table>
-          <thead>
+          <thead style={{verticalAlign: 'baseline'}}>
             <tr>
               <th>STT</th>
-              <th>Tên sản phẩm</th>
+              <th style={{width: '15%'}}>Tên sản phẩm</th>
               <th>Mô tả sản phẩm</th>
-              <th>Giá bán</th>
+              <th style={{width: '10%'}}>Giá bán</th>
               <th>Ngày tạo sản phẩm</th>
               <th>Nguồn gốc</th>
               <th>Thương hiệu</th>
-              <th>Chức năng</th>
+              <th style={{width: '15%'}}>Chức năng</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody style={{verticalAlign: 'baseline'}}>
             {Products.map((item) => {
               return (
                 <tr key={item.id}>
@@ -118,7 +124,9 @@ const ProductList = () => {
                 //   </td> */}
                   <td>{(id += 1)}</td>
                   <td>{item.name}</td>
-                  <td>{item.description}</td>
+                  <td>{splitDesc(item.description).map((item, index) => (
+                    <p key={index}>- {item}</p>
+                  ))}</td>
                   <td>{item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
                   <td>{item.createTime}</td>
                   <td>{item.brand}</td>

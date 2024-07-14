@@ -67,6 +67,11 @@ const ImagesAdd = () => {
         });
     }, []);
 
+    const splitDesc = (desc) => {
+        const newDesc = desc.split('-').filter(item => item);
+        return newDesc;
+      }
+
     return (
         <>
             <div>
@@ -100,7 +105,7 @@ const ImagesAdd = () => {
                                                     <th>Chức năng</th>
                                                 </tr>
                                             </thead>
-                                            <tbody>
+                                            <tbody style={{verticalAlign: 'baseline'}}>
                                                 {Products.map((item) => {
                                                     return (
                                                         <tr key={item.id}>
@@ -111,7 +116,9 @@ const ImagesAdd = () => {
                 //   </td> */}
                                                             <td>{(id += 1)}</td>
                                                             <td>{item.name}</td>
-                                                            <td>{item.description}</td>
+                                                            <td>{splitDesc(item.description).map((item, index) => (
+                                                                <p key={index}>- {item}</p>
+                                                            ))}</td>
                                                             <td>{item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
                                                             <td>{item.createTime}</td>
                                                             <td>{item.brand}</td>

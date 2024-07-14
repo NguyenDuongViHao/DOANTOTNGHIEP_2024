@@ -89,7 +89,7 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                     </div>
                   </td>
                   <td>
-                  <div>{item.issueDate}</div>
+                    <div>{item.issueDate}</div>
                   </td>
 
                   <td>

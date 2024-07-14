@@ -128,6 +128,9 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                 Mã đơn hàng/ Ngày đặt hàng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+                 Ngày đặt hàng
+              </th>
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Trạng thái
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
@@ -148,8 +151,11 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                       <div>
                         <p style={{ color: "#2962FF" }}>{item.code}</p>
                       </div>
-                      <div>{item.issueDate}</div>
                     </td>
+                    <td>
+                    <div>{item.issueDate}</div>
+                    </td>
+                   
                     <td>
                       <div
                          style={getStyles(item.approveOrder)}
@@ -169,7 +175,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                           handleLinkClickOrderer(item.id);
                         }}
                       >
-                        <p>Xem chi tiết và xác nhận</p>
+                        <p>Xem chi tiết</p>
                       </Link>
                     </td>
                   </tr>

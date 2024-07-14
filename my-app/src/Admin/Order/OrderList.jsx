@@ -104,10 +104,10 @@ const OrderList = () => {
               </div>
             </div>
 
-            <div className="search-bar">
-              {/* <div className="filter">+ Thêm điều kiện lọc</div> */}
+            {/* <div className="search-bar">
+              <div className="filter">+ Thêm điều kiện lọc</div> 
               <input type="text" placeholder="Tìm kiếm" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
-            </div>
+            </div> */}
 
             <Tab.Content>
               <Tab.Pane eventKey="default">

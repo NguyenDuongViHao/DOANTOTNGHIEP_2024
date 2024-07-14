@@ -41,11 +41,11 @@ const DeliverOrder = ({ ListOfInvoice }) => {
           <thead>
             <tr>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Mã đơn hàng/ Ngày đặt hàng
+                Mã đơn hàng
               </th>
-              {/* <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Trạng thái
-              </th> */}
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+              Ngày đặt hàng
+              </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Số lượng
               </th>
@@ -64,11 +64,11 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                       <div>
                         <p style={{ color: "#2962FF" }}>{item.code}</p>
                       </div>
-                      <div>{item.issueDate}</div>
+                     
                     </td>
-                    {/* <td>
-                    <div style={{backgroundColor:"rgb(197 255 217)", width:"35%", border:"1px solid #ccc", borderRadius:"4px", textAlign:"center"}}>{item.approveOrder}</div>
-                    </td> */}
+                    <td>
+                    <div>{item.issueDate}</div>
+                    </td>
                     <td>
                       <p>x{item.totalQuantity}</p>
                       <div>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>

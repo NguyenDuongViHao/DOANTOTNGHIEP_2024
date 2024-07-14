@@ -6,6 +6,7 @@ import OrdersHome from "./OrdersHome";
 
 const Home = () => {
     const [year, setYear] = useState(new Date().getFullYear());
+    const [month, setMonth] = useState(new Date().getMonth() + 1);
     const [memberCount, setMemberCount] = useState(0);
     const [monthlyOrderData, setMonthlyOrderData] = useState([]);
     const [invoices, setInvoices] = useState([]);
@@ -17,7 +18,6 @@ const Home = () => {
   });
   const [monthlyStatistics, setMonthlyStatistics] = useState([]);
   const [availableMonths, setAvailableMonths] = useState([]);
-    console.log(monthlyStatistics, "KKFJFFHFHFHFFH")
     useEffect(() => {
       const fetchStatistics = async () => {
           try {
@@ -50,7 +50,7 @@ const Home = () => {
       useEffect(() => {
         const fetchMemberCount = async () => {
             try {
-                const response = await AxiosClient.get(`/Invoices/membercount`); // Thay thế URL này bằng URL API thực tế của bạn
+                const response = await AxiosClient.get(`Invoices/monthlyNewMembers?month=${month}&year=${year}`); // Thay thế URL này bằng URL API thực tế của bạn
                 setMemberCount(response.data); // Giả sử API trả về một đối tượng có thuộc tính 'count'
             } catch (error) {
                 console.error('Error fetching member count:', error);
@@ -59,20 +59,21 @@ const Home = () => {
 
         fetchMemberCount();
     }, []);
+   
     useEffect(() => {
-        const fetchMonthlyRevenue = async () => {
-          try {
-            const response = await AxiosClient.get(
-              `/Invoices/OrderMonthlyRevenue?year=${year}`
-            );
-            setMonthlyOrderData(response.data);
-          } catch (error) {
-            console.error("Error fetching monthly revenue:", error);
-          }
-        };
-    
-        fetchMonthlyRevenue();
-      }, []);
+      const fetchPendingOrderByMonth = async () => {
+        try {
+          const response = await AxiosClient.get('/Invoices/PendingOrderByMonth');
+          console.log('API response data:', response.data); // Log the API response
+          setMonthlyOrderData(response.data);
+        } catch (error) {
+          console.error('Error fetching monthly revenue:', error);
+        }
+      };
+  
+      fetchPendingOrderByMonth();
+    }, []);
+
       const fetchAvailableMonths = async () => {
         try {
           const response = await AxiosClient.get("/Invoices/AvailableMonths");
@@ -101,8 +102,25 @@ const Home = () => {
         };
         fetchAvailableMonths();
         fetchPendingInvoices();
-        fetchPendingOrdersRevenue();
+        // fetchPendingOrdersRevenue();
       }, []);
+      
+      useEffect(() => {
+        const fetchOrderCountByMonth = async () => {
+          try {
+            const response = await AxiosClient.get(
+              `/Invoices/OrderCountByMonth?year=${year}`
+            );
+            setMonthlyOrderData(response.data);
+          } catch (error) {
+            console.error("Error fetching monthly revenue:", error);
+          }
+        };
+    
+        fetchOrderCountByMonth();
+      }, []);
+
+
       
 
 
@@ -166,7 +184,7 @@ const Home = () => {
                   <div className="col col-stats ms-3 ms-sm-0">
                     <div className="numbers">
                       <p className="card-category">Thành viên mới</p>
-                      <h4 className="card-title">{memberCount}</h4>
+                      <h4 className="card-title">{memberCount.totalNewMembers}</h4>
                     </div>
                   </div>
                 </div>
@@ -185,7 +203,7 @@ const Home = () => {
                   <div className="col col-stats ms-3 ms-sm-0">
                     <div className="numbers">
                       <p className="card-category">Đơn hàng chờ duyệt</p>
-                      <h4 className="card-title">{revenueByMonth}</h4>
+                      <h4 className="card-title">{revenueByMonth[0]?.pendingOrderCount}</h4>
                     </div>
                   </div>
                 </div>

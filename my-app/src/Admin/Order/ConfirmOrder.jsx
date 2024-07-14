@@ -90,7 +90,8 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
         <thead className="thead-light">
           <tr>
             <th style={{ width: "2%" }}></th>
-            <th style={{ width: "20%" }}>Mã đơn hàng/ Ngày đặt hàng</th>
+            <th style={{ width: "20%" }}>Mã đơn hàng</th>
+            <th style={{ width: "20%" }}>Ngày đặt hàng</th>
             <th style={{ width: "20%" }}>Số lượng</th>
             <th style={{ width: "20%" }}>Thao tác</th>
           </tr>
@@ -106,7 +107,10 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
               </td>
               <td>
                 <p style={{ color: "#2962FF", margin: 0 }}>{item.code}</p>
-                <div>{item.issueDate}</div>
+              </td>
+              <td>
+              <div>{item.issueDate}</div>
+
               </td>
               <td>
                 <p style={{ margin: 0 }}>x{item.totalQuantity}</p>
@@ -116,7 +120,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
               </td>
               <td className="text-center">
                 <button
-                  className="btn btn-primary"
+                  className="btn btn-primary" style={{marginRight:"190px"}}
                   onClick={() => handleShowTransfer(item.id)}
                 >
                   Xác nhận
