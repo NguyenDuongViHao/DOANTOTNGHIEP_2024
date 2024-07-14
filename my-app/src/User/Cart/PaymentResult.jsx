@@ -21,8 +21,8 @@ const PaymentResult = () => {
                 setStatus(res.data);
                 const invoiceData = {
                     // UserId: UserId,
-                    ShippingAddress: User.address,
-                    ShippingPhone: User.phoneNumber,
+                    ShippingAddress: User.shippingAddress,
+                    ShippingPhone: User.shippingPhone,
                     Total: totalPaymentOnline,
                     Discount: discountOnline,
                     COD: false,

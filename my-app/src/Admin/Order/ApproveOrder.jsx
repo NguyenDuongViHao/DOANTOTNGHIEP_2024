@@ -3,7 +3,12 @@ import AxiosClient from "../../Axios/AxiosClient";
 import { Link, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faLocationDot, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCheck,
+  faLocationDot,
+  faTimes,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 
 const ApproveOrder = ({ ListOfInvoice }) => {
   const [ListOfInvoiceApprove, setListOfInvoiceApprove] = useState([]);
@@ -13,7 +18,6 @@ const ApproveOrder = ({ ListOfInvoice }) => {
   const [selectedIdInvoice, setselectedIdInvoice] = useState({});
   const [Orderer, setOrderer] = useState({});
   const handleCloseConfirm = () => setshowConfirm(false);
-
 
   const handleLinkClick = (rowIndex) => {
     setOpenRowIndex((prevIndex) => (prevIndex === rowIndex ? null : rowIndex));
@@ -28,13 +32,17 @@ const ApproveOrder = ({ ListOfInvoice }) => {
   };
 
   const handleShowConfirm = (invoiceId) => {
-    setselectedIdInvoice(ListOfInvoiceApprove.find(a=> a.id == invoiceId))
+    setselectedIdInvoice(ListOfInvoiceApprove.find((a) => a.id == invoiceId));
     setshowConfirm(true);
   };
 
   const handleConfirm = () => {
-    AxiosClient.delete(`Invoices/AdminConfirmOrder/${selectedIdInvoice.id}`).then(() => {
-      setListOfInvoiceApprove(prevState => prevState.filter(invoice => invoice.id !== selectedIdInvoice.id));
+    AxiosClient.delete(
+      `Invoices/AdminConfirmOrder/${selectedIdInvoice.id}`
+    ).then(() => {
+      setListOfInvoiceApprove((prevState) =>
+        prevState.filter((invoice) => invoice.id !== selectedIdInvoice.id)
+      );
       setshowConfirm(false);
     });
   };
@@ -57,10 +65,18 @@ const ApproveOrder = ({ ListOfInvoice }) => {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Mã đơn hàng</th>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Ngày đặt hàng</th>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Số lượng/ GTĐH</th>
-              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>Thao tác</th>
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+                Mã đơn hàng
+              </th>
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+                Ngày đặt hàng
+              </th>
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+                Số lượng
+              </th>
+              <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
+                Thao tác
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -73,13 +89,14 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                     </div>
                   </td>
                   <td>
-                    <div>{item.issueDate}</div>
+                  <div>{item.issueDate}</div>
                   </td>
-    
+
                   <td>
                     <p>x{item.totalQuantity}</p>
-                    <div>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>
-                    <div>{item.total} ₫</div>
+                    <div>
+                      {item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫
+                    </div>
                   </td>
                   <td>
                     <Link
@@ -95,7 +112,13 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                 </tr>
                 {openRowIndex === index && (
                   <tr>
-                    <td colSpan="5" style={{ padding: "2rem", background: "rgb(248 248 248)" }}>
+                    <td
+                      colSpan="5"
+                      style={{
+                        padding: "2rem",
+                        background: "rgb(248 248 248)",
+                      }}
+                    >
                       <div style={{ marginBottom: "1rem" }}>
                         <FontAwesomeIcon icon={faUser} />{" "}
                         <label style={{ margin: "0 1rem" }}>
@@ -117,9 +140,21 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                             <tr key={index1}>
                               <td style={{ background: "#fff" }}>
                                 <div style={{ display: "flex" }}>
+                                  <div
+                                    style={{
+                                      marginRight: "0.5rem",
+                                      width: "10%",
+                                    }}
+                                  >
+                                    <img
+                                      src={`https://localhost:7073/Images/${orderdetail.image}`}
+                                      alt="hinh anh"
+                                    />
+                                  </div>
                                   <div style={{ width: "85%" }}>
-                                    <div>{orderdetail.name}</div>
-                                    <div>{orderdetail.id}</div>
+                                    <div>{orderdetail.productName}</div>
+                                    <div>{orderdetail.nameColor}, {orderdetail.nameSize} </div>
+                                    {/* <div>{orderdetail.id}</div> */}
                                   </div>
                                 </div>
                               </td>
@@ -128,7 +163,10 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                               </td>
                               <td style={{ background: "#fff" }}>
                                 <div>
-                                  {orderdetail.price?.toLocaleString("en-US").replace(/,/g, ".")} ₫
+                                  {orderdetail.price
+                                    ?.toLocaleString("en-US")
+                                    .replace(/,/g, ".")}{" "}
+                                  ₫
                                 </div>
                               </td>
                             </tr>
@@ -180,7 +218,8 @@ const ApproveOrder = ({ ListOfInvoice }) => {
           <Modal.Title>Xác nhận đơn hàng</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Đơn hàng sẽ được xác nhận và không thể hoàn tác. Bạn có chắc chắn muốn xác nhận đơn hàng này?
+          Đơn hàng sẽ được xác nhận và không thể hoàn tác. Bạn có chắc chắn muốn
+          xác nhận đơn hàng này?
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseConfirm}>

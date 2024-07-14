@@ -22,13 +22,15 @@ const InfoUser = () => {
   console.log(cleanPathname);
   const [User, setUser] = useState({});
   const UserId = localStorage.getItem("userId");
-  const [errors, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   
   useEffect(() => {
     AxiosClient.get(`/Users/${UserId}`).then((res) => {
       setUser(res.data);
+    });
+    AxiosClient.get(`/Favourites`).then((res) => {
+      setlistFavourite(res.data);
     });
   }, []);
 
@@ -124,7 +126,7 @@ const InfoUser = () => {
 
                   <Tab.Pane eventKey="favourite">
                     <div className="myOrder">
-                      Danh sách yêu thích ({listFavourite.length})
+                      Danh sách yêu thích 
                     </div>
                     <Card className="cardBody">
                       <Card.Body style={{backgroundColor:"#efefef", padding:"0px"}}>

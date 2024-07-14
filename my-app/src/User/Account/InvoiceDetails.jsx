@@ -20,6 +20,7 @@ const InvoiceDetails = () => {
   const handleCloseRating = () => setShowRating(false);
   const [ShowRatingId, setShowRatingId] = useState();
   const [User, setUser] = useState({});
+  const [changeshowsubmit, setchangeshowsubmit] = useState(false);
 
   var TotalInvoice = 0;
   var Subtotal = 0;
@@ -29,13 +30,14 @@ const InvoiceDetails = () => {
     AxiosClient.get(`InvoiceDetails/infoOrder/${id}`).then((res) => {
       setOrderer(res.data);
     });
-  }, []);
+  }, [changeshowsubmit]);
+console.log(Orderer)
 
   useEffect(() => {
     AxiosClient.get(`InvoiceDetails/detailsOfAnOrder/${id}`).then((res) => {
       setInvoiceDetails(res.data);
     });
-  }, []);
+  }, [changeshowsubmit]);
 
   const handleShowCancel = () => {
     setShowCancel(true);
@@ -43,8 +45,10 @@ const InvoiceDetails = () => {
 
   const handleCancel = (e) => {
     e.preventDefault();
-    AxiosClient.delete(`Invoices/Canceled/${id}`).then(() => {
-      navigate("/order");
+    AxiosClient.delete(`Invoices/Canceled/${id}`).then(() => {   
+      toast.success(()=> (<div>Đơn hàng đã hủy!</div>))
+      setchangeshowsubmit(true)
+      setShowCancel(false)
     });
   };
 
@@ -76,7 +80,6 @@ const InvoiceDetails = () => {
     setShowRating(true);
     setShowRatingId(id);
   };
-
   return (
     <>
       <Card className="card-body parentInvoice">
@@ -95,16 +98,20 @@ const InvoiceDetails = () => {
               <div className="itemI">
                 <div>Địa chỉ người nhận</div>
               </div>
-              {/* <div className="itemI">
-              <div>Hình thức giao hàng</div>
-            </div> */}
+             
               <div className="itemI">
                 <div>Hình thức thanh toán</div>
               </div>
+
+              <div className="itemI">
+              <div>Trạng thái đơn hàng</div>
             </div>
+            </div>        
           </div>
 
-          <div className="item2, displayFLEX" style={{ width: "50%" }}>
+           
+
+          <div className="item2, displayFLEX" style={{ width: "74%" }}>
             <Card className="card-body itemI" style={{ marginRight: "1rem" }}>
               <div>
                 <b>{Orderer.userName}</b>
@@ -113,12 +120,7 @@ const InvoiceDetails = () => {
               <div></div>
               <div>Điện thoại: {Orderer.shippingPhone}</div>
             </Card>
-            {/* <Card className="card-body itemI">
-            <div>
-              Vận chuyển tiết kiểm (dự kiến sản phẩm giao hàng vào thứ năm)
-            </div>
-            <div>Miễn phí vận chuyển</div>
-          </Card> */}
+            
             <Card className="card-body itemI" style={{ marginRight: "1rem" }}>
               <div>
                 {Orderer.cod ? "Chưa thanh toán, thanh toán khi nhận hàng" : ""}
@@ -127,6 +129,13 @@ const InvoiceDetails = () => {
                 {Orderer.vnpay ? "Đã thanh toán, thanh toán online" : ""}
               </div>
             </Card>
+
+            <Card className="card-body itemI">
+            <div>
+            
+            </div>
+            <i style={{textDecoration:"underline", textDecorationColor:"blue"}}>{Orderer.approveOrder}</i>
+          </Card>
           </div>
 
           <div>
@@ -166,6 +175,9 @@ const InvoiceDetails = () => {
                               <div style={{ width: "100%" }}>
                                 <div>{item.productName}</div>
                                 {/* <div>Cung cấp bởi: {item.publisher}</div> */}
+                                <div>Kích thước {item.nameSize}</div> 
+                                <div>Màu sắc: {item.nameColor}</div>
+
                               </div>
                             </div>
                           </td>
@@ -298,11 +310,11 @@ const InvoiceDetails = () => {
         </Modal.Header>
         <Modal.Body>Bạn có muốn hủy đơn hàng này</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handleCancel}>
+          <Button variant="primary" onClick={handleCancel}>
             <FontAwesomeIcon icon={faCheck} /> Xác nhận
           </Button>
           <Button variant="secondary" onClick={handleCloseCancel}>
-            <FontAwesomeIcon icon={faTimes} /> Hủy
+            <FontAwesomeIcon icon={faTimes} /> Thoát
           </Button>
         </Modal.Footer>
       </Modal>

@@ -61,21 +61,21 @@ const Router = () => {
                         
 
                     </Route>
-                    <Route path="/" element={<IndexUser />}>
-                        <Route path="" element={<Main />}></Route>
-                        <Route path="detail/:id" element={<ProductDetail />} />
-                        <Route path="cart" element={<Cart />} />
-                        <Route path="payment/shipping" element={<Shipping />} />
-                        <Route path="cart/shipping" element={<ShippingCart />} />
-                        <Route path="pay" element={<Pay />} />
-                        <Route path="search-results" element={<SearchResultComponent />} />
-                        <Route path="info" element={<InfoUser />} />
-                        <Route path="order" element={<InfoUser />} />
-                        <Route path="favourite" element={<InfoUser />} />
-                        <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
-                        <Route path="payment_result" element={<PaymentResult />} />
-                    </Route>
-
+                    
+                        <Route path="/" element={<IndexUser />}>
+                            <Route path="" element={<Main />}></Route>
+                            <Route path="detail/:id" element={<ProductDetail />} />
+                            <Route path="cart" element={<Cart />} />
+                            <Route path="payment/shipping" element={<Shipping />} />
+                            <Route path="cart/shipping" element={<ShippingCart />} />
+                            <Route path="pay" element={<Pay />} />
+                            <Route path="search-results" element={<SearchResultComponent />} />
+                            <Route path="info" element={<InfoUser />} />
+                            <Route path="order" element={<InfoUser />} />
+                            <Route path="favourite" element={<InfoUser />} />
+                            <Route path="order/invoice/detail/:id" element={<InvoiceDetails />} />
+                            <Route path="payment_result" element={<PaymentResult />} />
+                        </Route>
                 </Routes>
             </BrowserRouter>
         </>

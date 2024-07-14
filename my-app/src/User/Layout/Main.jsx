@@ -32,6 +32,9 @@ const Main = () => {
   const [SelectedCategory, setSelectedCategory] = useState(null);
   const [CategoryList, setCategoryList] = useState([]);
 
+  //slide
+  const [SlideShow, setSlideShow] = useState([]);
+
   // pagination
   const indexOfLastProduct = CurentProduct * ProductPerPage;
   const indexOfFristProduct = indexOfLastProduct - ProductPerPage;
@@ -59,7 +62,7 @@ const Main = () => {
     console.log(filtered);
     window.scrollTo(0, 300);
     setActiveKey(activeKey);
-    setactiveKeyCategory(item) // cần sửa
+    setactiveKeyCategory(item); // cần sửa
   };
 
   const handProductDefault = () => {
@@ -96,29 +99,27 @@ const Main = () => {
         (product) => product.price >= min && product.price <= max
       );
       setFilteredProducts(filtered);
-    }
-    else{    
-        setFilteredProducts(ListProductFrist);
+    } else {
+      setFilteredProducts(ListProductFrist);
     }
   };
 
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`)
       .then((res) => {
-        setFilteredProducts(res.data);
+        const randomizedData = res.data.sort(() => Math.random() - 0.5);
+        setFilteredProducts(randomizedData);
         setProductList(res.data);
         setTheHasBeenFilter(res.data);
-        setListProductFrist(res.data)
+        setListProductFrist(res.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
       });
   }, []);
 
-  console.log(ProductList);
-
   useEffect(() => {
-    AxiosClient.get(`/Categories`)
+    AxiosClient.get(`/Categories/ListCategory`)
       .then((res) => {
         setCategoryList(res.data);
       })
@@ -127,443 +128,482 @@ const Main = () => {
       });
   }, []);
 
-  console.log(CategoryList);
+  useEffect(() => {
+    AxiosClient.get(`/SlideShows`)
+      .then((res) => {
+        setSlideShow(res.data);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
+  }, []);
+  console.log(SlideShow);
 
   return (
     <>
-      <div className="dOGdaN">
-        <div className="bsxLcZ">
-          <div className="jZosWU">
-            <div className="cjqkgR">
-              <div className="efUuhP">Danh mục</div>
-              {CategoryList.map((item) => {
-                return (
-                  <>
-                    <div className={`bHIPhv ${item.name === activeKeyCategory ? 'active' : ''}`}>
-                      <a
-                        href="#"
-                        title={item.name}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleCatagories(item.name);
-                        }}
+      <div style={{ backgroundColor: "#efefef" }}>
+        <div className="dOGdaN">
+          <div className="bsxLcZ">
+            <div className="jZosWU">
+              <div className="cjqkgR">
+                <div className="efUuhP">Danh mục</div>
+                {CategoryList.map((item) => {
+                  return (
+                    <>
+                      <div
+                        className={`bHIPhv ${
+                          item.name === activeKeyCategory ? "active" : ""
+                        }`}
                       >
-                        <div className="iFfPOy">
-                          <img
-                            src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg"
-                            alt="hinhanh"
-                          />
-                        </div>
-                        <div className="ctcPzh">{item.name}</div>
-                      </a>
+                        <a
+                          href="#"
+                          title={item.name}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleCatagories(item.name);
+                          }}
+                        >
+                          <div className="iFfPOy">
+                            <img
+                              src={`https://localhost:7073/images/${item.image}`}
+                              alt="hinhanh"
+                            />
+                          </div>
+                          <div className="ctcPzh">{item.name}</div>
+                        </a>
+                      </div>
+                    </>
+                  );
+                })}
+              </div>
+
+              <div className="cjqkgR">
+                <div>
+                  <div className="efUuhP">Tìm theo giá</div>
+
+                  <div class="price-range-container">
+                    <div class="input-group">
+                      <input
+                        className="inputSearch"
+                        type="number"
+                        id="min-price"
+                        name="min-price"
+                        min="0"
+                        step="10000"
+                        value={minPrice}
+                        onChange={(e) => setMinPrice(e.target.value)}
+                      />
+                      <span style={{ margin: "0px", marginTop: "5px" }}>-</span>
+                      <input
+                        className="inputSearch"
+                        type="number"
+                        id="max-price"
+                        name="max-price"
+                        min="0"
+                        step="10000"
+                        value={maxPrice}
+                        onChange={(e) => setMaxPrice(e.target.value)}
+                      />
                     </div>
-                  </>
-                );
-              })}
-            </div>
-
-            <div className="cjqkgR">
-              <div>
-                <div className="efUuhP">Tìm theo giá</div>
-
-                <div class="price-range-container">
-                  <div class="input-group">
-                    <input
-                      className="inputSearch"
-                      type="number"
-                      id="min-price"
-                      name="min-price"
-                      min="0"
-                      step="10000"
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
-                    />
-                    <span style={{ margin: "0px", marginTop: "5px" }}>-</span>
-                    <input
-                      className="inputSearch"
-                      type="number"
-                      id="max-price"
-                      name="max-price"
-                      min="0"
-                      step="10000"
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
-                    />
+                    <button onClick={handleFilter} className="buttonSearch">
+                      Áp dụng
+                    </button>
                   </div>
-                  <button onClick={handleFilter} className="buttonSearch">
-                    Áp dụng
-                  </button>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="mxUBJ">
-            <div className="dDEtQq">
-              <div className="cFhbdX">
-                <h2>Tất cả sản phẩm</h2>
+            <div className="mxUBJ">
+              <div className="dDEtQq">
+                <div className="cFhbdX">
+                  <h2>Tất cả sản phẩm</h2>
+                </div>
               </div>
-            </div>
 
-            <div style={{ marginTop: "12px", backgroundColor: "white" }}>
-              <div className="slick-slider jgCwDI slick-initialized">
-                <Swiper
-                  watchSlidesProgress={true}
-                  slidesPerView={2}
-                  modules={[Pagination, Navigation]}
-                  loop={true}
-                  navigation={true}
-                  className="mySwiper"
-                  pagination={{
-                    clickable: true,
-                  }}
-                >
-                  {
-                    <>
-                      <SwiperSlide className="main-swiper-slide">
-                        <a href="" className="wbnRK">
-                          <div className={`carousel-item active`}>
-                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
-                          </div>
-                        </a>
-                      </SwiperSlide>
-
-                      <SwiperSlide className="main-swiper-slide">
-                        <a href="" className="wbnRK">
-                          <div className={`carousel-item active`}>
-                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
-                          </div>
-                        </a>
-                      </SwiperSlide>
-
-                      <SwiperSlide className="main-swiper-slide">
-                        <a href="" className="wbnRK">
-                          <div className={`carousel-item active`}>
-                            <img src="https://salt.tikicdn.com/cache/280x280/ts/product/da/c6/46/bf1ef8e107bea1ba17041f4f84b6b069.jpg" />
-                          </div>
-                        </a>
-                      </SwiperSlide>
-                    </>
-                  }
-                </Swiper>
-              </div>
-            </div>
-
-            <div className="cFhbdX" style={{ marginTop: "1rem" }}>
-              <div className="sort-list mb-3" id="noanim-tab-example">
-                <Nav variant="pills">
-                  <Nav.Item className="navitem1">
-                    <Nav.Link
-                      eventKey="first"
-                      onClick={handProductDefault}
-                      style={{ border: "solid 1px gray", borderRadius: "16px" }}
-                    >
-                      Phổ Biến
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item className="navitem1">
-                    <Nav.Link
-                      eventKey="second"
-                      onClick={handProductIncrease}
-                      style={{ border: "solid 1px gray", borderRadius: "16px" }}
-                    >
-                      Giá Thấp Đến Cao
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item className="navitem1">
-                    <Nav.Link
-                      eventKey="third"
-                      onClick={handProductDecrease}
-                      style={{ border: "solid 1px gray", borderRadius: "16px" }}
-                    >
-                      {" "}
-                      Giá Cao Đến Thấp
-                    </Nav.Link>
-                  </Nav.Item>
-                  <Nav.Item className="navitem1">
-                    <Nav.Link
-                      eventKey="Fourth"
-                      onClick={handProductNews}
-                      style={{ border: "solid 1px gray", borderRadius: "16px" }}
-                    >
-                      {" "}
-                      Hàng mới
-                    </Nav.Link>
-                  </Nav.Item>
-                </Nav>
-                <div
-                  style={{ borderTop: "0.5px solid gray", margin: "1rem 0" }}
-                ></div>
-              </div>
-            </div>
-
-            <div className="product_container">
-              <div className="product_frame">
-                <Container className="mt-3">
-                  <Tab.Container
-                    defaultActiveKey="first"
-                    activeKey={activeKey}
-                    onSelect={(k) => setActiveKey(k)}
+              <div style={{ marginTop: "12px", backgroundColor: "white" }}>
+                <div className="slick-slider jgCwDI slick-initialized">
+                  <Swiper
+                    watchSlidesProgress={true}
+                    slidesPerView={2}
+                    modules={[Pagination, Navigation]}
+                    loop={true}
+                    navigation={true}
+                    className="mySwiper"
+                    pagination={{
+                      clickable: true,
+                    }}
                   >
-                    <Tab.Content>
-                      <Tab.Pane eventKey="first">
-                        <div className="product-main">
-                          {CurrentProducts.map((item) => {
-                            return (
-                              <>
-                                <div className="product-item men">
-                                  <div
-                                    className="product discount product_filter"
-                                    style={{ margin: "0 auto", width: "90%" }}
-                                  >
-                                    <div className="product_background">
-                                      <div className="product_border">
-                                        <div className="product_image">
-                                        <Link to={`detail/${item.id}`}>
-                                        <img
-                                            src={`https://localhost:7073/images/${item.imageName}`}
-                                            alt=""
-                                          />
-                                        </Link>
+                    {SlideShow.map((item) => (
+                      <>
+                        <SwiperSlide className="main-swiper-slide">
+                          <a href="" className="wbnRK">
+                            <div className={`carousel-item active`}>
+                              <img
+                                src={`https://localhost:7073/SlideShow/${item.fileName}`}
+                                style={{ objectFit: "cover" }}
+                              />
+                            </div>
+                          </a>
+                        </SwiperSlide>
+                        ;
+                      </>
+                    ))}
+                  </Swiper>
+                </div>
+              </div>
+
+              <div className="cFhbdX" style={{ marginTop: "1rem" }}>
+                <div className="sort-list mb-3" id="noanim-tab-example">
+                  <Nav variant="pills">
+                    <Nav.Item className="navitem1">
+                      <Nav.Link
+                        eventKey="first"
+                        onClick={handProductDefault}
+                        style={{
+                          border: "solid 1px gray",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        Phổ Biến
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="navitem1">
+                      <Nav.Link
+                        eventKey="second"
+                        onClick={handProductIncrease}
+                        style={{
+                          border: "solid 1px gray",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        Giá Thấp Đến Cao
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="navitem1">
+                      <Nav.Link
+                        eventKey="third"
+                        onClick={handProductDecrease}
+                        style={{
+                          border: "solid 1px gray",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        {" "}
+                        Giá Cao Đến Thấp
+                      </Nav.Link>
+                    </Nav.Item>
+                    <Nav.Item className="navitem1">
+                      <Nav.Link
+                        eventKey="Fourth"
+                        onClick={handProductNews}
+                        style={{
+                          border: "solid 1px gray",
+                          borderRadius: "16px",
+                        }}
+                      >
+                        {" "}
+                        Hàng mới
+                      </Nav.Link>
+                    </Nav.Item>
+                  </Nav>
+                  <div
+                    style={{ borderTop: "0.5px solid gray", margin: "1rem 0" }}
+                  ></div>
+                </div>
+              </div>
+
+              <div className="product_container">
+                <div className="product_frame">
+                  <Container className="mt-3">
+                    <Tab.Container
+                      defaultActiveKey="first"
+                      activeKey={activeKey}
+                      onSelect={(k) => setActiveKey(k)}
+                    >
+                      <Tab.Content>
+                        <Tab.Pane eventKey="first">
+                          <div className="product-main">
+                            {CurrentProducts.map((item) => {
+                              return (
+                                <>
+                                  <div className="product-item men">
+                                    <div
+                                      className="product discount product_filter"
+                                      style={{ margin: "0 auto", width: "90%" }}
+                                    >
+                                      <div className="product_background">
+                                        <div className="product_border">
+                                          <div className="product_image">
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={
+                                                  item.imageName == null
+                                                    ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
+                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                }
+                                                alt=""
+                                              />
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="product_info">
+                                        <h6 className="product_name">
+                                          <Link to={`detail/${item.id}`}>
+                                            {item.name}
+                                          </Link>
+                                        </h6>
+                                        <div className="product_price">
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")}
+                                          <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="favorite favorite_left" />
-                                    <div className="product_info">
-                                      <h6 className="product_name">
-                                        <Link to={`detail/${item.id}`}>
-                                          {item.name}
-                                        </Link>
-                                      </h6>
-                                      <div className="product_price">
-                                        {item.price.toLocaleString("en-US")
-                                        .replace(/,/g, ".")}<sup>₫</sup>
-                                      </div>
+                                    <div className="red_button add_to_cart_button">
+                                      <Link to={`detail/${item.id}`}>
+                                        Xem chi tiết
+                                      </Link>
                                     </div>
                                   </div>
-                                  <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>
-                                      Xem chi tiết
-                                    </Link>
-                                  </div>
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
-                        <div>
-                          <ul className="pagination">
-                            {pageNumber.map((item) => {
-                              return (
-                                <li className="page-item" key={item}>
-                                  <a
-                                    href="#"
-                                    className="page-link"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      paginate(item);
-                                    }}
-                                  >
-                                    {item}
-                                  </a>
-                                </li>
+                                </>
                               );
                             })}
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="second">
-                        <div className="product-main">
-                          {CurrentProducts.map((item) => {
-                            return (
-                              <>
-                                <div className="product-item men">
-                                  <div className="product discount product_filter">
-                                    <div className="product_background">
-                                      <div className="product_border">
-                                        <div className="product_image">
-                                        <Link to={`detail/${item.id}`}>
-                                        <img
-                                            src={`https://localhost:7073/images/${item.imageName}`}
-                                            alt=""
-                                          />
-                                        </Link>
+                          </div>
+                          <div>
+                            <ul className="pagination">
+                              {pageNumber.map((item) => {
+                                return (
+                                  <li className="page-item" key={item}>
+                                    <a
+                                      href="#"
+                                      className="page-link"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        paginate(item);
+                                      }}
+                                    >
+                                      {item}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="second">
+                          <div className="product-main">
+                            {CurrentProducts.map((item) => {
+                              return (
+                                <>
+                                  <div className="product-item men">
+                                    <div className="product discount product_filter">
+                                      <div className="product_background">
+                                        <div className="product_border">
+                                          <div className="product_image">
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={
+                                                  item.imageName == null
+                                                    ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
+                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                }
+                                                alt=""
+                                              />
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="product_info">
+                                        <h6 className="product_name">
+                                          <Link to={`detail/${item.id}`}>
+                                            {item.name}
+                                          </Link>
+                                        </h6>
+                                        <div className="product_price">
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")}{" "}
+                                          <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="favorite favorite_left" />
-                                    <div className="product_info">
-                                      <h6 className="product_name">
-                                        <Link to={`detail/${item.id}`}>
-                                          {item.name}
-                                        </Link>
-                                      </h6>
-                                      <div className="product_price">
-                                        {item.price.toLocaleString("en-US")
-                                        .replace(/,/g, ".")} <sup>₫</sup>
-                                      </div>
+                                    <div className="red_button add_to_cart_button">
+                                      <Link to={`detail/${item.id}`}>
+                                        Xem chi tiết
+                                      </Link>
                                     </div>
                                   </div>
-                                  <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>
-                                      Xem chi tiết
-                                    </Link>
-                                  </div>
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
-                        <div>
-                          <ul className="pagination">
-                            {pageNumber.map((item) => {
-                              return (
-                                <li className="page-item" key={item}>
-                                  <a
-                                    href="#"
-                                    className="page-link"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      paginate(item);
-                                    }}
-                                  >
-                                    {item}
-                                  </a>
-                                </li>
+                                </>
                               );
                             })}
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="third">
-                        <div className="product-main">
-                          {CurrentProducts.map((item) => {
-                            return (
-                              <>
-                                <div className="product-item men">
-                                  <div className="product discount product_filter">
-                                    <div className="product_background">
-                                      <div className="product_border">
-                                        <div className="product_image">
-                                        <Link to={`detail/${item.id}`}>
-                                        <img
-                                            src={`https://localhost:7073/images/${item.imageName}`}
-                                            alt=""
-                                          />
-                                        </Link>
+                          </div>
+                          <div>
+                            <ul className="pagination">
+                              {pageNumber.map((item) => {
+                                return (
+                                  <li className="page-item" key={item}>
+                                    <a
+                                      href="#"
+                                      className="page-link"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        paginate(item);
+                                      }}
+                                    >
+                                      {item}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="third">
+                          <div className="product-main">
+                            {CurrentProducts.map((item) => {
+                              return (
+                                <>
+                                  <div className="product-item men">
+                                    <div className="product discount product_filter">
+                                      <div className="product_background">
+                                        <div className="product_border">
+                                          <div className="product_image">
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={
+                                                  item.imageName == null
+                                                    ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
+                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                }
+                                                alt=""
+                                              />
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="product_info">
+                                        <h6 className="product_name">
+                                          <Link to={`detail/${item.id}`}>
+                                            {item.name}
+                                          </Link>
+                                        </h6>
+                                        <div className="product_price">
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")}{" "}
+                                          <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="favorite favorite_left" />
-                                    <div className="product_info">
-                                      <h6 className="product_name">
-                                        <Link to={`detail/${item.id}`}>
-                                          {item.name}
-                                        </Link>
-                                      </h6>
-                                      <div className="product_price">
-                                        {item.price.toLocaleString("en-US")
-                                        .replace(/,/g, ".")} <sup>₫</sup>
-                                      </div>
+                                    <div className="red_button add_to_cart_button">
+                                      <Link to={`detail/${item.id}`}>
+                                        Xem chi tiết
+                                      </Link>
                                     </div>
                                   </div>
-                                  <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>
-                                      Xem chi tiết
-                                    </Link>
-                                  </div>
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
-                        <div>
-                          <ul className="pagination">
-                            {pageNumber.map((item) => {
-                              return (
-                                <li className="page-item" key={item}>
-                                  <a
-                                    href="#"
-                                    className="page-link"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      paginate(item);
-                                    }}
-                                  >
-                                    {item}
-                                  </a>
-                                </li>
+                                </>
                               );
                             })}
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                      <Tab.Pane eventKey="Fourth">
-                        <div className="product-main">
-                          {CurrentProducts.map((item) => {
-                            return (
-                              <>
-                                <div className="product-item men">
-                                  <div className="product discount product_filter">
-                                    <div className="product_background">
-                                      <div className="product_border">
-                                        <div className="product_image">
-                                        <Link to={`detail/${item.id}`}>
-                                        <img
-                                            src={`https://localhost:7073/images/${item.imageName}`}
-                                            alt=""
-                                          />
-                                        </Link>
+                          </div>
+                          <div>
+                            <ul className="pagination">
+                              {pageNumber.map((item) => {
+                                return (
+                                  <li className="page-item" key={item}>
+                                    <a
+                                      href="#"
+                                      className="page-link"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        paginate(item);
+                                      }}
+                                    >
+                                      {item}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="Fourth">
+                          <div className="product-main">
+                            {CurrentProducts.map((item) => {
+                              return (
+                                <>
+                                  <div className="product-item men">
+                                    <div className="product discount product_filter">
+                                      <div className="product_background">
+                                        <div className="product_border">
+                                          <div className="product_image">
+                                            <Link to={`detail/${item.id}`}>
+                                              <img
+                                                src={
+                                                  item.imageName == null
+                                                    ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
+                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                }
+                                                alt="hình ảnh chưa có"
+                                              />
+                                            </Link>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="product_info">
+                                        <h6 className="product_name">
+                                          <Link to={`detail/${item.id}`}>
+                                            {item.name}
+                                          </Link>
+                                        </h6>
+                                        <div className="product_price">
+                                          {item.price
+                                            .toLocaleString("en-US")
+                                            .replace(/,/g, ".")}{" "}
+                                          <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
-                                    <div className="favorite favorite_left" />
-                                    <div className="product_info">
-                                      <h6 className="product_name">
-                                        <Link to={`detail/${item.id}`}>
-                                          {item.name}
-                                        </Link>
-                                      </h6>
-                                      <div className="product_price">
-                                        {item.price.toLocaleString("en-US")
-                                        .replace(/,/g, ".")} <sup>₫</sup>
-                                      </div>
+                                    <div className="red_button add_to_cart_button">
+                                      <Link to={`detail/${item.id}`}>
+                                        Xem chi tiết
+                                      </Link>
                                     </div>
                                   </div>
-                                  <div className="red_button add_to_cart_button">
-                                    <Link to={`detail/${item.id}`}>
-                                      Xem chi tiết
-                                    </Link>
-                                  </div>
-                                </div>
-                              </>
-                            );
-                          })}
-                        </div>
-                        <div>
-                          <ul className="pagination">
-                            {pageNumber.map((item) => {
-                              return (
-                                <li className="page-item" key={item}>
-                                  <a
-                                    href="#"
-                                    className="page-link"
-                                    onClick={(e) => {
-                                      e.preventDefault();
-                                      paginate(item);
-                                    }}
-                                  >
-                                    {item}
-                                  </a>
-                                </li>
+                                </>
                               );
                             })}
-                          </ul>
-                        </div>
-                      </Tab.Pane>
-                    </Tab.Content>
-                  </Tab.Container>
-                </Container>
+                          </div>
+                          <div>
+                            <ul className="pagination">
+                              {pageNumber.map((item) => {
+                                return (
+                                  <li className="page-item" key={item}>
+                                    <a
+                                      href="#"
+                                      className="page-link"
+                                      onClick={(e) => {
+                                        e.preventDefault();
+                                        paginate(item);
+                                      }}
+                                    >
+                                      {item}
+                                    </a>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          </div>
+                        </Tab.Pane>
+                      </Tab.Content>
+                    </Tab.Container>
+                  </Container>
+                </div>
               </div>
             </div>
           </div>

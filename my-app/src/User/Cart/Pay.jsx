@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 
 const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
   const [cod, setCod] = useState(true);
 
   const [paymentUrl, setPaymentUrl] = useState("");
- 
+
   var Discount = 0;
   var totalInvoice = 0;
   var Subtotal = 0;
@@ -65,10 +66,10 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
       COD: cod,
       Vnpay: vnpay,
     };
-    const listnameproduct = PaymentList.map(payment => payment.productName);
+    const listnameproduct = PaymentList.map((payment) => payment.productName);
     const productNamesString = listnameproduct.join(", ");
 
-    const model= {
+    const model = {
       orderType: productNamesString,
       amount: totalInvoice,
       orderDescription: "Thanh toán VNPAY",
@@ -79,6 +80,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
       AxiosClient.post(`/Carts/pay/${UserId}`, invoiceData)
         .then(() => {
           navigate("/order");
+          toast.info(() => <div>Đặt hàng thành công</div>);
         })
         .catch((error) => {
           console.error("Error while posting COD payment:", error);
@@ -209,8 +211,8 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
                         <div className="gsYpJq">
                           <div className="eydcWx">
                             <img
-                              className="method-icon"
-                              src="https://salt.tikicdn.com/ts/upload/ce/f6/e8/ea880ef285856f744e3ffb5d282d4b2d.jpg"
+                              class="method-icon"
+                              src="https://salt.tikicdn.com/ts/upload/77/6a/df/a35cb9c62b9215dbc6d334a77cda4327.png"
                               width="32"
                               height="32"
                               alt="icon"

@@ -298,7 +298,7 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === "/cart") {
+    if (location.pathname == "/cart") {
       const updateSelectedBackToFalse = async () => {
         try {
           await AxiosClient.put(
@@ -339,7 +339,7 @@ const Cart = () => {
       setUser(res.data);
     });
   }, [UserId]);
-
+console.log(UserId, "userrrrrrr")
   useEffect(() => {
     AxiosClient.get(`/ProductDetails`)
       .then((res) => {

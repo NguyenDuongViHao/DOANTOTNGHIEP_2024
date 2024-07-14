@@ -38,72 +38,83 @@ const Footer = () => {
         </div>
       </div> */}
 
-      <footer className="footer">
-        <div className="container">
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="footer_nav_container d-flex flex-sm-row flex-column align-items-center justify-content-lg-start justify-content-center text-center">
-                <ul className="footer_nav" style={{display:"flex"}}>
-                  <li>
-                    <a href="#">Blog</a>
-                  </li>
-                  <li>
-                    <a href="#">FAQs</a>
-                  </li>
-                  <li>
-                    <a href="contact.html">Contact us</a>
-                  </li>
-                </ul>
-              </div>
+      <footer className="footer" style={{position:"absolute", bottom:0, width:"100%"}}>
+        <div className="cyhWKd">
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              gap: "20px",
+              padding: "0 80px",
+            }}
+          >
+            <div style={{ width: "268px" }}>
+              <h4 className="">Hổ trợ khách hàng</h4>
+              <p className="hotline pjrjr">
+                Hotline:{" "}
+                <span style={{ color: "rgb(56, 56, 61)", fontWeight: "500" }}>
+                  0355303024
+                </span>
+              </p>
+              <p className="hotline pjrjr">
+                Email:{" "}
+                <a
+                  style={{ color: "rgb(56, 56, 61)", fontWeight: "500" }}
+                  href="mailto:0306211024@caothang.edu.vn"
+                >
+                  0306211024@caothang.edu.vn
+                </a>
+              </p>
             </div>
-            <div className="col-lg-6">
-              <div className="footer_social d-flex flex-row align-items-center justify-content-lg-end justify-content-center">
-                <ul>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-facebook" aria-hidden="true" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-twitter" aria-hidden="true" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-instagram" aria-hidden="true" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-skype" aria-hidden="true" />
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i className="fa fa-pinterest" aria-hidden="true" />
-                    </a>
-                  </li>
-                </ul>
-              </div>
+            <div style={{ width: "268px" }}>
+              <h4 className="">Phương thức thanh toán</h4>
+              <p className="plkjh">
+                <span className="icon">
+                  <img
+                    class="method-icon"
+                    src="https://salt.tikicdn.com/ts/upload/92/b2/78/1b3b9cda5208b323eb9ec56b84c7eb87.png"
+                    width="32"
+                    height="32"
+                    alt="icon"
+                  />
+                </span>
+                <span className="icon">
+                  <img
+                    class="method-icon"
+                    src="https://salt.tikicdn.com/ts/upload/77/6a/df/a35cb9c62b9215dbc6d334a77cda4327.png"
+                    width="32"
+                    height="32"
+                    alt="icon"
+                  />
+                </span>
+              </p>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-12">
-              <div className="footer_nav_container">
-                <div className="cr">
-                  ©2018 All Rights Reserverd. Made with{" "}
-                  <i className="fa fa-heart-o" aria-hidden="true" /> by{" "}
-                  <a href="#">Colorlib</a> &amp; distributed by{" "}
-                  <a href="https://themewagon.com">ThemeWagon</a>
-                </div>
-              </div>
+            <div style={{ width: "268px" }}>
+              <h4 className="">Kết nối với chúng tôi</h4>
+              <p className="plkjh">
+                <span className="icon">
+                  <a href="">
+                    <img
+                      src="https://img.lazcdn.com/g/tps/imgextra/i3/O1CN01Wdetn224xMIRNihao_!!6000000007457-2-tps-34-34.png"
+                      alt="fb"
+                    />
+                  </a>
+                </span>
+                <span className="icon">
+                  <a href="">
+                    <img
+                      src="https://img.lazcdn.com/g/tps/imgextra/i4/O1CN01zt1zOu1zsFnzoIWje_!!6000000006769-2-tps-34-34.png"
+                      alt="yt"
+                      data-spm-anchor-id="a2o4n.homepage.sns.i0.19053bdcCfcVL6"
+                    />
+                  </a>
+                </span>
+              </p>
             </div>
           </div>
         </div>
-      </footer>
+      </footer>   
     </>
   );
 };
-
 export default Footer;

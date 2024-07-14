@@ -65,7 +65,7 @@ const CancelOrder = ({ ListOfInvoice }) => {
                 Trạng thái
               </th> */}
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng/ GTĐH
+                Số lượng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -82,7 +82,7 @@ const CancelOrder = ({ ListOfInvoice }) => {
                       <div>
                         <p style={{ color: "#2962FF" }}>{item.code}</p>
                       </div>
-                      <div>{item.issuedDate}</div>
+                      <div>{item.issueDate}</div>
                     </td>
                     {/* <td>
                     <div style={{backgroundColor:"#f97474", width:"35%", border:"1px solid #ccc", borderRadius:"4px", textAlign:"center"}}>{item.approveOrder}</div>
@@ -100,11 +100,11 @@ const CancelOrder = ({ ListOfInvoice }) => {
                             handleLinkClickOrderer(item.id);
                           }}
                         >
-                          <p>Xem chi tiết và xác nhận</p>
+                          <p>Xem chi tiết</p>
                         </Link>
-                        <label style={{ color: `${item.status === true ? "#dc3545" : "#28a745"}`, marginLeft: "5rem" }}>
-                          {item.status === true ? "Chờ duyệt" : "Đã duyệt"}
-                        </label>
+                        {/* <label style={{ color: `${item.status === false ? "#dc3545" : "#28a745"}`, marginLeft: "5rem" }}>
+                           Đã hủy
+                        </label> */}
                         
                       </div>
                     </td>
@@ -153,20 +153,17 @@ const CancelOrder = ({ ListOfInvoice }) => {
                                             width: "10%",
                                           }}
                                         >
-                                          {/* <img
-                                            src={`https://localhost:7106/Images/${orderdetail.images}`}
+                                          <img
+                                            src={`https://localhost:7073/Images/${orderdetail.image}`}
                                             alt="hinh anh"
-                                          /> */}
+                                          />
                                         </div>
                                         <div style={{ width: "85%" }}>
-                                          <div>{orderdetail.bookName}</div>
+                                          <div>{orderdetail.productName}</div>
                                           <div>
-                                            Mã sản phẩm:{" "}
-                                            {orderdetail.productCode}
+                                            Giá: {orderdetail.price.toLocaleString("en-US").replace(/,/g, ".")} ₫
                                           </div>
-                                          <div>
-                                            Giá: {orderdetail.unitPrice.toLocaleString("en-US").replace(/,/g, ".")} ₫
-                                          </div>
+                                          <div>{orderdetail.nameColor}, {orderdetail.nameSize} </div>
                                         </div>
                                       </div>
                                     </td>
@@ -198,7 +195,7 @@ const CancelOrder = ({ ListOfInvoice }) => {
                               height: "4rem",
                             }}
                           >
-                            {item.status === true ? (
+                            {/* {item.status === true ? (
                               <button
                                 onClick={() => {
                                   handleShowCancel(item.id);
@@ -227,7 +224,7 @@ const CancelOrder = ({ ListOfInvoice }) => {
                               >
                                 Đã duyệt
                               </button>
-                            )}
+                            )} */}
                           </div>
                         </div>
                       </td>

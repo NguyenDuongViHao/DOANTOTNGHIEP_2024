@@ -115,19 +115,19 @@ const OrderList = () => {
               </Tab.Pane>
 
               <Tab.Pane eventKey="approveOrder">
-                <ApproveOrder ListOfInvoice={filteredOrders} loading={loading} />
+                <ApproveOrder ListOfInvoice={ListOfInvoice} loading={loading} />
               </Tab.Pane>
 
               <Tab.Pane eventKey="confirmed">
-                <ConfirmOrder ListOfInvoice={filteredOrders} loading={loading} />
+                <ConfirmOrder ListOfInvoice={ListOfInvoice} loading={loading} />
               </Tab.Pane>
 
               <Tab.Pane eventKey="delivered">
-                <DeliverOrder ListOfInvoice={filteredOrders} loading={loading} />
+                <DeliverOrder ListOfInvoice={ListOfInvoice} loading={loading} />
               </Tab.Pane>
 
               <Tab.Pane eventKey="canceled">
-                <CancelOrder ListOfInvoice={filteredOrders} loading={loading} />
+                <CancelOrder ListOfInvoice={ListOfInvoice} loading={loading} />
               </Tab.Pane>
             </Tab.Content>
           </div>

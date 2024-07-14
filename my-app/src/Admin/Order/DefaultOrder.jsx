@@ -73,7 +73,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
   
   const getStyles = (orderStatus) => {
     switch (orderStatus) {
-      case "Đã đặt":
+      case "Chờ xử lý":
         return {
           backgroundColor: "#fcfca1",
           border: "1px solid #ccc",
@@ -131,7 +131,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                 Trạng thái
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng/ GTĐH
+                Số lượng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -148,7 +148,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                       <div>
                         <p style={{ color: "#2962FF" }}>{item.code}</p>
                       </div>
-                      <div>{item.issuedDate}</div>
+                      <div>{item.issueDate}</div>
                     </td>
                     <td>
                       <div
@@ -225,13 +225,11 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                                         </div>
                                         <div style={{ width: "85%" }}>
                                           <div>{orderdetail.name}</div>
-                                          <div>
-                                            Mã sản phẩm:{" "}
-                                            {orderdetail.id}
-                                          </div>
+                                          
                                           <div>
                                             Giá: {orderdetail.price?.toLocaleString("en-US").replace(/,/g, ".")} ₫
                                           </div>
+                                          <div>{orderdetail.nameColor}, {orderdetail.nameSize} </div>
                                         </div>
                                       </div>
                                     </td>

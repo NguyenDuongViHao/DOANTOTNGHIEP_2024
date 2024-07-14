@@ -312,9 +312,40 @@ fUChpf a, .fUChpf > span {
   font-weight: 400;
   text-decoration: none;
 }
-
-
-
-
-
-
+/* footer */
+.cyhWKd {
+  padding: 16px 0px;
+}
+.fdMvyN {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 500;
+  color: rgb(56, 56, 61);
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+.cyhWKd .hotline {
+  margin-bottom: 8px;
+}
+.hoKyYL .pjrjr {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(128, 128, 137);
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+.hoKyYL .plkjh {
+  font-size: 12px;
+  line-height: 16px;
+  color: rgb(128, 128, 137);
+  margin-bottom: 12px;
+  margin-top: 0px;
+}
+.icon {
+  display: inline-block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  vertical-align: middle;
+  width: 32px;
+  height: 32px;
+}

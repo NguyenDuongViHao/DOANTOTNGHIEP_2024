@@ -16,6 +16,10 @@ const MyOrderInfo = ({ ListOfOrder }) => {
         </thead>
         <tbody>
           {ListOfOrder.map((item) => {
+             const issueDate = new Date(item.issueDate);
+             const currentDate = new Date();         
+             currentDate.setHours(0, 0, 0, 0);
+             issueDate.setHours(0, 0, 0, 0);
             return (
               <tr>
                 <td>
@@ -27,7 +31,7 @@ const MyOrderInfo = ({ ListOfOrder }) => {
                 <td>
                   {item.total.toLocaleString("en-US").replace(/,/g, ".")} ₫
                 </td>
-                <td>{item.approveOrder}</td>
+                <td style={{color:item.approveOrder == "Đã hủy" ? "red" : ""}}>{item.approveOrder} {" "}</td>
               </tr>
             );
           })}

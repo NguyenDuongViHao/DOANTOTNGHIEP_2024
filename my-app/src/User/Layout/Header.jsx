@@ -19,7 +19,7 @@ const Header = () => {
   const handleCloseLogin = () => setShowLogin(false);
   const [showRegister, setShowRegister] = useState(false);
   const handleCloseRegister = () => setShowRegister(false);
-  
+  const [cartCount, setCartCount] = useState(0);
 
   const handleSearch = (event) => {
     setQuery(event.target.value); // Lưu query vào state
@@ -37,7 +37,7 @@ const Header = () => {
   };
 
   const handleButtonSearch = (event) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       navigate(`/search-results?query=${encodeURIComponent(query)}`);
     }
   };
@@ -52,13 +52,13 @@ const Header = () => {
   const handleShowLogin = () => setShowLogin(true);
   const handleShowRegister = () => setShowRegister(true);
 
-  const handleSwitchCart=()=>{
-    if(UserId==null){
-      setShowLogin(true)
+  const handleSwitchCart = () => {
+    if (UserId == null) {
+      setShowLogin(true);
       return;
     }
-    navigate('/cart')
-  }
+    navigate("/cart");
+  };
 
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`).then((res) => {
@@ -67,10 +67,10 @@ const Header = () => {
     });
   }, []);
 
-  const logout = async () => {
+  const logout = async (e) => {
     try {
       localStorage.clear();
-      navigate("/");
+      window.location.href = "/";
     } catch (error) {
       console.log("Logout error", error);
     }
@@ -86,7 +86,9 @@ const Header = () => {
           <p className="brEmWQ">Đơn hàng của tôi</p>
         </Link>
         <Link to="" className="kjhfd">
-          <p className="brEmWQ" onClick={logout}>Đăng xuất</p>
+          <p className="brEmWQ" onClick={logout}>
+            Đăng xuất
+          </p>
         </Link>
       </div>
     );
@@ -94,10 +96,14 @@ const Header = () => {
     menu = (
       <div className="hvGJCW toggler">
         <Link to="" className="kjhfd">
-          <p className="brEmWQ" onClick={handleShowLogin}>Đăng nhập</p>
+          <p className="brEmWQ" onClick={handleShowLogin}>
+            Đăng nhập
+          </p>
         </Link>
         <Link to="" className="kjhfd">
-          <p className="brEmWQ"onClick={handleShowRegister}>Đăng ký</p>
+          <p className="brEmWQ" onClick={handleShowRegister}>
+            Đăng ký
+          </p>
         </Link>
         <Link to="" className="kjhfd">
           <p className="brEmWQ">Quên mật khẩu</p>
@@ -106,9 +112,42 @@ const Header = () => {
     );
   }
 
+  useEffect(() => {
+    // Hàm để lấy số lượng mặt hàng trong giỏ hàng
+    const fetchCartCount = async () => {
+      try {
+        const response = await AxiosClient.get("/Carts/cartcount");
+        const count = await response.data;
+        setCartCount(count);
+        if (UserId) {
+          localStorage.setItem("cartCount", count);
+        } else {
+          localStorage.setItem("cartCount", 0);
+          return;
+        }
+      } catch (error) {
+        console.error("Error fetching cart count:", error);
+      }
+    };
+
+    // Gọi mỗi 5 giây
+    if (UserId) {
+      const intervalId = setInterval(fetchCartCount, 4000);
+
+      // Lấy số lượng từ localStorage khi component được tải
+      const savedCartCount = localStorage.getItem("cartCount");
+      if (savedCartCount) {
+        setCartCount(parseInt(savedCartCount, 10));
+      }
+      // Dọn dẹp interval khi component bị unmount
+      return () => clearInterval(intervalId);
+    }
+    return;
+  }, [navigate]);
+
   const navigateToNewPage = () => {
     // Dùng window.location.href để chuyển hướng và tải lại trang
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   return (
@@ -156,7 +195,7 @@ const Header = () => {
                             to={`/search-results?query=${encodeURIComponent(
                               query
                             )}`}
-                            style={{marginRight:"1rem"}}
+                            style={{ marginRight: "1rem" }}
                           >
                             Tìm kiếm
                           </Link>
@@ -188,7 +227,10 @@ const Header = () => {
                           src="https://salt.tikicdn.com/ts/upload/b4/90/74/6baaecfa664314469ab50758e5ee46ca.png"
                           alt="header_menu_item_home"
                         />
-                        <Link onClick={navigateToNewPage} style={{ color: "rgb(128, 128, 137)" }}>
+                        <Link
+                          onClick={navigateToNewPage}
+                          style={{ color: "rgb(128, 128, 137)" }}
+                        >
                           Trang chủ
                         </Link>
                       </div>
@@ -210,7 +252,7 @@ const Header = () => {
                                 alt="header_header_img_Cart"
                                 style={{ width: "60%" }}
                               />
-                              <span className="jbrHBQ">0</span>
+                              <span className="jbrHBQ">{cartCount}</span>
                             </div>
                           </div>
                         </div>

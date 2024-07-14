@@ -134,14 +134,18 @@ const SearchResultComponent = () => {
                                           <div className="product_image">
                                             <Link to={`detail/${item.id}`}>
                                               <img
-                                                src={`https://localhost:7073/images/${item.imageName}`}
+                                                src={
+                                                  item.imageName == null
+                                                    ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
+                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                }
                                                 alt=""
                                               />
                                             </Link>
                                           </div>
                                         </div>
                                       </div>
-                                      <div className="favorite favorite_left" />
+                                      {/* <div className="favorite favorite_left" /> */}
                                       <div className="product_info">
                                         <h6 className="product_name">
                                           <Link to={`/detail/${item.id}`}>
@@ -151,193 +155,8 @@ const SearchResultComponent = () => {
                                         <div className="product_price">
                                           {item.price
                                             .toLocaleString("en-US")
-                                            .replace(/,/g, ".")} <sup>₫</sup>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="red_button add_to_cart_button">
-                                      <a href="#">add to cart</a>
-                                    </div>
-                                  </div>
-                                </>
-                              );
-                            })}
-                          </div>
-                          <div>
-                            <ul className="pagination">
-                              {pageNumber.map((item) => {
-                                return (
-                                  <li className="page-item" key={item}>
-                                    <a
-                                      href="#"
-                                      className="page-link"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        paginate(item);
-                                      }}
-                                    >
-                                      {item}
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="second">
-                          <div className="product-main">
-                            {CurrentProducts.map((item) => {
-                              return (
-                                <>
-                                  <div className="product-item men">
-                                    <div className="product discount product_filter">
-                                      <div className="product_background">
-                                        <div className="product_border">
-                                          <div className="product_image">
-                                            <Link to={`detail/${item.id}`}>
-                                              <img
-                                                src={`https://localhost:7073/images/${item.imageName}`}
-                                                alt=""
-                                              />
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="favorite favorite_left" />
-                                      <div className="product_info">
-                                        <h6 className="product_name">
-                                          <Link to="detail/1">
-                                            {item.title}
-                                          </Link>
-                                        </h6>
-                                        <div className="product_price">
-                                          {item.price
-                                            .toLocaleString("en-US")
-                                            .replace(/,/g, ".")} <sup>₫</sup>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="red_button add_to_cart_button">
-                                      <a href="#">add to cart</a>
-                                    </div>
-                                  </div>
-                                </>
-                              );
-                            })}
-                          </div>
-                          <div>
-                            <ul className="pagination">
-                              {pageNumber.map((item) => {
-                                return (
-                                  <li className="page-item" key={item}>
-                                    <a
-                                      href="#"
-                                      className="page-link"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        paginate(item);
-                                      }}
-                                    >
-                                      {item}
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="third">
-                          <div className="product-main">
-                            {CurrentProducts.map((item) => {
-                              return (
-                                <>
-                                  <div className="product-item men">
-                                    <div className="product discount product_filter">
-                                      <div className="product_background">
-                                        <div className="product_border">
-                                          <div className="product_image">
-                                            <Link to={`detail/${item.id}`}>
-                                              <img
-                                                src={`https://localhost:7073/images/${item.imageName}`}
-                                                alt=""
-                                              />
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="favorite favorite_left" />
-                                      <div className="product_info">
-                                        <h6 className="product_name">
-                                          <Link to="detail/1">
-                                            {item.title}
-                                          </Link>
-                                        </h6>
-                                        <div className="product_price">
-                                          {item.price
-                                            .toLocaleString("en-US")
-                                            .replace(/,/g, ".")} <sup>₫</sup>
-                                        </div>
-                                      </div>
-                                    </div>
-                                    <div className="red_button add_to_cart_button">
-                                      <a href="#">add to cart</a>
-                                    </div>
-                                  </div>
-                                </>
-                              );
-                            })}
-                          </div>
-                          <div>
-                            <ul className="pagination">
-                              {pageNumber.map((item) => {
-                                return (
-                                  <li className="page-item" key={item}>
-                                    <a
-                                      href="#"
-                                      className="page-link"
-                                      onClick={(e) => {
-                                        e.preventDefault();
-                                        paginate(item);
-                                      }}
-                                    >
-                                      {item}
-                                    </a>
-                                  </li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        </Tab.Pane>
-                        <Tab.Pane eventKey="Fourth">
-                          <div className="product-main">
-                            {CurrentProducts.map((item) => {
-                              return (
-                                <>
-                                  <div className="product-item men">
-                                    <div className="product discount product_filter">
-                                      <div className="product_background">
-                                        <div className="product_border">
-                                          <div className="product_image">
-                                            <Link to={`detail/${item.id}`}>
-                                              <img
-                                                src={`https://localhost:7073/images/${item.imageName}`}
-                                                alt=""
-                                              />
-                                            </Link>
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="favorite favorite_left" />
-                                      <div className="product_info">
-                                        <h6 className="product_name">
-                                          <Link to="detail/1">
-                                            {item.title}
-                                          </Link>
-                                        </h6>
-                                        <div className="product_price">
-                                          {item.price
-                                            .toLocaleString("en-US")
-                                            .replace(/,/g, ".")} <sup>₫</sup>
+                                            .replace(/,/g, ".")}{" "}
+                                          <sup>₫</sup>
                                         </div>
                                       </div>
                                     </div>
@@ -412,7 +231,7 @@ const SearchResultComponent = () => {
                       step="10000"
                       value={maxPrice}
                       onChange={(e) => setMaxPrice(e.target.value)}
-                      style={{width:"45%"}}
+                      style={{ width: "45%" }}
                     />
                   </div>
                   <button onClick={handleFilter} className="buttonSearch">

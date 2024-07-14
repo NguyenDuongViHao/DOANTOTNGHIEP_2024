@@ -132,6 +132,7 @@ namespace ClothingStore.Controllers
                 COD = infoOrder.Invoice.COD,
 
 				Vnpay = infoOrder.Invoice.Vnpay,
+                ApproveOrder = infoOrder.Invoice.ApproveOrder,
 			};
 
             return Ok(detailOrder);
@@ -145,7 +146,7 @@ namespace ClothingStore.Controllers
 					  .Include(i => i.ProductDetail.Size)
 					  .Include(i => i.ProductDetail.Color)
 					  .Include(i => i.Invoice.User)
-					  .Where(a => a.Invoice.Id == id).ToListAsync();
+					  .Where(a => a.InvoiceId == id).ToListAsync();
 			if (invoiceDetail == null)
 			{
 				return NotFound();
@@ -181,7 +182,7 @@ namespace ClothingStore.Controllers
 			var orderer = await _context.InvoiceDetail
 				.Include(i => i.ProductDetail.Product)
 				.Include(i => i.Invoice.User)
-				.FirstOrDefaultAsync(a => a.Invoice.Id == id);
+				.FirstOrDefaultAsync(a => a.InvoiceId == id);
 
 			if (orderer == null)
 			{

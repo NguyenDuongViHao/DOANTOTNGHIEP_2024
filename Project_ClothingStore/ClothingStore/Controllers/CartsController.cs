@@ -348,5 +348,12 @@ namespace ClothingStore.Controllers
 			return BadRequest("UserId is null");
 		}
 
+		[HttpGet("cartcount")]
+		public async Task<IActionResult> GetCartCount()
+		{
+			var cartCount = await _context.Cart.CountAsync();
+			return Ok(cartCount);
+		}
+			
 	}
 }

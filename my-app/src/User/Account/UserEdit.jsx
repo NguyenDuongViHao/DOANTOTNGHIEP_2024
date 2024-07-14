@@ -64,6 +64,11 @@ const UserEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    if (!emailPattern.test(user.email)) {
+      setEmailError("Vui lòng nhập địa chỉ email hợp lệ.");
+      return;
+    }
     try {
       await AxiosClient.put(`/Users/updateInfoUser/${accessToken}`, user);
       window.location.reload();
@@ -100,7 +105,7 @@ const UserEdit = () => {
   return (
     <>
       {/* <div className="geNdhL1">Thông tin của tôi</div> */}
-      <div className="row gutters-sm" style={{borderRadius:"0px"}}>
+      <div className="row gutters-sm" style={{ borderRadius: "0px" }}>
         <div className="col-md-4 mb-3">
           <div className="card">
             <div className="card-body">

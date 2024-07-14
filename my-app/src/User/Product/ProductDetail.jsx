@@ -122,125 +122,124 @@ const ProductDetail = () => {
       .join("")
       .toUpperCase();
   };
-console.log(activeIndexColor, "color")
-console.log(activeIndexSize, "size")
+  console.log(activeIndexColor, "color");
+  console.log(activeIndexSize, "size");
 
   const handleSubmitCart = async (e) => {
     if (UserId == null) {
       setShowLogin(true);
       return;
     }
-      if (activeIndexColor && activeIndexSize) {
-        e.preventDefault();
-        const productDetailAddCart = ListProductDetail.find(
+    if (activeIndexColor && activeIndexSize) {
+      e.preventDefault();
+      const productDetailAddCart = ListProductDetail.find(
+        (search) =>
+          search.sizeId == activeIndexSize &&
+          search.colorId == activeIndexColor &&
+          search.productId == id
+      );
+      console.log(id, "iddd");
+      console.log(productDetailAddCart, "chitiet");
+      if (productDetailAddCart) {
+        //kiểm tra biến thể
+        const ProductInCart = ListCart.find(
           (search) =>
-            search.sizeId == activeIndexSize &&
-            search.colorId == activeIndexColor &&
-            search.productId == id
-        );
-        console.log(id, "iddd")
-        console.log(productDetailAddCart, "chitiet")
-        if (productDetailAddCart) {//kiểm tra biến thể
-          const ProductInCart = ListCart.find(
-            (search) =>
-              search.productDetailId == productDetailAddCart.id &&
-              search.userId == UserId
-          ); //undef //thêm user
-          console.log(ProductInCart,"kkhfaksf")
-          var totalQuantity = 0;
+            search.productDetailId == productDetailAddCart.id &&
+            search.userId == UserId
+        ); //undef //thêm user
+        console.log(ProductInCart, "kkhfaksf");
+        var totalQuantity = 0;
 
-          if (ProductInCart) {
-            //nếu có trong giỏ hàng
-            console.log(ProductInCart, "cos trong gio hang")
-            console.log(productDetailAddCart.quantity, "soluong san pham ton")
+        if (ProductInCart) {
+          //nếu có trong giỏ hàng
+          console.log(ProductInCart, "cos trong gio hang");
+          console.log(productDetailAddCart.quantity, "soluong san pham ton");
 
-            totalQuantity = Quantity + ProductInCart.quantity;
-            if (totalQuantity > productDetailAddCart.quantity) {
-              //"kiểm tra so lượng sản phẩm được thêm vào khi đã có thêm vào trước đó
-              toast.info(
-                () => (
-                  <div>
-                    Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity}{" "}
-                    hãy kiểm tra giỏ hàng
-                  </div>
-                ),
-                {
-                  position: "bottom-center",
-                  autoClose: 2000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  closeButton: false,
-                  className: "custom-toast",
-                  toastId: "custom-toast",
-                }
-              );
-              return false;
-            } else {
-              setCarts((prev) => ({
-                ...prev,
-                quantity: Quantity,
-                productDetailId: productDetailAddCart.id,
-              }));
-              setShouldSubmit(true);
-              return true;
-            }
+          totalQuantity = Quantity + ProductInCart.quantity;
+          if (totalQuantity > productDetailAddCart.quantity) {
+            //"kiểm tra so lượng sản phẩm được thêm vào khi đã có thêm vào trước đó
+            toast.info(
+              () => (
+                <div>
+                  Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity} hãy
+                  kiểm tra giỏ hàng
+                </div>
+              ),
+              {
+                position: "bottom-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                closeButton: false,
+                className: "custom-toast",
+                toastId: "custom-toast",
+              }
+            );
+            return false;
           } else {
-            if (Quantity > productDetailAddCart.quantity) {
-              //kiểm tra số lựong sản phẩm đc thêm vào khi chưa có sản phẩm đó trong gio hàng,
-              console.log(Quantity, productDetailAddCart.quantity, "soluong, sl đg có trong giỏ hàng")
-              toast.info(
-                () => (
-                  <div>
-                    Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity}
-                  </div>
-                ),
-                {
-                  position: "bottom-center",
-                  autoClose: 2000,
-                  hideProgressBar: true,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined,
-                  closeButton: false,
-                  className: "custom-toast",
-                  toastId: "custom-toast",
-                }
-              );
-              return false;
-            }
             setCarts((prev) => ({
               ...prev,
               quantity: Quantity,
               productDetailId: productDetailAddCart.id,
             }));
             setShouldSubmit(true);
-            console.log(productDetailAddCart.id, "detailllll");
             return true;
           }
         } else {
-          toast.info(() => <div>Biến thể này chưa có cho sản phẩm</div>, {
-            position: "bottom-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            closeButton: false,
-            className: "custom-toast",
-            toastId: "custom-toast",
-          });
-          return false;
+          if (Quantity > productDetailAddCart.quantity) {
+            //kiểm tra số lựong sản phẩm đc thêm vào khi chưa có sản phẩm đó trong gio hàng,
+            toast.info(
+              () => (
+                <div>
+                  Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity}
+                </div>
+              ),
+              {
+                position: "bottom-center",
+                autoClose: 2000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                closeButton: false,
+                className: "custom-toast",
+                toastId: "custom-toast",
+              }
+            );
+            return false;
+          }
+          setCarts((prev) => ({
+            ...prev,
+            quantity: Quantity,
+            productDetailId: productDetailAddCart.id,
+          }));
+          setShouldSubmit(true);
+          console.log(productDetailAddCart.id, "detailllll");
+          return true;
         }
+      } else {
+        toast.info(() => <div>Biến thể này chưa có cho sản phẩm</div>, {
+          position: "bottom-center",
+          autoClose: 2000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          closeButton: false,
+          className: "custom-toast",
+          toastId: "custom-toast",
+        });
+        return false;
       }
-      else{
-        toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>)
-        }
-      return false;
+    } else {
+      toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>);
+    }
+    return false;
   };
 
   console.log(ListCart, "cart");
@@ -249,18 +248,17 @@ console.log(activeIndexSize, "size")
     if (UserId == null) {
       setShowLogin(true);
       return;
-    } 
-    if (activeIndexColor && activeIndexSize){
+    }
+    if (activeIndexColor && activeIndexSize) {
       const shouldProceed = await handleSubmitCart(e);
       if (shouldProceed) {
         const timer = setTimeout(() => {
           navigate("/cart");
         }, 300);
-        return () => clearTimeout(timer);    
+        return () => clearTimeout(timer);
       }
-    }
-    else{
-      toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>)
+    } else {
+      toast.warning(() => <div>Sản phẩm này chưa có biến thể</div>);
     }
   };
 
@@ -307,7 +305,7 @@ console.log(activeIndexSize, "size")
       })
       .catch((error) => {
         console.error("Lỗi khi thêm mục yêu thích", error);
-      }); 
+      });
   };
 
   const handleQuantityChange = (e, IdProduct) => {
@@ -319,25 +317,31 @@ console.log(activeIndexSize, "size")
       toast.error("Vui lòng chỉ nhập số!");
       return;
     }
-    const quantityProductDetail = ListProductDetail.find((search)=> search.productId == IdProduct && search.colorId == ColorId && search.sizeId == SizeId)
+    const quantityProductDetail = ListProductDetail.find(
+      (search) =>
+        search.productId == IdProduct &&
+        search.colorId == ColorId &&
+        search.sizeId == SizeId
+    );
     if (!quantityProductDetail) {
       toast.error("Không tìm thấy sản phẩm!");
       return;
     }
-    if(newQuantity > quantityProductDetail.quantity){
-      toast.warning(() => (<div>Sản phẩm này chỉ còn {quantityProductDetail.quantity} !</div>));
+    if (newQuantity > quantityProductDetail.quantity) {
+      toast.warning(() => (
+        <div>Sản phẩm này chỉ còn {quantityProductDetail.quantity} !</div>
+      ));
       return;
     }
-   
+
     updateQuantity(newQuantity);
-    console.log(quantityProductDetail,"productdetail ")
-    console.log(newQuantity,"so luong cart thay đoi")
+    console.log(quantityProductDetail, "productdetail ");
+    console.log(newQuantity, "so luong cart thay đoi");
   };
 
   const updateQuantity = (newQuantity) => {
-    setQuantity(newQuantity)
+    setQuantity(newQuantity);
   };
-
 
   useEffect(() => {
     AxiosClient.get(`Favourites/${UserId}/${id}`)
@@ -395,9 +399,13 @@ console.log(activeIndexSize, "size")
       setDisplayVariantSize(`${ProductDetail[0].sizes[0].nameSize}`);
       setActiveIndexColor(`${ProductDetail[0].colors[0].id}`);
       setDisplayVariantColor(`${ProductDetail[0].colors[0].nameColor}`);
-      setMainImageUrl(
-        `https://localhost:7073/images/${ProductDetail[0].images[0].fileName}`
-      );
+      if (ProductDetail[0].images.length > 0) {
+        setMainImageUrl(
+          `https://localhost:7073/images/${ProductDetail[0].images[0].fileName}`
+        );
+      } else {
+        setMainImageUrl(`../3708994bdca38cd8dbea509f233f3cf4.jpg`);
+      }
     }
   }, [ProductDetail]);
 
@@ -484,7 +492,7 @@ console.log(activeIndexSize, "size")
                           <div className="img-pro">
                             <div className="position-pointer">
                               <img
-                                src={MainImageUrl}
+                                src={MainImageUrl == null ? "" : MainImageUrl}
                                 alt=""
                                 className="hbqSye"
                               />
@@ -553,7 +561,7 @@ console.log(activeIndexSize, "size")
                                       <sup>₫</sup>
                                     </div>
                                     <div className="product-price__discount-rate">
-                                     {/* khuyến mãi */}
+                                      {/* khuyến mãi */}
                                     </div>
                                   </div>
                                 </div>
@@ -665,13 +673,24 @@ console.log(activeIndexSize, "size")
                           <div className="eba-dki">
                             <div className="xbBes">
                               {collapse ? (
-                                <div>
-                                  {item.description}
-
+                                <div className="description">
+                                  {item.description
+                                    .split(" - ")
+                                    .map((part, index) => (
+                                      <div key={index}>{part}</div>
+                                    ))}
                                   <div className="gradient"></div>
                                 </div>
                               ) : (
-                                <div className="imwRtb">{item.description}</div>
+                                <div className="imwRtb">
+                                  <div className="description">
+                                    {item.description
+                                      .split(" - ")
+                                      .map((part, index) => (
+                                        <div key={index}>{part}</div>
+                                      ))}
+                                  </div>
+                                </div>
                               )}
                               {collapse ? (
                                 <a
@@ -1165,7 +1184,9 @@ console.log(activeIndexSize, "size")
                                 type="text"
                                 className="input"
                                 value={Quantity}
-                                onChange={(e)=>{handleQuantityChange(e, item.id)}}
+                                onChange={(e) => {
+                                  handleQuantityChange(e, item.id);
+                                }}
                               />
                               <button onClick={handleIncrease}>
                                 <img

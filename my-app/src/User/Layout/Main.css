@@ -20,7 +20,7 @@
 
 .bsxLcZ {
     display: flex;
-    padding-top: 16px;
+    padding-top: 50px;
     -webkit-box-pack: justify;
     justify-content: space-between;
 }
@@ -157,7 +157,7 @@ a {
 .product_frame{
     background-color: rgb(255, 255, 255);
     padding: 1rem;  
-    margin-bottom: 1rem;
+    margin-bottom: 14rem;
 }
 
 .product-main{
@@ -246,8 +246,8 @@ div{
     display: block !important;
     object-fit: contain;
     border-radius: 8px;
-    width: 495px !important;
-    height: 250px;
+    width: 600px !important;
+    height: 303px;
 }
 
 .main-swiper-slide img {

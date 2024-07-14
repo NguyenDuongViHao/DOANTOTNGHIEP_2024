@@ -131,5 +131,27 @@ namespace ClothingStore.Controllers
         {
             return _context.Category.Any(e => e.Id == id);
         }
-    }
+
+        [HttpGet("ListCategory")]
+		public async Task<ActionResult<IEnumerable<Category>>> GetListCategory()
+		{
+            var categoryy = await _context.Category.Where(c => c.Status)
+				.ToListAsync();
+			var products = await _context.Product.Include(e => e.Category).Where(a => a.Status).ToListAsync();
+			var rows = new List<CategoryViewModel>();
+            foreach (var item in categoryy) {
+				var product = products.FirstOrDefault(p => p.Category.Id == item.Id);
+				Models.Image image = await _context.Image.FirstOrDefaultAsync(i => i.ProductId == product.Id);
+				rows.Add(new CategoryViewModel
+				{
+					Id = item.Id,
+					Name = item.Name,
+					Image = image.ImageURL,
+					Status = item.Status,
+				});
+			}
+				
+				return Ok(rows);
+		}
+	}
 }

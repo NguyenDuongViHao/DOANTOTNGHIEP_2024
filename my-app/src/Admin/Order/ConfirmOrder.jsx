@@ -13,11 +13,10 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
   const [selectedTransfer, setselectedTransfer] = useState(null);
   const navigate = useNavigate();
 
-
   // Function to handle checkbox change for bulk actions
   const handleCheckboxChangeAll = (id) => {
     const updatedInvoices = InvoiALLFirst.map((item) =>
-      item.id === id ? { ...item, statusCheck: !item.statusCheck } : item
+      item.id == id ? { ...item, statusCheck: !item.statusCheck } : item
     );
     setInvoiALLFirst(updatedInvoices);
   };
@@ -34,23 +33,18 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
 
   // Function to handle bulk transfer of confirmed orders
   const handleTransferAll = (e) => {
-    e.preventDefault();
     try {
-      const confirmedToTransfer = InvoiALLFirst.filter(
-        (invoice) => invoice.statusCheck === true
+      const confrimTransferAll = InvoiALLFirst.filter(
+        (invoice) => invoice.statusCheck == true
       );
-      confirmedToTransfer.forEach((item) => {
-        AxiosClient.delete(`Invoices/AdminTransport/${item.id}`).then(() => {
-          // After each successful delete, update the list
-          setListOfInvoiceConfirm((prevList) =>
-            prevList.filter((invoice) => invoice.id !== item.id)
-          );
-        });
-      });
+      confrimTransferAll.map((item) =>
+        AxiosClient.delete(`Invoices/AdminTransport/${item.id}`)
+      );
     } catch (error) {
       console.log("Validation error:", error);
     }
     setshowTransferAll(false);
+    e.preventDefault();
   };
 
   // Function to show individual order transfer confirmation modal
@@ -67,13 +61,15 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
 
   // Function to confirm transfer of an individual order
   const handleTransfer = () => {
-    AxiosClient.delete(`Invoices/AdminTransport/${selectedTransfer.id}`).then(() => {
-      // After successful delete, update the list
-      setListOfInvoiceConfirm((prevList) =>
-        prevList.filter((invoice) => invoice.id !== selectedTransfer.id)
-      );
-      setshowTransfer(false);
-    });
+    AxiosClient.delete(`Invoices/AdminTransport/${selectedTransfer.id}`).then(
+      () => {
+        // After successful delete, update the list
+        setListOfInvoiceConfirm((prevList) =>
+          prevList.filter((invoice) => invoice.id !== selectedTransfer.id)
+        );
+        setshowTransfer(false);
+      }
+    );
   };
 
   // Fetch initial list of confirmed invoices when component mounts
@@ -81,7 +77,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
     AxiosClient.get(`Invoices/ListOfOrder/confirmed`).then((res) => {
       setListOfInvoiceConfirm(res.data);
     });
-  }, []);
+  }, [ListOfInvoiceConfirm]);
 
   // Update InvoiALLFirst when ListOfInvoice changes
   useEffect(() => {
@@ -95,7 +91,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
           <tr>
             <th style={{ width: "2%" }}></th>
             <th style={{ width: "20%" }}>Mã đơn hàng/ Ngày đặt hàng</th>
-            <th style={{ width: "20%" }}>Số lượng/ GTĐH</th>
+            <th style={{ width: "20%" }}>Số lượng</th>
             <th style={{ width: "20%" }}>Thao tác</th>
           </tr>
         </thead>
@@ -110,11 +106,13 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
               </td>
               <td>
                 <p style={{ color: "#2962FF", margin: 0 }}>{item.code}</p>
-                <small>{item.issuedDate}</small>
+                <div>{item.issueDate}</div>
               </td>
               <td>
                 <p style={{ margin: 0 }}>x{item.totalQuantity}</p>
-                <small>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</small>
+                <small>
+                  {item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫
+                </small>
               </td>
               <td className="text-center">
                 <button

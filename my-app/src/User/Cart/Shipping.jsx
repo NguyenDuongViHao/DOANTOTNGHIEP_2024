@@ -21,7 +21,7 @@ const Shipping = () => {
   const UserId = localStorage.getItem("userId");
 
   const handleEditClick = () => {
-    setOpenEdit((prevIndex) => (prevIndex === false ? true : false));
+    setOpenEdit(!OpenEdit);
     setTempFullName(FullName)
     setTempPhone(Phone)
     setTempAddress(Address)

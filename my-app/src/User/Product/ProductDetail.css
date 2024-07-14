@@ -1030,5 +1030,11 @@ element.style {
     margin-bottom: 3rem; /* Điều chỉnh khoảng cách từ dưới lên trên (ở đây là 3rem) */
   }
 
-
+.description {
+    white-space: pre-line; /* các khoảng trắng và xuống dòng tự động */
+  }
+  
+.description div {
+    margin-bottom: 5px; /* Khoảng cách giữa các dòng */
+  }
   

@@ -3,6 +3,7 @@ import "./MyOrder.css";
 import { useEffect, useState } from "react";
 import AxiosClient from "../../Axios/AxiosClient";
 import MyOrderInfo from "./MyOrderInfo";
+import { ToastContainer } from "react-toastify";
 
 const MyOrder = () => {
   const [ListOfOrders, setListOfOrders] = useState([]);
@@ -74,6 +75,7 @@ const MyOrder = () => {
           </Tab.Pane>
         </Tab.Content>
       </TabContainer>
+      <ToastContainer/>
     </>
   );
 };

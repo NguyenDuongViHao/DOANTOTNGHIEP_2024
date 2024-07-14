@@ -33,6 +33,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
       setOrderer(res.data);
     });
   };
+
   return (
     <>
       <div class="container mt-4">
@@ -46,7 +47,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                 Trạng thái
               </th> */}
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng/ GTĐH
+                Số lượng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -63,7 +64,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                       <div>
                         <p style={{ color: "#2962FF" }}>{item.code}</p>
                       </div>
-                      <div>{item.issuedDate}</div>
+                      <div>{item.issueDate}</div>
                     </td>
                     {/* <td>
                     <div style={{backgroundColor:"rgb(197 255 217)", width:"35%", border:"1px solid #ccc", borderRadius:"4px", textAlign:"center"}}>{item.approveOrder}</div>
@@ -99,7 +100,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                         <div style={{ marginBottom: "1rem" }}>
                           <FontAwesomeIcon icon={faUser} />{" "}
                           <label style={{ margin: "0 1rem" }}>
-                            {Orderer.orderersName}({Orderer.shippingPhone})
+                           ({Orderer.shippingPhone})
                           </label>
                           / <FontAwesomeIcon icon={faLocationDot} />{" "}
                           <label>{Orderer.shippingAddress}</label>
@@ -125,19 +126,20 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                                           }}
                                         >
                                           <img
-                                            src={`https://localhost:7106/Images/${orderdetail.images}`}
+                                            src={`https://localhost:7073/Images/${orderdetail.image}`}
                                             alt="hinh anh"
                                           />
                                         </div>
                                         <div style={{ width: "85%" }}>
                                           <div>{orderdetail.name}</div>
-                                          <div>
+                                          {/* <div>
                                             Mã sản phẩm:{" "}
                                             {orderdetail.id}
-                                          </div>
+                                          </div> */}
                                           <div>
                                             Giá: {orderdetail.price?.toLocaleString("en-US").replace(/,/g, ".")} ₫
                                           </div>
+                                          <div>{orderdetail.nameColor}, {orderdetail.nameSize} </div>
                                         </div>
                                       </div>
                                     </td>

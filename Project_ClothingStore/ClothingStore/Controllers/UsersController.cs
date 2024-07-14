@@ -57,7 +57,7 @@ namespace ClothingStore.Controllers
 		public async Task<ActionResult<User>> GetUser(string id)
 		{
 			var user = await _userManager.FindByIdAsync(id);
-			if (user == null || !user.Status)
+			if (user == null)
 			{
 				return NotFound();
 			}
@@ -255,5 +255,19 @@ namespace ClothingStore.Controllers
 				return StatusCode(StatusCodes.Status500InternalServerError, "Unable to update user.");
 			}
 		}
+
+		//[HttpGet("UserLogged")]
+		//public async Task<ActionResult<User>> GetUser()
+		//{
+		//	var UserId = User.GetUserId().ToString();
+
+		//	var user = await _userManager.FindByIdAsync(UserId);
+		//	if (user == null || user.Status)
+		//	{
+		//		return NotFound();
+		//	}
+
+		//	return Ok(user);
+		//}
 	}
 }

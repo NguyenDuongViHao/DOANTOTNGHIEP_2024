@@ -238,7 +238,7 @@ namespace ClothingStore.Controllers
 				}
 			}
 
-			invoice.Status = false;
+			invoice.Status = true;
 			_context.Invoice.Update(invoice);
 			await _context.SaveChangesAsync();
 			return NoContent();
@@ -581,11 +581,31 @@ namespace ClothingStore.Controllers
 		public async Task<IActionResult> UserCanceled(int id)
 		{
 			var invoice = await _context.Invoice.FindAsync(id);
+			var productDetails = await _context.ProductDetail.ToListAsync();
+			var invoice_Detail = await _context.InvoiceDetail
+					  .Include(i => i.ProductDetail)
+					  .Include(i => i.Invoice)
+					  .Where(a => a.InvoiceId == id).ToListAsync();
 
 			if (invoice == null)
 			{
 				return NotFound();
 			}
+
+			foreach (InvoiceDetail detailinvoi in invoice_Detail)
+			{
+				productDetails.Where(b => b.Id == detailinvoi.ProductDetailId);
+				foreach (ProductDetail proDetail in productDetails)
+				{
+					if (proDetail.Id == detailinvoi.ProductDetailId)
+					{
+						proDetail.Quantity += detailinvoi.Quantity;
+					}
+					_context.ProductDetail.Update(proDetail);
+					await _context.SaveChangesAsync();
+				}
+			}
+			invoice.Status = false;
 			invoice.ApproveOrder = "Đã hủy";
 			_context.Invoice.Update(invoice);
 			await _context.SaveChangesAsync();
