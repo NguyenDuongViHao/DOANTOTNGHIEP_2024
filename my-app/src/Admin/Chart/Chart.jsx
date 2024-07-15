@@ -83,6 +83,7 @@ const Chart = () => {
 
     fetchMonthlyStatistics();
   }, []);
+  
 
   useEffect(() => {
     const fetchMonthlyRevenue = async () => {

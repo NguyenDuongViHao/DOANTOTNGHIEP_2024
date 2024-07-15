@@ -10,7 +10,7 @@ const Home = () => {
     const [memberCount, setMemberCount] = useState(0);
     const [monthlyOrderData, setMonthlyOrderData] = useState([]);
     const [invoices, setInvoices] = useState([]);
-    const [revenueByMonth, setRevenueByMonth] = useState([]);
+    const [monthlyPendingOrder, setMonthlyPendingOrder] = useState([]);
     const [statistics, setStatistics] = useState({
       currentMonth: '',
       numberOfInvoices: 0,
@@ -65,7 +65,7 @@ const Home = () => {
         try {
           const response = await AxiosClient.get('/Invoices/PendingOrderByMonth');
           console.log('API response data:', response.data); // Log the API response
-          setMonthlyOrderData(response.data);
+          setMonthlyPendingOrder(response.data);
         } catch (error) {
           console.error('Error fetching monthly revenue:', error);
         }
@@ -92,14 +92,14 @@ const Home = () => {
           }
         };
     
-        const fetchPendingOrdersRevenue = async () => {
-          try {
-            const response = await AxiosClient.get(`/Invoices/pending-orders-revenue?year=${year}`);
-            setRevenueByMonth(response.data);
-          } catch (error) {
-            console.error('Error fetching pending orders revenue:', error);
-          }
-        };
+        // const fetchPendingOrdersRevenue = async () => {
+        //   try {
+        //     const response = await AxiosClient.get(`/Invoices/pending-orders-revenue?year=${year}`);
+        //     setRevenueByMonth(response.data);
+        //   } catch (error) {
+        //     console.error('Error fetching pending orders revenue:', error);
+        //   }
+        // };
         fetchAvailableMonths();
         fetchPendingInvoices();
         // fetchPendingOrdersRevenue();
@@ -203,7 +203,7 @@ const Home = () => {
                   <div className="col col-stats ms-3 ms-sm-0">
                     <div className="numbers">
                       <p className="card-category">Đơn hàng chờ duyệt</p>
-                      <h4 className="card-title">{revenueByMonth[0]?.pendingOrderCount}</h4>
+                      <h4 className="card-title">{monthlyPendingOrder[0]?.pendingOrderCount}</h4>
                     </div>
                   </div>
                 </div>
@@ -217,7 +217,7 @@ const Home = () => {
               <div className="card-header">
                 <div className="card-head-row">
                   <div className="card-title">
-                    Báo cáo doanh thu theo tháng
+                    Báo cáo số lượng đơn hàng theo tháng
                   </div>
                 </div>
               </div>

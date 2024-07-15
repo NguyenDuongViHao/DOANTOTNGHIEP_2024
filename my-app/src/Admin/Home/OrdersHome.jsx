@@ -6,7 +6,7 @@ ChartJS.register(PointElement, LineElement, Title, Tooltip, Legend);
 
 const OrdersHome = ({ data }) => {
   const chartData = {
-    labels: data.map(item => item.month),
+    labels: data.map(item => item.day),
     datasets: [
       {
         label: 'Số lượng đơn hàng',
