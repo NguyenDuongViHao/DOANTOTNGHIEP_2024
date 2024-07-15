@@ -605,21 +605,26 @@ namespace ClothingStore.Controllers
 			}
 		}
 		[HttpGet("OrderCountByMonth")] // biểu đồ: getOrderCountByMonth, đơn hàng chờ duyệt là getPendingOrderByMonth
-		public async Task<ActionResult<IEnumerable<object>>> GetOrderCountByMonth(int year)
+		public async Task<ActionResult<IEnumerable<object>>> GetOrderCountByMonth()
 		{
-			var monthlyRevenue = await _context.Invoice
-				.Where(i => i.IssueDate.Year == year)
-				.GroupBy(i => i.IssueDate.Month)
+			// Lấy năm và tháng hiện tại
+			int currentYear = DateTime.Now.Year;
+			int currentMonth = DateTime.Now.Month;
+
+			var monthlyOrderCounts = await _context.Invoice
+				.Where(i => i.IssueDate.Year == currentYear && i.IssueDate.Month == currentMonth)
+				.GroupBy(i => i.IssueDate.Day)
 				.Select(g => new
 				{
-					Month = g.Key,
-					OrderCount = g.Count() // Số lượng đơn hàng trong tháng
+					Day = g.Key,
+					OrderCount = g.Count() // Số lượng đơn hàng trong ngày
 				})
-				.OrderBy(m => m.Month)
+				.OrderBy(m => m.Day)
 				.ToListAsync();
 
-			return Ok(monthlyRevenue);
+			return Ok(monthlyOrderCounts);
 		}
+
 		[HttpGet("AvailableMonths")]
 		public async Task<ActionResult<IEnumerable<int>>> GetAvailableMonths()
 		{
