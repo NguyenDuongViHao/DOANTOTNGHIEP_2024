@@ -168,6 +168,54 @@ namespace ClothingStore.Controllers
 
 			return NoContent();
 		}
+		[HttpGet("totalsize/{sizeId}")]
+		public async Task<IActionResult> GetTotalBySize(int sizeId)
+		{
+			var result = await _context.ProductDetail
+				.Where(pd => pd.SizeId == sizeId)
+				.ToArrayAsync();
+
+			if (result == null)
+			{
+				return NotFound();
+			}
+
+			return Ok(result);
+		}
+		[HttpGet("totalsizesum/{sizeId}")]
+		public async Task<IActionResult> GetSizeSum(int sizeId)
+		{
+			var totalQuantity = await _context.ProductDetail
+				.Where(pd => pd.SizeId == sizeId)
+				.SumAsync(pd => pd.Quantity);
+
+			if (totalQuantity == 0)
+			{
+				return NotFound("No products found for the given size.");
+			}
+
+			return Ok(totalQuantity);
+		}
+		[HttpGet("sumquantity")]
+		public async Task<IActionResult> GetSum()
+		{
+			var totalQuantity = await _context.ProductDetail
+				.SumAsync(pd => pd.Quantity);
+
+			if (totalQuantity == 0)
+			{
+				return NotFound("No products found for the given size.");
+			}
+
+			return Ok(totalQuantity);
+		}
+
+
+
+
+
+
+
 
 	}
 }
