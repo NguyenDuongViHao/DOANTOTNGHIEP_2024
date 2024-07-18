@@ -145,7 +145,29 @@ namespace ClothingStore.Controllers
 			return productDetails;
 		}
 
+		[HttpPost]
+		[Route("testPro/{productId}")]
+		public async Task<IActionResult> PostProductDetails(int productId, ProductDetail productDetail)
+		{
+			if (productId <= 0)
+			{
+				return BadRequest("Invalid productId");
+			}
 
+			// Kiểm tra xem sản phẩm có tồn tại trong database không
+			var existingProduct = await _context.Product.FindAsync(productId);
+			if (existingProduct == null)
+			{
+				return NotFound("Product not found");
+			}
+
+			// Thêm chi tiết sản phẩm vào database
+			productDetail.ProductId = productId;
+			_context.ProductDetail.Add(productDetail);
+			await _context.SaveChangesAsync();
+
+			return NoContent();
+		}
 
 	}
 }

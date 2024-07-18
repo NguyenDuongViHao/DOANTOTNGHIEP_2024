@@ -114,31 +114,32 @@ namespace ClothingStore.Controllers
         [Route("listProduct")]
 		public async Task<ActionResult<IEnumerable<Product>>> GetListProduct()
 		{
-			var products = await _context.Product.Include(e => e.Category).Where(a=> a.Status).ToListAsync();
-            var rows = new List<ProductViewModel>();
+			var products = await _context.Product
+	                 .Include(e => e.Category)
+	                .Where(a => a.Status)
+	                .Select(p => new
+	                {
+		                Product = p,
+		                PurchaseCount = _context.InvoiceDetail.Where(id => id.ProductDetail.ProductId == p.Id).Sum(id => (int?)id.Quantity) ?? 0
+	                })
+	            .OrderByDescending(p => p.PurchaseCount)
+	            .ToListAsync();
+			var rows = new List<ProductViewModel>();
             foreach (var product in products) {
-				var chuoi = "";
-				var ngay = "";
-				var thang = "";
-				var nam = "";
-				var time = "";
-				ngay = ngay + product.CreateTime.Day;
-				thang = thang + product.CreateTime.Month;
-				nam = nam + product.CreateTime.Year;
-				time = ngay + "/" + thang + "/" + nam;
-				Models.Image image = await _context.Image.FirstOrDefaultAsync(i => i.ProductId == product.Id);
+				var createTime = $"{product.Product.CreateTime.Day}/{product.Product.CreateTime.Month}/{product.Product.CreateTime.Year}";
+				Models.Image image = await _context.Image.FirstOrDefaultAsync(i => i.ProductId == product.Product.Id);
                 rows.Add(new ProductViewModel
                 {
-                    Id = product.Id,
-                    Name = product.Name,
-                    Description = product.Description,
-                    Price = product.Price,
-                    Brand = product.Brand,
-                    Origin = product.Origin,
-                    CreateTime = time,
-                    CategoryName = product.Category.Name,
+                    Id = product.Product.Id,
+                    Name = product.Product.Name,
+                    Description = product.Product.Description,
+                    Price = product.Product.Price,
+                    Brand = product.Product.Brand,
+                    Origin = product.Product.Origin,
+                    CreateTime = createTime,
+                    CategoryName = product.Product.Category.Name,
 					ImageName = image?.ImageURL,
-					Status = product.Status,
+					Status = product.Product.Status,
                 });
             }
 			return Ok(rows);
@@ -213,6 +214,67 @@ namespace ClothingStore.Controllers
 			};
 
             return Ok(detailProducts);
+		}
+
+		[HttpPost]
+		[Route("ProductWithDetailsAndImages")]
+		public async Task<ActionResult<Product>> CreateProductWithDetailsAndImages([FromForm] ProductFormData formData)
+		{
+			if (!ModelState.IsValid)
+			{
+				return BadRequest(ModelState);
+			}
+
+			// Create Product entity
+			var product = new Product
+			{
+				Name = formData.Name,
+				Description = formData.Description,
+				Price = formData.Price,
+                CategoryId = formData.CategoryId,
+				Brand = formData.Brand,
+				Origin = formData.Origin,
+				CreateTime = DateTime.Now,
+				Status = true  // You may set status as needed
+			};
+            
+			_context.Product.Add(product);
+			await _context.SaveChangesAsync();
+
+			// Create ProductDetail entity
+			var productDetail = new ProductDetail
+			{
+				ProductId = product.Id,
+				SizeId = formData.SizeId,
+				ColorId = formData.ColorId,
+				Quantity = formData.Quantity
+			};
+
+			_context.ProductDetail.Add(productDetail);
+			await _context.SaveChangesAsync();
+
+			// Upload and save multiple images
+			foreach (var formFile in formData.FileImages)
+			{
+				var image = new Image();
+				if (formFile != null && formFile.Length > 0)
+				{
+					var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+					image.ImageURL = fileName;  // Example: storing in a local directory
+
+					var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/Images", fileName);
+					using (var stream = new FileStream(filePath, FileMode.Create))
+					{
+						await formFile.CopyToAsync(stream);
+					}
+
+					image.ProductId = product.Id;
+					_context.Image.Add(image);
+					await _context.SaveChangesAsync();
+				}
+			}
+
+			return CreatedAtAction("GetProduct", new { id = product.Id }, product);
 		}
 
 	}
