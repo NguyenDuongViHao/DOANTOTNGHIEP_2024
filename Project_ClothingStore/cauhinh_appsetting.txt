@@ -1,0 +1,35 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+
+  "ConnectionStrings": {
+    "ClothingStoreContext": "Server=LAPTOP-89CSI2HV;Database=ClothingStore;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+
+  "JWT": {
+    "ValidAudience": "https://localhost:7073",
+    "ValidIssuer": "https://localhost:7073",
+    "Secret": "ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM"
+  },
+
+  "Vnpay": {
+    "TmnCode": "4VKK0N7I",
+    "HashSecret": "TRPYQA6U4Y00O7YUXPFSJMDN8NW85TV5",
+    "BaseUrl": "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html",
+    "Command": "pay",
+    "CurrCode": "VND",
+    "Version": "2.1.0",
+    "Locale": "vn"
+  },
+  "PaymentCallBack": {
+    "ReturnUrl": "http://localhost:3000/payment_result"
+  },
+
+  "TimeZoneId": "SE Asia Standard Time",
+  "AllowedHosts": "*"
+
+}
