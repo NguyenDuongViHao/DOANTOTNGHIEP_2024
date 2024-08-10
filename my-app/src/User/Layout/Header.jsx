@@ -105,18 +105,22 @@ const Header = () => {
             Đăng ký
           </p>
         </Link>
-        <Link to="" className="kjhfd">
+        {/* <Link to="" className="kjhfd">
           <p className="brEmWQ">Quên mật khẩu</p>
-        </Link>
+        </Link> */}
       </div>
     );
   }
 
   useEffect(() => {
     // Hàm để lấy số lượng mặt hàng trong giỏ hàng
+    if(UserId==null){
+      setCartCount(0);
+      return;
+    }
     const fetchCartCount = async () => {
       try {
-        const response = await AxiosClient.get("/Carts/cartcount");
+        const response = await AxiosClient.get(`/Carts/cartcount/${UserId}`);
         const count = await response.data;
         setCartCount(count);
         if (UserId) {

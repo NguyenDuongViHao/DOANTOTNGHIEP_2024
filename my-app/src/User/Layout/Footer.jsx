@@ -38,7 +38,7 @@ const Footer = () => {
         </div>
       </div> */}
 
-      <footer className="footer" style={{position:"absolute", bottom:0, width:"100%"}}>
+      <footer className="footer" style={{position:"absolute", width:"100%", bottom:"0px"}}>
         <div className="cyhWKd">
           <div
             style={{

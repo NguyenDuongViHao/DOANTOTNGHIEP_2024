@@ -83,7 +83,7 @@ console.log(Orderer)
   return (
     <>
       <Card className="card-body parentInvoice">
-        <div style={{ width: "80%", margin: "0 auto" }}>
+        <div style={{ width: "80%", margin: "0 auto", marginBottom:"14rem" }}>
           <div className="item1">
             <div className="detailInvoiceNavbar displayFLEX">
               <div className="detailInvoiceNavbarItem1">

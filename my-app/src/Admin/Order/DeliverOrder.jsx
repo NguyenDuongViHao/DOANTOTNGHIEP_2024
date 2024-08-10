@@ -47,7 +47,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
               Ngày đặt hàng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng
+                Tổng tiền
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -70,7 +70,7 @@ const DeliverOrder = ({ ListOfInvoice }) => {
                     <div>{item.issueDate}</div>
                     </td>
                     <td>
-                      <p>x{item.totalQuantity}</p>
+                      {/* <p>x{item.totalQuantity}</p> */}
                       <div>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>
                     </td>
                     <td>

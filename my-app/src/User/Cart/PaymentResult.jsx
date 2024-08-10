@@ -10,7 +10,7 @@ const PaymentResult = () => {
         const totalPaymentOnline = localStorage.getItem("TotalPaymentOnline");
         const discountOnline = localStorage.getItem("DiscountOnline");
         const [codeOrders, setCodeOrders] = useState({});
-
+        const [invoiceCreated, setInvoiceCreated] = useState(false);
         const [User, setUser] = useState({});
         //nếu thành công thì lưu , và ngược lại
 
@@ -28,11 +28,11 @@ const PaymentResult = () => {
                     COD: false,
                     Vnpay: true,
                   };
-                if (res.data.vnPayResponseCode === '00'){
+                if (res.data.vnPayResponseCode === '00' && !invoiceCreated){
                     AxiosClient.post(`/Carts/pay/${UserId}`, invoiceData)
                     .then((res) => {
                         setCodeOrders(res.data);
-                        console.log("Create Invoice Success", res.data);
+                        setInvoiceCreated(true);
                     })
                     .catch((error) => {
                       console.error("Error while posting COD payment:", error);
@@ -45,7 +45,7 @@ const PaymentResult = () => {
           };
       
           fetchPaymentStatus();
-        }, [location.search]);
+        }, [location.search, invoiceCreated]);
 
         useEffect(() => {
             AxiosClient.get(`/Users/${UserId}`).then((res) => {
@@ -74,7 +74,7 @@ const PaymentResult = () => {
                 case '75':
                     return <h2>Ngân hàng thanh toán đang bảo trì</h2>;
                 case '79':
-                    return <h2>Nhậh2 sai mật khẩu thanh toán quá số lần quy định</h2>;
+                    return <h2>Nhập sai mật khẩu thanh toán quá số lần quy định</h2>;
                 case '99':
                     return <h2>Tài khoản không đủ số dư để thực hiện giao dịch.</h2>;
                 default:

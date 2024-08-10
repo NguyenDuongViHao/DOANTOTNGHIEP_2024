@@ -4,7 +4,7 @@ import { useEffect, useId, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button, Modal } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const Cart = () => {
   const location = useLocation();
@@ -28,13 +28,12 @@ const Cart = () => {
   const [ListProductDetail, setListProductDetail] = useState([]);
   // const [quantityOnChange, setquantityOnChange] = useState("");
 
-
   const handleCloseDeleteCart = () => setShow(false);
   const handleShowDeleteCart = (id) => {
     setSelectedCart(Cart.find((a) => a.id == id));
     setShow(true);
-  }
-  const handleDeleteCart = async (e) =>{
+  };
+  const handleDeleteCart = async (e) => {
     e.preventDefault();
     try {
       await AxiosClient.delete(`/Carts/${selectedCart.id}`);
@@ -45,23 +44,23 @@ const Cart = () => {
       console.error("Error deleting cart item", error);
       toast.error("Có lỗi xảy ra khi xóa các sản phẩm!");
     }
-  }
+  };
 
   //xóa nhiều
   const handleCloseDeleteCartAll = () => setShowAll(false);
   const handleShowDeleteCartAll = () => {
-    const deleteSelected = Cart.filter((item)=> item.selected)
-    if(deleteSelected.length==0){
-      toast.warning(() => (<div>Không có sản phẩm nào được chọn để xóa!</div>));     
+    const deleteSelected = Cart.filter((item) => item.selected);
+    if (deleteSelected.length == 0) {
+      toast.warning(() => <div>Không có sản phẩm nào được chọn để xóa!</div>);
       return;
     }
-    setShowAll(true)
-  }
+    setShowAll(true);
+  };
 
-  const handleDeleteCartAll = async (e)=>{
+  const handleDeleteCartAll = async (e) => {
     e.preventDefault();
-    try{
-      const deleteSelected = Cart.filter((item)=> item.selected)
+    try {
+      const deleteSelected = Cart.filter((item) => item.selected);
       const deletePromises = deleteSelected.map((item) =>
         AxiosClient.delete(`/Carts/${item.id}`)
       );
@@ -71,12 +70,11 @@ const Cart = () => {
       setCart(updatedCart);
 
       setShowAll(false);
-    } catch(error){
+    } catch (error) {
       console.error("Error deleting cart item", error);
       toast.error("Có lỗi xảy ra khi xóa các sản phẩm!");
     }
-  }
-
+  };
 
   const increaseQuantity = (Id) => {
     const updateCartIncrease = Cart.map((item) =>
@@ -84,10 +82,8 @@ const Cart = () => {
     );
     const quantityHasIncrease = updateCartIncrease.find(
       (item) => item.id === Id
-    ); 
-    const quantityCurrent = ListCart.find(
-      (item) => item.id === Id
-    ); 
+    );
+    const quantityCurrent = ListCart.find((item) => item.id === Id);
     console.log(quantityCurrent, "tăng");
 
     const updateQuantityOfProduct = quantityHasIncrease
@@ -99,23 +95,11 @@ const Cart = () => {
           selected: false,
         }
       : null;
-      if(quantityHasIncrease.quantity>quantityCurrent.productDetail.quantity){
-        toast.warning(() => (
-          <div>Sản phẩm này đã hết hàng!</div>), {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          closeButton: false,
-          className: "custom-toast",
-          toastId: 'custom-toast'
-        });   
-        return;
-      }
-    
+    if (quantityHasIncrease.quantity > quantityCurrent.productDetail.quantity) {
+      toast.warning(() => <div>Sản phẩm này đã hết hàng!</div>);
+      return;
+    }
+
     setCart(updateCartIncrease);
     setTotal(calculateTotal(updateCartIncrease));
     if (updateQuantityOfProduct) {
@@ -149,9 +133,11 @@ const Cart = () => {
   };
 
   const handleQuantityChange = (e, Idcart) => {
-    const cartSelected = Cart.find((search) => search.id == Idcart); 
+    const cartSelected = Cart.find((search) => search.id == Idcart);
     const newQuantity = e.target.value;
-    const productAddToCart = ListProductDetail.find((search)=> search.id == cartSelected.productDetailId)
+    const productAddToCart = ListProductDetail.find(
+      (search) => search.id == cartSelected.productDetailId
+    );
     if (isNaN(newQuantity)) {
       toast.error("Vui lòng chỉ nhập số!");
       return;
@@ -160,13 +146,15 @@ const Cart = () => {
       toast.error("Không tìm thấy sản phẩm!");
       return;
     }
-    if(newQuantity > productAddToCart.quantity){
-      toast.warning(() => (<div>Sản phẩm này chỉ còn {productAddToCart.quantity} !</div>));   
+    if (newQuantity > productAddToCart.quantity) {
+      toast.warning(() => (
+        <div>Sản phẩm này chỉ còn {productAddToCart.quantity} !</div>
+      ));
       return;
     }
     updateQuantity(Idcart, newQuantity, cartSelected.productDetailId);
-    console.log(productAddToCart,"productdetail ")
-    console.log(newQuantity,"so luong cart thay đoi")
+    console.log(productAddToCart, "productdetail ");
+    console.log(newQuantity, "so luong cart thay đoi");
   };
 
   const updateQuantity = (Idcart, newQuantity, productDetailId) => {
@@ -175,15 +163,21 @@ const Cart = () => {
         item.id === Idcart ? { ...item, quantity: Number(newQuantity) } : item
       )
     );
-    
-    AxiosClient.put( `/Carts/updateQuantityCart`, {quantity: newQuantity, userId: UserId, id: Idcart, productDetailId: productDetailId, selected: false})
-        .then((response) => {
-          console.log("Cart items updated quantity successfully", response);
-        })
-        .catch((error) => {
-          console.error("Error updating cart items", error);
-          toast.error("Có lỗi xảy ra khi cập nhật số lượng giỏ hàng.");
-        });
+
+    AxiosClient.put(`/Carts/updateQuantityCart`, {
+      quantity: newQuantity,
+      userId: UserId,
+      id: Idcart,
+      productDetailId: productDetailId,
+      selected: false,
+    })
+      .then((response) => {
+        console.log("Cart items updated quantity successfully", response);
+      })
+      .catch((error) => {
+        console.error("Error updating cart items", error);
+        toast.error("Có lỗi xảy ra khi cập nhật số lượng giỏ hàng.");
+      });
   };
 
   const calculateTotalForProduct = (pro) => {
@@ -229,34 +223,33 @@ const Cart = () => {
   };
 
   const handleBuyProduct = () => {
-    if(User.phoneNumber == null){
-      navigate("/cart/shipping")
-    }
-    else{
+    if (User.phoneNumber == null) {
+      navigate("/cart/shipping");
+    } else {
       const selectedCartItems = Cart.filter((item) => item.selected);
 
-    if (selectedCartItems.length > 0) {
-      const selectedDetails = selectedCartItems.map((item) => ({
-        id: item.id,
-        productDetailId: item.productDetailId,
-        quantity: item.quantity,
-        selected: true,
-        userId: UserId,
-        // Đảm bảo rằng selected luôn là true khi gửi lên server
-      }));
+      if (selectedCartItems.length > 0) {
+        const selectedDetails = selectedCartItems.map((item) => ({
+          id: item.id,
+          productDetailId: item.productDetailId,
+          quantity: item.quantity,
+          selected: true,
+          userId: UserId,
+          // Đảm bảo rằng selected luôn là true khi gửi lên server
+        }));
 
-      AxiosClient.put(`/Carts/updateSelected`, selectedDetails)
-        .then((response) => {
-          console.log("Cart items updated successfully", response);
-          navigate("/pay");
-        })
-        .catch((error) => {
-          console.error("Error updating cart items", error);
-          toast.error("Có lỗi xảy ra khi cập nhật giỏ hàng.");
-        });
-    } else {
-      toast.warning("Không có sản phẩm nào được chọn.");
-    }
+        AxiosClient.put(`/Carts/updateSelected`, selectedDetails)
+          .then((response) => {
+            console.log("Cart items updated successfully", response);
+            navigate("/pay");
+          })
+          .catch((error) => {
+            console.error("Error updating cart items", error);
+            toast.error("Có lỗi xảy ra khi cập nhật giỏ hàng.");
+          });
+      } else {
+        toast.warning("Không có sản phẩm nào được chọn.");
+      }
     }
   };
 
@@ -327,7 +320,7 @@ const Cart = () => {
   useEffect(() => {
     AxiosClient.get(`/Carts`)
       .then((res) => {
-        setListCart(res.data)
+        setListCart(res.data);
       })
       .catch((error) => {
         console.error("There was an error fetching the products!", error);
@@ -339,7 +332,7 @@ const Cart = () => {
       setUser(res.data);
     });
   }, [UserId]);
-console.log(UserId, "userrrrrrr")
+  console.log(UserId, "userrrrrrr");
   useEffect(() => {
     AxiosClient.get(`/ProductDetails`)
       .then((res) => {
@@ -469,7 +462,9 @@ console.log(UserId, "userrrrrrr")
                                     type="tel"
                                     className="qty-input "
                                     value={item.quantity}
-                                    onChange={(e)=>{handleQuantityChange(e, item.id)}}
+                                    onChange={(e) => {
+                                      handleQuantityChange(e, item.id);
+                                    }}
                                   />
                                   <span
                                     className="qty-increase"
@@ -494,7 +489,7 @@ console.log(UserId, "userrrrrrr")
                                   alt="deleted"
                                   width="17"
                                   height="17"
-                                  onClick={()=>handleShowDeleteCart(item.id)}
+                                  onClick={() => handleShowDeleteCart(item.id)}
                                 />
                               </div>
                             </div>
@@ -517,7 +512,7 @@ console.log(UserId, "userrrrrrr")
             </div>
 
             {/* .... */}
-            <div className="eEhtFa">
+            <div className="eEhtFa" style={{ marginBottom: "15rem" }}>
               <div className="right-inner" style={{ top: "-249.911px" }}>
                 <div>
                   <div className="bVA-DDf2 cTGPxG">
@@ -592,7 +587,7 @@ console.log(UserId, "userrrrrrr")
                 </div>
 
                 <div className="dGoOLh" onClick={handleBuyProduct}>
-                  Mua Hàng
+                  Đặt Hàng
                 </div>
 
                 <div style={{ marginTop: "12px" }}></div>
@@ -613,13 +608,13 @@ console.log(UserId, "userrrrrrr")
         <Modal.Header closeButton>
           <Modal.Title>Xóa sản phẩm</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-         Bạn có muốn xóa sản phẩm đang chọn
-        </Modal.Body>
+        <Modal.Body>Bạn có muốn xóa sản phẩm đang chọn</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleDeleteCart}>Xác nhận</Button>
+          <Button variant="primary" onClick={handleDeleteCart}>
+            Xác nhận
+          </Button>
           <Button variant="secondary" onClick={handleCloseDeleteCart}>
-           Hủy
+            Hủy
           </Button>
         </Modal.Footer>
       </Modal>
@@ -635,18 +630,18 @@ console.log(UserId, "userrrrrrr")
         <Modal.Header closeButton>
           <Modal.Title>Xóa tất cả sản phẩm</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Bạn có muốn xóa
-        </Modal.Body>
+        <Modal.Body>Bạn có muốn xóa</Modal.Body>
         <Modal.Footer>
-          <Button variant="primary" onClick={handleDeleteCartAll}>Xác nhận</Button>
+          <Button variant="primary" onClick={handleDeleteCartAll}>
+            Xác nhận
+          </Button>
           <Button variant="secondary" onClick={handleCloseDeleteCartAll}>
             Hủy
           </Button>
         </Modal.Footer>
       </Modal>
 
-      <ToastContainer className="custom-toast-container"/>
+      <ToastContainer className="custom-toast-container" />
     </>
   );
 };

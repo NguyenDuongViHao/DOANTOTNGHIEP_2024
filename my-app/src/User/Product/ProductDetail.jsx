@@ -77,18 +77,7 @@ const ProductDetail = () => {
     if (Quantity > 1) {
       setQuantity((prevQuantity) => prevQuantity - 1);
     } else {
-      toast.info(() => <div>Số lượng không được nhỏ hơn 1</div>, {
-        position: "bottom-center",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        closeButton: false,
-        className: "custom-toast",
-        toastId: "custom-toast",
-      });
+      toast.info(() => <div>Số lượng không được nhỏ hơn 1</div>);
     }
   };
 
@@ -158,26 +147,12 @@ const ProductDetail = () => {
           totalQuantity = Quantity + ProductInCart.quantity;
           if (totalQuantity > productDetailAddCart.quantity) {
             //"kiểm tra so lượng sản phẩm được thêm vào khi đã có thêm vào trước đó
-            toast.info(
-              () => (
-                <div>
-                  Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity} hãy
-                  kiểm tra giỏ hàng
-                </div>
-              ),
-              {
-                position: "bottom-center",
-                autoClose: 2000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                closeButton: false,
-                className: "custom-toast",
-                toastId: "custom-toast",
-              }
-            );
+            toast.info(() => (
+              <div>
+                Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity} hãy
+                kiểm tra giỏ hàng
+              </div>
+            ));
             return false;
           } else {
             setCarts((prev) => ({
@@ -191,25 +166,11 @@ const ProductDetail = () => {
         } else {
           if (Quantity > productDetailAddCart.quantity) {
             //kiểm tra số lựong sản phẩm đc thêm vào khi chưa có sản phẩm đó trong gio hàng,
-            toast.info(
-              () => (
-                <div>
-                  Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity}
-                </div>
-              ),
-              {
-                position: "bottom-center",
-                autoClose: 2000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                closeButton: false,
-                className: "custom-toast",
-                toastId: "custom-toast",
-              }
-            );
+            toast.info(() => (
+              <div>
+                Số lượng sản phẩm chỉ còn {productDetailAddCart.quantity}
+              </div>
+            ));
             return false;
           }
           setCarts((prev) => ({
@@ -222,18 +183,7 @@ const ProductDetail = () => {
           return true;
         }
       } else {
-        toast.info(() => <div>Biến thể này chưa có cho sản phẩm</div>, {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          closeButton: false,
-          className: "custom-toast",
-          toastId: "custom-toast",
-        });
+        toast.info(() => <div>Biến thể này chưa có cho sản phẩm</div>);
         return false;
       }
     } else {
@@ -268,31 +218,9 @@ const ProductDetail = () => {
     } else {
       setfavoriteChange((prevFavourite) => !prevFavourite);
       if (favoriteChange) {
-        toast.info(() => <div>Đã bỏ yêu thích</div>, {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          closeButton: false,
-          className: "custom-toast",
-          toastId: "custom-toast",
-        });
+        toast.info(() => <div>Đã bỏ yêu thích</div>);
       } else {
-        toast.info(() => <div>Đã thêm vào danh sách yêu thích </div>, {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          closeButton: false,
-          className: "custom-toast",
-          toastId: "custom-toast",
-        });
+        toast.info(() => <div>Đã thêm vào danh sách yêu thích </div>);
       }
       handleThemFavourite();
     }
@@ -401,7 +329,7 @@ const ProductDetail = () => {
       setDisplayVariantColor(`${ProductDetail[0].colors[0].nameColor}`);
       if (ProductDetail[0].images.length > 0) {
         setMainImageUrl(
-          `https://localhost:7073/images/${ProductDetail[0].images[0].fileName}`
+          `https://localhost:7073/Images/${ProductDetail[0].images[0].fileName}`
         );
       } else {
         setMainImageUrl(`../3708994bdca38cd8dbea509f233f3cf4.jpg`);
@@ -414,18 +342,7 @@ const ProductDetail = () => {
       AxiosClient.post("/Carts/createCart", Carts)
         .then((res) => {
           console.log("Cart created:", res.data);
-          toast.info(() => <div>Thêm vào giỏ hàng thành công</div>, {
-            position: "bottom-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            closeButton: false,
-            className: "custom-toast",
-            toastId: "custom-toast",
-          });
+          toast.info(() => <div>Thêm vào giỏ hàng thành công</div>);
         })
         .catch((error) => {
           console.error("There was an error creating the cart!", error);
@@ -484,7 +401,7 @@ const ProductDetail = () => {
           <>
             <div className="proDetails">
               <div className="proframe">
-                <div className="">
+                <div className="" style={{ marginBottom: "14rem" }}>
                   <div className="proContainer">
                     <div className="proleft">
                       <div className="kXwtNH">
@@ -515,12 +432,12 @@ const ProductDetail = () => {
                                         onClick={(e) => {
                                           e.preventDefault();
                                           handleClickImage(
-                                            `https://localhost:7073/images/${itemImg.fileName}`
+                                            `https://localhost:7073/Images/${itemImg.fileName}`
                                           );
                                         }}
                                       >
                                         <img
-                                          src={`https://localhost:7073/images/${itemImg.fileName}`}
+                                          src={`https://localhost:7073/Images/${itemImg.fileName}`}
                                           alt=""
                                         />
                                       </a>
@@ -1078,7 +995,7 @@ const ProductDetail = () => {
                                           <div className="review-comment__created-date">
                                             <div className="review-comment__attributes">
                                               <div className="review-comment__attributes--item">
-                                                <span>màu sắc kích cỡ</span>
+                                                {/* <span>màu sắc kích cỡ</span> */}
                                               </div>
                                             </div>
                                           </div>

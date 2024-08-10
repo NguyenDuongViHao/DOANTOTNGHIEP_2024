@@ -83,6 +83,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
           toast.info(() => <div>Đặt hàng thành công</div>);
         })
         .catch((error) => {
+          
           console.error("Error while posting COD payment:", error);
         });
     }
@@ -112,7 +113,7 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
     <>
       <div style={{ background: "#efefef", padding: "2rem 0" }}>
         <div style={{ borderRadius: "4px" }}>
-          <div style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "center", marginBottom:"11rem" }}>
             <div style={{ width: "55%" }}>
               <div className="bVA-DDf">
                 <h3 className="dMMxLl">Chọn hình thức giao hàng</h3>
@@ -343,10 +344,10 @@ const Pay = ({ user, phoneValue, addressValue, onChildOpenPay }) => {
         </Modal.Header>
         <Modal.Body>Bạn có chắc muốn đặt đơn hàng này</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={handlePayment}>
+          <Button variant="secondary" onClick={handlePayment}>
             Xác nhận
           </Button>
-          <Button variant="secondary" onClick={handleClosePay}>
+          <Button variant="danger" onClick={handleClosePay}>
             Hủy
           </Button>
         </Modal.Footer>

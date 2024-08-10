@@ -125,7 +125,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
           <thead>
             <tr>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Mã đơn hàng/ Ngày đặt hàng
+                Mã đơn hàng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                  Ngày đặt hàng
@@ -134,7 +134,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                 Trạng thái
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng
+               Tổng tiền
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -164,7 +164,7 @@ const DefaultOrder = ({ ListOfInvoice }) => {
                       </div>
                     </td>
                     <td>
-                      <p>x{item.totalQuantity}</p>
+                      {/* <p>x{item.quantity}</p> */}
                       <div>{item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫</div>
                     </td>
                     <td>

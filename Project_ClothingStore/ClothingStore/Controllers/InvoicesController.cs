@@ -255,7 +255,7 @@ namespace ClothingStore.Controllers
 						 : str == "confirmed" ? i.ApproveOrder == "Đã xác nhận"
 						 : str == "delivered" ? i.ApproveOrder == "Đã giao"
 						 : str == "canceled" ? i.ApproveOrder == "Đã hủy"
-						 : i.ApproveOrder == "Đã đặt")
+						 : i.ApproveOrder == "Đã đặt").OrderByDescending(i=>i.Id)
 				.ToListAsync();
 
 			var listInvoices = new List<InvoiceViewModel>();
@@ -612,7 +612,7 @@ namespace ClothingStore.Controllers
 			int currentMonth = DateTime.Now.Month;
 
 			var monthlyOrderCounts = await _context.Invoice
-				.Where(i => i.IssueDate.Year == currentYear && i.IssueDate.Month == currentMonth)
+				.Where(i => i.IssueDate.Year == currentYear && i.IssueDate.Month == currentMonth && i.ApproveOrder=="Đã giao")
 				.GroupBy(i => i.IssueDate.Day)
 				.Select(g => new
 				{

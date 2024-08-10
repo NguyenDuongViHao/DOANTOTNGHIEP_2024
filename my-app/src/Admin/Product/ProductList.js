@@ -1,33 +1,53 @@
-import { useEffect, useState } from 'react';
-import './ProductList.css'
-import AxiosClient from '../../Axios/AxiosClient';
-import $ from 'jquery';
-import { Link, useNavigate } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faEdit, faEllipsisVertical, faInfoCircle, faPlus, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Button, Col, Modal, Pagination, Row } from 'react-bootstrap';
-import { SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
-import Swiper from 'swiper';
+import { useEffect, useState } from "react";
+import "./ProductList.css";
+import AxiosClient from "../../Axios/AxiosClient";
+import $ from "jquery";
+import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCheck,
+  faEdit,
+  faEllipsisVertical,
+  faInfoCircle,
+  faPlus,
+  faTimes,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+import { Button, Col, Modal, Pagination, Row } from "react-bootstrap";
+import { SwiperSlide } from "swiper/react";
+import { Navigation } from "swiper/modules";
+import Swiper from "swiper";
 const ProductList = () => {
   var id = 0;
   const [Products, setProducts] = useState([]);
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
   const [selectedProducts, setSelectedProducts] = useState({ price: 0 });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [showDelete, setShowDelete] = useState(false);
+  const [showSubnmit, setshowSubnmit] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    setSelectedProducts(Products.find(u => u.id == id));
+    setSelectedProducts(Products.find((u) => u.id == id));
+    AxiosClient.get(`/Products/productDetail/${id}`)
+      .then((res) => {
+        setProductDetail([res.data]);
+      })
+      .catch((error) => {
+        console.error("There was an error fetching the products!", error);
+      });
     setShow(true);
-  }
+    setshowSubnmit(true);
+  };
+
+  const [ProductDetail, setProductDetail] = useState([]);
+  const [MainImageUrl, setMainImageUrl] = useState("");
 
   const handleButtonClick = () => {
-    navigate('/admin/products/add');
+    navigate("/admin/products/add");
   };
   const fetchProducts = () => {
-    AxiosClient.get('/Products/listProduct')
+    AxiosClient.get("/Products/listProductAdmin")
       .then((res) => {
         setProducts(res.data);
         console.log(res.data);
@@ -53,15 +73,15 @@ const ProductList = () => {
     setShowDelete(true);
   };
   useEffect(() => {
-    fetchProducts()
+    fetchProducts();
   }, []);
   useEffect(() => {
-    if (searchTerm.trim() !== '') {
+    if (searchTerm.trim() !== "") {
       AxiosClient.get(`/Products/searchProduct?name=${searchTerm}`)
         .then((res) => {
           setProducts(res.data);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error("Error fetching data:", error);
         });
     } else {
@@ -69,15 +89,27 @@ const ProductList = () => {
     }
   }, [searchTerm]);
 
-
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
 
   const splitDesc = (desc) => {
-    const newDesc = desc.split('-').filter(item => item);
+    const newDesc = desc.split("-").filter((item) => item);
     return newDesc;
-  }
+  };
+
+  const handleClickImage = (url) => {
+    setMainImageUrl(url);
+  };
+
+  useEffect(() => {
+    if (showSubnmit) {
+      setMainImageUrl(
+        `https://localhost:7073/Images/${ProductDetail[0].images[0].fileName}`
+      );
+    }
+    setshowSubnmit(false);
+  }, [ProductDetail]);
 
   return (
     <div className="container productadmin">
@@ -85,7 +117,10 @@ const ProductList = () => {
         <h2>Danh sách sản phẩm</h2>
         <div>
           <button onClick={handleButtonClick}>
-            <span style={{marginRight: '5px'}}><FontAwesomeIcon icon={faPlus} /></span>Tạo sản phẩm
+            <span style={{ marginRight: "5px" }}>
+              <FontAwesomeIcon icon={faPlus} />
+            </span>
+            Tạo sản phẩm
           </button>
         </div>
       </div>
@@ -96,24 +131,24 @@ const ProductList = () => {
           value={searchTerm}
           onChange={handleSearchChange} // Update searchTerm as user types
         />
-
       </div>
       <div className="product-section">
         <h3>Tất cả sản phẩm</h3>
         <table>
-          <thead style={{verticalAlign: 'baseline'}}>
+          <thead style={{ verticalAlign: "baseline" }}>
             <tr>
               <th>STT</th>
-              <th style={{width: '15%'}}>Tên sản phẩm</th>
+              <th style={{ width: "15%" }}>Tên sản phẩm</th>
+              <th style={{ width: "15%" }}>Hình ảnh</th>
               <th>Mô tả sản phẩm</th>
-              <th style={{width: '10%'}}>Giá bán</th>
+              <th style={{ width: "10%" }}>Giá bán</th>
               <th>Ngày tạo sản phẩm</th>
               <th>Nguồn gốc</th>
               <th>Thương hiệu</th>
-              <th style={{width: '15%'}}>Chức năng</th>
+              <th style={{ width: "15%" }}>Chức năng</th>
             </tr>
           </thead>
-          <tbody style={{verticalAlign: 'baseline'}}>
+          <tbody style={{ verticalAlign: "baseline" }}>
             {Products.map((item) => {
               return (
                 <tr key={item.id}>
@@ -124,10 +159,20 @@ const ProductList = () => {
                 //   </td> */}
                   <td>{(id += 1)}</td>
                   <td>{item.name}</td>
-                  <td>{splitDesc(item.description).map((item, index) => (
-                    <p key={index}>- {item}</p>
-                  ))}</td>
-                  <td>{item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
+                  <td>
+                    <img
+                      src={`https://localhost:7073/Images/${item.imageName}`}
+                    />
+                  </td>
+
+                  <td>
+                    {splitDesc(item.description).map((item, index) => (
+                      <p key={index}>- {item}</p>
+                    ))}
+                  </td>
+                  <td>
+                    {item.price.toLocaleString("en-US").replace(/,/g, ".")} ₫
+                  </td>
                   <td>{item.createTime}</td>
                   <td>{item.brand}</td>
                   <td>{item.origin}</td>
@@ -168,6 +213,7 @@ const ProductList = () => {
             <tr>
               <th>STT</th>
               <th>Tên sản phẩm</th>
+              <th>Hình ảnh</th>
               <th>Mô tả sản phẩm</th>
               <th>Giá bán</th>
               <th>Ngày tạo sản phẩm</th>
@@ -216,76 +262,74 @@ const ProductList = () => {
                               src={`https://localhost:7106/Images/${selectedImage.fileName}`}
                               style={{ width: "400px" }}
                             /> */}
-
-                {Products.map(item => {
+                {ProductDetail.map((item) => {
                   return (
                     <>
-                      <div className="product_body" style={{ marginLeft: "0", marginRight: "0" }} key={item.id}>
-                        <div className="product_main">
-                          <Row className="">
-                            {/* <Col className="product_image_main" style={{width:"96%"}}>
-                                                <div className="product_header_image">
-                                                    <div className="product_image_body">
-                                                        <div className="" style={{ width: "368px", height: "368px" }}>
-                                                            <div style={{ position: "relative", cursor: "pointer" }}>
-                                                                <img
-                                                                    src={hoveredImage || selectedImage}
-                                                                    alt=""
-                                                                    className="product_image"
-                                                                    style={{ width: "368px", height: "368px", zIndex: "2", opacity: "1" }}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div className="image_badges"></div>
-                                                    <div className="product_image_list_body">
-                                                        <div className="product_image_list_main">
-                                                            <Swiper
-                                                                slidesPerView={7}
-                                                                navigation={true}
-                                                                modules={[Pagination, Navigation]}
-                                                                className="mySwiper"
-                                                                initialSlide={0}
-                                                            >
-                                                                {item.images.map((img, index) => (
-                                                                    <SwiperSlide key={index}>
-                                                                        <a
-                                                                            className={`image_active ${selectedImage === `https://localhost:7106/images/${img.fileName}` ? 'active' : ''}`}
-                                                                            onClick={() => handleImageClick(`https://localhost:7106/images/${img.fileName}`)}
-                                                                            onMouseOver={() => handleImageHover(`https://localhost:7106/images/${img.fileName}`)}
-                                                                            onMouseLeave={handleImageLeave}
-                                                                        >
-                                                                            <img
-                                                                                src={`https://localhost:7106/images/${img.fileName}`}
-                                                                                alt={`Image ${index + 1}`}
-                                                                                className="product_image_list"
-                                                                            />
-                                                                        </a>
-                                                                    </SwiperSlide>
-                                                                ))}
-                                                            </Swiper>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Col> */}
-                          </Row>
+                      <div className="kXwtNH">
+                        <div className="image-frame">
+                          <div className="img-pro">
+                            <div className="position-pointer">
+                              <img
+                                src={MainImageUrl == null ? "" : MainImageUrl}
+                                alt=""
+                                className="hbqSye"
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="eKNqTX thumbnail-list">
+                          <div className="bCOUwr children-slider">
+                            <div className="content">
+                              {/* <span className="icon-prev"></span> */}
+                              <span className="slider">
+                                {item.images.map((itemImg) => {
+                                  return (
+                                    <>
+                                      <a
+                                        href=""
+                                        className="jWvPKd"
+                                        key={itemImg.id}
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          handleClickImage(
+                                            `https://localhost:7073/Images/${itemImg.fileName}`
+                                          );
+                                        }}
+                                      >
+                                        <img
+                                          src={`https://localhost:7073/Images/${itemImg.fileName}`}
+                                          alt=""
+                                        />
+                                      </a>
+                                    </>
+                                  );
+                                })}
+                              </span>
+                              {/* <span className="icon-next"></span> */}
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <div>
-
-                      </div>
                     </>
-                  )
-                })
-                }
-
+                  );
+                })}
               </Col>
               <Col style={{ paddingTop: "5rem" }}>
                 <dl className="row">
                   <dt>Tên sản phẩm:</dt>
                   <dd>{selectedProducts.name}</dd>
+
+                  {/* <dt>Hình ảnh:</dt>
+                  <dd>{selectedProducts.imageName}</dd> */}
+
                   <dt>Giá sản phẩm </dt>
-                  <td>{selectedProducts.price.toLocaleString("en-US").replace(/,/g, ".")} ₫</td>
+                  <td>
+                    {selectedProducts.price
+                      .toLocaleString("en-US")
+                      .replace(/,/g, ".")}{" "}
+                    ₫
+                  </td>
 
                   <dt>Ngày tạo sản phẩm</dt>
                   <dd>{selectedProducts.createTime}</dd>
@@ -296,11 +340,13 @@ const ProductList = () => {
                 </dl>
               </Col>
             </Row>
-            <Row>
+            <Row style={{marginTop:"2rem"}}>
               <Col md={12}>
                 <dl className="row">
                   <dt>Mô tả </dt>
-                  <dd className="text-justify">{selectedProducts.description}</dd>
+                  <dd className="text-justify">
+                    {selectedProducts.description}
+                  </dd>
                 </dl>
               </Col>
             </Row>
@@ -311,19 +357,13 @@ const ProductList = () => {
             </Button>
           </Modal.Footer>
         </Modal>
-        <Modal
-          show={showDelete}
-          onHide={handleCloseDelete}
-          centered
-        >
+        <Modal show={showDelete} onHide={handleCloseDelete} centered>
           <Modal.Header closeButton>
             <Modal.Title>Xác nhận xóa</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             Bạn có chắc muốn sản phẩm{" "}
-            <span style={{ fontWeight: "bold" }}>
-              {selectedProducts.name}
-            </span>
+            <span style={{ fontWeight: "bold" }}>{selectedProducts.name}</span>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={handleDelete}>
@@ -336,7 +376,6 @@ const ProductList = () => {
         </Modal>
       </div>
     </div>
-
   );
-}
+};
 export default ProductList;

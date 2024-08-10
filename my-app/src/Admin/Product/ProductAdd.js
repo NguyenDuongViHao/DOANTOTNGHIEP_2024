@@ -288,8 +288,25 @@ const ProductAdd = () => {
       }
 
       console.log("Product created successfully");
+
+      toast.success(() => <div>Thêm sản phẩm thành công</div>, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        closeButton: false,
+        className: "custom-toast",
+        toastId: "custom-toast",
+      });
+      setTimeout(() => {
+        navigate("/admin/products");
+      }, 2000);
     } catch (error) {
       console.error("Error creating product:", error.message);
+      toast.error("Thêm sản phẩm thất bại");
     }
   };
 

@@ -47,10 +47,11 @@ const ProductDetailAdmin = () => {
       <div className="container productadmin">
         <div className="header productadmin">
           <h2 style={{fontSize:"20px"}}>Chi tiết sản phẩm: {productName}</h2>
+          <div>
           <Link
             to="/admin/products"
             className="btn btn-primary mb-2"
-            style={{ marginLeft: "289px" }}
+            style={{ marginRight: "1rem" }}
           >
             Quay lại
           </Link>
@@ -61,6 +62,7 @@ const ProductDetailAdmin = () => {
           >
             Thêm chi tiết sản phẩm
           </Link>
+          </div>
         </div>
 
         <div className="product-section">

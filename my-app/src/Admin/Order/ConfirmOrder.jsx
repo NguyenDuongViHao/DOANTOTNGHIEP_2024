@@ -4,6 +4,7 @@ import { Button, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck, faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const ConfirmOrder = ({ ListOfInvoice }) => {
   const [ListOfInvoiceConfirm, setListOfInvoiceConfirm] = useState([]);
@@ -45,6 +46,8 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
     }
     setshowTransferAll(false);
     e.preventDefault();
+    toast.success("Đơn hàng đã xác nhận thành công");
+
   };
 
   // Function to show individual order transfer confirmation modal
@@ -68,6 +71,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
           prevList.filter((invoice) => invoice.id !== selectedTransfer.id)
         );
         setshowTransfer(false);
+        toast.success("Đơn hàng đã xác nhận thành công");
       }
     );
   };
@@ -92,7 +96,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
             <th style={{ width: "2%" }}></th>
             <th style={{ width: "20%" }}>Mã đơn hàng</th>
             <th style={{ width: "20%" }}>Ngày đặt hàng</th>
-            <th style={{ width: "20%" }}>Số lượng</th>
+            <th style={{ width: "20%" }}>Tổng tiền</th>
             <th style={{ width: "20%" }}>Thao tác</th>
           </tr>
         </thead>
@@ -109,18 +113,18 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
                 <p style={{ color: "#2962FF", margin: 0 }}>{item.code}</p>
               </td>
               <td>
-              <div>{item.issueDate}</div>
-
+                <div>{item.issueDate}</div>
               </td>
               <td>
-                <p style={{ margin: 0 }}>x{item.totalQuantity}</p>
+                {/* <p style={{ margin: 0 }}>x{item.totalQuantity}</p> */}
                 <small>
                   {item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫
                 </small>
               </td>
               <td className="text-center">
                 <button
-                  className="btn btn-primary" style={{marginRight:"190px"}}
+                  className="btn btn-primary"
+                  style={{ marginRight: "190px" }}
                   onClick={() => handleShowTransfer(item.id)}
                 >
                   Xác nhận
@@ -170,6 +174,7 @@ const ConfirmOrder = ({ ListOfInvoice }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      <ToastContainer />
     </div>
   );
 };

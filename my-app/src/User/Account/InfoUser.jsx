@@ -45,7 +45,7 @@ const InfoUser = () => {
             id="left-tabs-example"
             defaultActiveKey={cleanPathname}
           >
-            <Row>
+            <Row style={{marginBottom:"11rem"}}>
               <Col sm={3} className="mt-4 mb-3">
                 <div className="userInfo jIFHQL">
                   <FontAwesomeIcon

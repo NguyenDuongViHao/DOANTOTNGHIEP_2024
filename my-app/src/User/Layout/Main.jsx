@@ -107,8 +107,8 @@ const Main = () => {
   useEffect(() => {
     AxiosClient.get(`/Products/listProduct`)
       .then((res) => {
-        const randomizedData = res.data.sort(() => Math.random() - 0.5);
-        setFilteredProducts(randomizedData);
+        // const randomizedData = res.data.sort(() => Math.random() - 0.5);
+        setFilteredProducts(res.data);
         setProductList(res.data);
         setTheHasBeenFilter(res.data);
         setListProductFrist(res.data);
@@ -165,7 +165,7 @@ const Main = () => {
                         >
                           <div className="iFfPOy">
                             <img
-                              src={`https://localhost:7073/images/${item.image}`}
+                              src={`https://localhost:7073/Images/${item.image}`}
                               alt="hinhanh"
                             />
                           </div>
@@ -339,7 +339,7 @@ const Main = () => {
                                                 src={
                                                   item.imageName == null
                                                     ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
-                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                    : `https://localhost:7073/Images/${item.imageName}`
                                                 }
                                                 alt=""
                                               />
@@ -408,7 +408,7 @@ const Main = () => {
                                                 src={
                                                   item.imageName == null
                                                     ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
-                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                    : `https://localhost:7073/Images/${item.imageName}`
                                                 }
                                                 alt=""
                                               />
@@ -477,7 +477,7 @@ const Main = () => {
                                                 src={
                                                   item.imageName == null
                                                     ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
-                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                    : `https://localhost:7073/Images/${item.imageName}`
                                                 }
                                                 alt=""
                                               />
@@ -546,7 +546,7 @@ const Main = () => {
                                                 src={
                                                   item.imageName == null
                                                     ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
-                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                    : `https://localhost:7073/Images/${item.imageName}`
                                                 }
                                                 alt="hình ảnh chưa có"
                                               />

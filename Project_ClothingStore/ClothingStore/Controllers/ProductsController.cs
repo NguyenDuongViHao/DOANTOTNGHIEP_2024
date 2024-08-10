@@ -277,5 +277,34 @@ namespace ClothingStore.Controllers
 			return CreatedAtAction("GetProduct", new { id = product.Id }, product);
 		}
 
+		[HttpGet]
+		[Route("listProductAdmin")]
+		public async Task<ActionResult<IEnumerable<Product>>> GetListProductAdmin()
+		{
+			var products = await _context.Product
+					 .Include(e => e.Category)
+					.Where(a => a.Status)
+				.OrderByDescending(p=> p.Id).ToListAsync();
+			var rows = new List<ProductViewModel>();
+			foreach (var product in products)
+			{
+				var createTime = $"{product.CreateTime.Day}/{product.CreateTime.Month}/{product.CreateTime.Year}";
+				Models.Image image = await _context.Image.FirstOrDefaultAsync(i => i.ProductId == product.Id);
+				rows.Add(new ProductViewModel
+				{
+					Id = product.Id,
+					Name = product.Name,
+					Description = product.Description,
+					Price = product.Price,
+					Brand = product.Brand,
+					Origin = product.Origin,
+					CreateTime = createTime,
+					CategoryName = product.Category.Name,
+					ImageName = image?.ImageURL,
+					Status = product.Status,
+				});
+			}
+			return Ok(rows);
+		}
 	}
 }

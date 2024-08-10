@@ -132,12 +132,12 @@ const SearchResultComponent = () => {
                                       <div className="product_background">
                                         <div className="product_border">
                                           <div className="product_image">
-                                            <Link to={`detail/${item.id}`}>
+                                            <Link to={`/detail/${item.id}`}>
                                               <img
                                                 src={
                                                   item.imageName == null
                                                     ? `../3708994bdca38cd8dbea509f233f3cf4.jpg`
-                                                    : `https://localhost:7073/images/${item.imageName}`
+                                                    : `https://localhost:7073/Images/${item.imageName}`
                                                 }
                                                 alt=""
                                               />

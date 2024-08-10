@@ -310,7 +310,7 @@ namespace ClothingStore.Controllers
 				var cartOfUser = await _context.Cart
 					.Include(c => c.User)
 					.Include(c => c.ProductDetail.Product)
-					.Where(i => i.UserId == UserId).ToListAsync();
+					.Where(i => i.UserId == UserId && i.Selected).ToListAsync();
 				var codeOrder = DateTime.Now.ToString("yyMMddhhmmss");
 				Invoice invoice = new Invoice()
 				{

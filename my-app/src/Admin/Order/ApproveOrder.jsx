@@ -9,6 +9,7 @@ import {
   faTimes,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { toast, ToastContainer } from "react-toastify";
 
 const ApproveOrder = ({ ListOfInvoice }) => {
   const [ListOfInvoiceApprove, setListOfInvoiceApprove] = useState([]);
@@ -43,7 +44,9 @@ const ApproveOrder = ({ ListOfInvoice }) => {
       setListOfInvoiceApprove((prevState) =>
         prevState.filter((invoice) => invoice.id !== selectedIdInvoice.id)
       );
+
       setshowConfirm(false);
+      toast.success("Đơn hàng đã xác nhận thành công")
     });
   };
 
@@ -72,7 +75,7 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                 Ngày đặt hàng
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
-                Số lượng
+                Tổng tiền
               </th>
               <th style={{ width: "20%", background: "rgb(230 229 229)" }}>
                 Thao tác
@@ -93,7 +96,7 @@ const ApproveOrder = ({ ListOfInvoice }) => {
                   </td>
 
                   <td>
-                    <p>x{item.totalQuantity}</p>
+                    {/* <p>x{item.totalQuantity}</p> */}
                     <div>
                       {item.total?.toLocaleString("en-US").replace(/,/g, ".")} ₫
                     </div>
@@ -230,6 +233,8 @@ const ApproveOrder = ({ ListOfInvoice }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <ToastContainer/>
     </>
   );
 };
